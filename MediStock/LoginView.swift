@@ -1,3 +1,10 @@
+//
+//  LoginView.swift
+//  MediStock
+//
+//  Created by Julien Cotte on 24/07/2026.
+//
+
 import SwiftUI
 
 struct LoginView: View {
@@ -7,21 +14,21 @@ struct LoginView: View {
 
     var body: some View {
         VStack {
-            TextField("Email", text: $email)
+            TextField("auth.email.placeholder", text: $email)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
-            SecureField("Password", text: $password)
+            SecureField("auth.password.placeholder", text: $password)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
             Button(action: {
                 session.signIn(email: email, password: password)
             }) {
-                Text("Login")
+                Text("auth.login.button")
             }
             Button(action: {
                 session.signUp(email: email, password: password)
             }) {
-                Text("Sign Up")
+                Text("auth.signUp.button")
             }
         }
         .padding()

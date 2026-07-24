@@ -1,3 +1,10 @@
+//
+//  SessionStore.swift
+//  MediStock
+//
+//  Created by Julien Cotte on 24/07/2026.
+//
+
 import Foundation
 import Firebase
 

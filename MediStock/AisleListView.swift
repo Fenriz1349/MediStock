@@ -1,3 +1,10 @@
+//
+//  AisleListView.swift
+//  MediStock
+//
+//  Created by Julien Cotte on 24/07/2026.
+//
+
 import SwiftUI
 
 struct AisleListView: View {
@@ -12,7 +19,7 @@ struct AisleListView: View {
                     }
                 }
             }
-            .navigationBarTitle("Aisles")
+            .navigationBarTitle("tab.aisles.title")
             .navigationBarItems(trailing: Button(action: {
                 viewModel.addRandomMedicine(user: "test_user") // Remplacez par l'utilisateur actuel
             }) {

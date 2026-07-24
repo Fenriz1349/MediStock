@@ -1,3 +1,10 @@
+//
+//  MedicineDetailView.swift
+//  MediStock
+//
+//  Created by Julien Cotte on 24/07/2026.
+//
+
 import SwiftUI
 
 struct MedicineDetailView: View {
@@ -27,7 +34,7 @@ struct MedicineDetailView: View {
             }
             .padding(.vertical)
         }
-        .navigationBarTitle("Medicine Details", displayMode: .inline)
+        .navigationBarTitle("medicineDetail.navigationTitle", displayMode: .inline)
         .onAppear {
             viewModel.fetchHistory(for: medicine)
         }
@@ -40,9 +47,9 @@ struct MedicineDetailView: View {
 extension MedicineDetailView {
     private var medicineNameSection: some View {
         VStack(alignment: .leading) {
-            Text("Name")
+            Text("medicineDetail.name.label")
                 .font(.headline)
-            TextField("Name", text: $medicine.name, onCommit: {
+            TextField("medicineDetail.name.label", text: $medicine.name, onCommit: {
                 viewModel.updateMedicine(medicine, user: session.session?.uid ?? "")
             })
             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -53,7 +60,7 @@ extension MedicineDetailView {
 
     private var medicineStockSection: some View {
         VStack(alignment: .leading) {
-            Text("Stock")
+            Text("medicineDetail.stock.label")
                 .font(.headline)
             HStack {
                 Button(action: {
@@ -63,7 +70,7 @@ extension MedicineDetailView {
                         .font(.title)
                         .foregroundColor(.red)
                 }
-                TextField("Stock", value: $medicine.stock, formatter: NumberFormatter(), onCommit: {
+                TextField("medicineDetail.stock.label", value: $medicine.stock, formatter: NumberFormatter(), onCommit: {
                     viewModel.updateMedicine(medicine, user: session.session?.uid ?? "")
                 })
                 .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -84,9 +91,9 @@ extension MedicineDetailView {
 
     private var medicineAisleSection: some View {
         VStack(alignment: .leading) {
-            Text("Aisle")
+            Text("medicineDetail.aisle.label")
                 .font(.headline)
-            TextField("Aisle", text: $medicine.aisle, onCommit: {
+            TextField("medicineDetail.aisle.label", text: $medicine.aisle, onCommit: {
                 viewModel.updateMedicine(medicine, user: session.session?.uid ?? "")
             })
             .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -97,18 +104,18 @@ extension MedicineDetailView {
 
     private var historySection: some View {
         VStack(alignment: .leading) {
-            Text("History")
+            Text("medicineDetail.history.title")
                 .font(.headline)
                 .padding(.top, 20)
             ForEach(viewModel.history.filter { $0.medicineId == medicine.id }, id: \.id) { entry in
                 VStack(alignment: .leading, spacing: 5) {
                     Text(entry.action)
                         .font(.headline)
-                    Text("User: \(entry.user)")
+                    Text(String(localized: "medicineDetail.history.user", defaultValue: "Utilisateur : \(entry.user)"))
                         .font(.subheadline)
-                    Text("Date: \(entry.timestamp.formatted())")
+                    Text(String(localized: "medicineDetail.history.date", defaultValue: "Date : \(entry.timestamp.formatted())"))
                         .font(.subheadline)
-                    Text("Details: \(entry.details)")
+                    Text(String(localized: "medicineDetail.history.details", defaultValue: "Détails : \(entry.details)"))
                         .font(.subheadline)
                 }
                 .padding()

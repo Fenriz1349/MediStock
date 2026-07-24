@@ -1,3 +1,10 @@
+//
+//  AllMedicinesView.swift
+//  MediStock
+//
+//  Created by Julien Cotte on 24/07/2026.
+//
+
 import SwiftUI
 
 struct AllMedicinesView: View {
@@ -10,16 +17,16 @@ struct AllMedicinesView: View {
             VStack {
                 // Filtrage et Tri
                 HStack {
-                    TextField("Filter by name", text: $filterText)
+                    TextField("allMedicines.filterField", text: $filterText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding(.leading, 10)
-                    
+
                     Spacer()
 
-                    Picker("Sort by", selection: $sortOption) {
-                        Text("None").tag(SortOption.none)
-                        Text("Name").tag(SortOption.name)
-                        Text("Stock").tag(SortOption.stock)
+                    Picker("allMedicines.sortPicker", selection: $sortOption) {
+                        Text("allMedicines.sortOption.none").tag(SortOption.none)
+                        Text("allMedicines.sortOption.name").tag(SortOption.name)
+                        Text("allMedicines.sortOption.stock").tag(SortOption.stock)
                     }
                     .pickerStyle(MenuPickerStyle())
                     .padding(.trailing, 10)
@@ -33,13 +40,13 @@ struct AllMedicinesView: View {
                             VStack(alignment: .leading) {
                                 Text(medicine.name)
                                     .font(.headline)
-                                Text("Stock: \(medicine.stock)")
+                                Text(String(localized: "allMedicines.medicineStock", defaultValue: "Stock : \(medicine.stock)"))
                                     .font(.subheadline)
                             }
                         }
                     }
                 }
-                .navigationBarTitle("All Medicines")
+                .navigationBarTitle("tab.allMedicines.title")
                 .navigationBarItems(trailing: Button(action: {
                     viewModel.addRandomMedicine(user: "test_user") // Remplacez par l'utilisateur actuel
                 }) {

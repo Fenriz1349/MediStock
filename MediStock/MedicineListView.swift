@@ -1,3 +1,10 @@
+//
+//  MedicineListView.swift
+//  MediStock
+//
+//  Created by Julien Cotte on 24/07/2026.
+//
+
 import SwiftUI
 
 struct MedicineListView: View {
