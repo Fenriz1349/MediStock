@@ -1,0 +1,46 @@
+# Xcode
+#
+build/
+DerivedData/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+*.xcscmblueprint
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# CocoaPods (unused here, kept in case it's ever adopted)
+Pods/
+
+# Firebase / GoogleService-Info
+#
+# Contains API keys and project identifiers - never commit.
+# Each developer/CI must supply their own copy locally / via secrets.
+GoogleService-Info.plist
+
+# macOS
+.DS_Store
+
+# Fastlane (screenshots, reports)
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Local task-tracking log - never committed, personal working notes only
+TASKS.md
