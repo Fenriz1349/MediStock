@@ -48,6 +48,7 @@
 		68D144FD30139D5200696204 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 68D144FC30139D5200696204 /* Localizable.xcstrings */; };
 		68D145023013A52800696204 /* AuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D145013013A52800696204 /* AuthenticationViewModel.swift */; };
 		68D145063013A58700696204 /* AuthenticationViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D145053013A58700696204 /* AuthenticationViewModelTest.swift */; };
+		68D1450A3013AA1600696204 /* TestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D145093013AA1600696204 /* TestHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +100,8 @@
 		68D144FC30139D5200696204 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		68D145013013A52800696204 /* AuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModel.swift; sourceTree = "<group>"; };
 		68D145053013A58700696204 /* AuthenticationViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationViewModelTest.swift; sourceTree = "<group>"; };
+		68D145093013AA1600696204 /* TestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestHelper.swift; sourceTree = "<group>"; };
+		68D1450B3013AC0D00696204 /* MediStock.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = MediStock.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +143,7 @@
 		53E0D88A2C06084700DE1134 = {
 			isa = PBXGroup;
 			children = (
+				68D1450B3013AC0D00696204 /* MediStock.xctestplan */,
 				53E0D8952C06084700DE1134 /* MediStock */,
 				68D144E530136D3900696204 /* GoogleService-Info.plist */,
 				53E0D8A62C06084900DE1134 /* MediStockTests */,
@@ -187,6 +191,7 @@
 		53E0D8A62C06084900DE1134 /* MediStockTests */ = {
 			isa = PBXGroup;
 			children = (
+				68D145093013AA1600696204 /* TestHelper.swift */,
 				68D145033013A57500696204 /* Presentation */,
 				53E0D8A72C06084900DE1134 /* MediStockTests.swift */,
 			);
@@ -472,6 +477,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68D1450A3013AA1600696204 /* TestHelper.swift in Sources */,
 				68D145063013A58700696204 /* AuthenticationViewModelTest.swift in Sources */,
 				53E0D8A82C06084900DE1134 /* MediStockTests.swift in Sources */,
 			);
