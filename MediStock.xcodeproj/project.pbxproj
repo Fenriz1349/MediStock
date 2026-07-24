@@ -40,6 +40,9 @@
 		68D144E730136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
 		68D144E830136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
 		68D144EE301393C600696204 /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D144ED301393C600696204 /* AppUser.swift */; };
+		68D144F03013998100696204 /* MedicineStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D144EF3013998100696204 /* MedicineStoring.swift */; };
+		68D144F23013999000696204 /* HistoryStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D144F13013999000696204 /* HistoryStoring.swift */; };
+		68D144F4301399A300696204 /* AuthenticationServicing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68D144F3301399A300696204 /* AuthenticationServicing.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +86,9 @@
 		53E0D8ED2C06718100DE1134 /* AllMedicinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllMedicinesView.swift; sourceTree = "<group>"; };
 		68D144E530136D3900696204 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		68D144ED301393C600696204 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
+		68D144EF3013998100696204 /* MedicineStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineStoring.swift; sourceTree = "<group>"; };
+		68D144F13013999000696204 /* HistoryStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStoring.swift; sourceTree = "<group>"; };
+		68D144F3301399A300696204 /* AuthenticationServicing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServicing.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,6 +224,9 @@
 		68D144EC301390B100696204 /* Repositories */ = {
 			isa = PBXGroup;
 			children = (
+				68D144EF3013998100696204 /* MedicineStoring.swift */,
+				68D144F13013999000696204 /* HistoryStoring.swift */,
+				68D144F3301399A300696204 /* AuthenticationServicing.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
