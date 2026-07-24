@@ -1,5 +1,5 @@
 //
-//  FirebaseAuthenticationService.swift
+//  MainTabView.swift
 //  MediStock
 //
 //  Created by Julien Cotte on 24/07/2026.

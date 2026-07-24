@@ -1,5 +1,5 @@
 //
-//  LoginView.swift
+//  AuthenticationView.swift
 //  MediStock
 //
 //  Created by Julien Cotte on 24/07/2026.
@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct LoginView: View {
+struct AuthenticationView: View {
     @State private var email = ""
     @State private var password = ""
-    @EnvironmentObject var session: SessionStore
+    @EnvironmentObject var viewModel: AuthenticationViewModel
 
     var body: some View {
         VStack {
@@ -21,12 +21,12 @@ struct LoginView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
             Button(action: {
-                session.signIn(email: email, password: password)
+                Task { await viewModel.signIn(email: email, password: password) }
             }) {
                 Text("auth.login.button")
             }
             Button(action: {
-                session.signUp(email: email, password: password)
+                Task { await viewModel.signUp(email: email, password: password) }
             }) {
                 Text("auth.signUp.button")
             }
@@ -35,8 +35,8 @@ struct LoginView: View {
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
+struct AuthenticationView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView().environmentObject(SessionStore())
+        AuthenticationView().environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
     }
 }
