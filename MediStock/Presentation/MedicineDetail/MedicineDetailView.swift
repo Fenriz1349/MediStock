@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MedicineDetailView: View {
     @State var medicine: Medicine
-    @ObservedObject var viewModel = CatalogViewModel()
+    @StateObject private var viewModel = MedicineDetailViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore())
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
 
     var body: some View {
@@ -36,10 +36,10 @@ struct MedicineDetailView: View {
         }
         .navigationBarTitle("medicineDetail.navigationTitle", displayMode: .inline)
         .onAppear {
-            viewModel.fetchHistory(for: medicine)
+            viewModel.listen(forMedicineId: medicine.id ?? "")
         }
         .onChange(of: medicine) { _ in
-            viewModel.updateMedicine(medicine, user: authenticationViewModel.session?.uid ?? "")
+            Task { await viewModel.updateMedicine(medicine, user: authenticationViewModel.session?.uid ?? "") }
         }
     }
 }
@@ -49,9 +49,7 @@ extension MedicineDetailView {
         VStack(alignment: .leading) {
             Text("medicineDetail.name.label")
                 .font(.headline)
-            TextField("medicineDetail.name.label", text: $medicine.name, onCommit: {
-                viewModel.updateMedicine(medicine, user: authenticationViewModel.session?.uid ?? "")
-            })
+            TextField("medicineDetail.name.label", text: $medicine.name)
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .padding(.bottom, 10)
         }
@@ -64,20 +62,18 @@ extension MedicineDetailView {
                 .font(.headline)
             HStack {
                 Button(action: {
-                    viewModel.decreaseStock(medicine, user: authenticationViewModel.session?.uid ?? "")
+                    Task { await viewModel.decreaseStock(medicine, user: authenticationViewModel.session?.uid ?? "") }
                 }) {
                     Image(systemName: "minus.circle")
                         .font(.title)
                         .foregroundColor(.red)
                 }
-                TextField("medicineDetail.stock.label", value: $medicine.stock, formatter: NumberFormatter(), onCommit: {
-                    viewModel.updateMedicine(medicine, user: authenticationViewModel.session?.uid ?? "")
-                })
+                TextField("medicineDetail.stock.label", value: $medicine.stock, formatter: NumberFormatter())
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .keyboardType(.numberPad)
                 .frame(width: 100)
                 Button(action: {
-                    viewModel.increaseStock(medicine, user: authenticationViewModel.session?.uid ?? "")
+                    Task { await viewModel.increaseStock(medicine, user: authenticationViewModel.session?.uid ?? "") }
                 }) {
                     Image(systemName: "plus.circle")
                         .font(.title)
@@ -93,9 +89,7 @@ extension MedicineDetailView {
         VStack(alignment: .leading) {
             Text("medicineDetail.aisle.label")
                 .font(.headline)
-            TextField("medicineDetail.aisle.label", text: $medicine.aisle, onCommit: {
-                viewModel.updateMedicine(medicine, user: authenticationViewModel.session?.uid ?? "")
-            })
+            TextField("medicineDetail.aisle.label", text: $medicine.aisle)
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .padding(.bottom, 10)
         }
@@ -107,7 +101,7 @@ extension MedicineDetailView {
             Text("medicineDetail.history.title")
                 .font(.headline)
                 .padding(.top, 20)
-            ForEach(viewModel.history.filter { $0.medicineId == medicine.id }, id: \.id) { entry in
+            ForEach(viewModel.history, id: \.id) { entry in
                 VStack(alignment: .leading, spacing: 5) {
                     Text(entry.action)
                         .font(.headline)
@@ -131,7 +125,7 @@ extension MedicineDetailView {
 struct MedicineDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleMedicine = Medicine(name: "Sample", stock: 10, aisle: "Aisle 1")
-        let sampleViewModel = CatalogViewModel()
-        MedicineDetailView(medicine: sampleMedicine, viewModel: sampleViewModel).environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+        MedicineDetailView(medicine: sampleMedicine)
+            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
     }
 }
