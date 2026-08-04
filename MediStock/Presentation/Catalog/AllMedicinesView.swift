@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AllMedicinesView: View {
-    @ObservedObject var viewModel = MedicineStockViewModel()
+    @ObservedObject var viewModel = CatalogViewModel()
     @State private var filterText: String = ""
     @State private var sortOption: SortOption = .none
 

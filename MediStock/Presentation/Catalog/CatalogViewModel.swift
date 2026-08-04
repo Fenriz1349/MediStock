@@ -1,5 +1,5 @@
 //
-//  MedicineStockViewModel.swift
+//  CatalogViewModel.swift
 //  MediStock
 //
 //  Created by Julien Cotte on 24/07/2026.
@@ -8,7 +8,7 @@
 import Foundation
 import Firebase
 
-class MedicineStockViewModel: ObservableObject {
+class CatalogViewModel: ObservableObject {
     @Published var medicines: [Medicine] = []
     @Published var aisles: [String] = []
     @Published var history: [HistoryEntry] = []

@@ -171,6 +171,9 @@
         }
       }
     },
+    "Hello, World!" : {
+
+    },
     "medicineDetail.aisle.label" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MedicineDetailView: View {
     @State var medicine: Medicine
-    @ObservedObject var viewModel = MedicineStockViewModel()
+    @ObservedObject var viewModel = CatalogViewModel()
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
 
     var body: some View {
@@ -131,7 +131,7 @@ extension MedicineDetailView {
 struct MedicineDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleMedicine = Medicine(name: "Sample", stock: 10, aisle: "Aisle 1")
-        let sampleViewModel = MedicineStockViewModel()
+        let sampleViewModel = CatalogViewModel()
         MedicineDetailView(medicine: sampleMedicine, viewModel: sampleViewModel).environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
     }
 }

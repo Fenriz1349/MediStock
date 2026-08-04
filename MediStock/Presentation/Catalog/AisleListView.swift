@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct AisleListView: View {
-    @ObservedObject var viewModel = MedicineStockViewModel()
+    @ObservedObject var viewModel = CatalogViewModel()
 
     var body: some View {
         NavigationView {
             List {
                 ForEach(viewModel.aisles, id: \.self) { aisle in
-                    NavigationLink(destination: MedicineListView(aisle: aisle)) {
+                    NavigationLink(destination: AisleMedicinesView(aisle: aisle)) {
                         Text(aisle)
                     }
                 }
