@@ -55,5 +55,5 @@ jobs:
           xcodebuild test \
             -project MediStock.xcodeproj \
             -scheme MediStock \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -destination 'platform=iOS Simulator,name=iPhone 17' \
             CODE_SIGNING_ALLOWED=NO
