@@ -1,3 +1,10 @@
+//
+//  MainTabView.swift
+//  MediStock
+//
+//  Created by Julien Cotte on 24/07/2026.
+//
+
 import SwiftUI
 
 struct MainTabView: View {
@@ -6,13 +13,13 @@ struct MainTabView: View {
             AisleListView()
                 .tabItem {
                     Image(systemName: "list.dash")
-                    Text("Aisles")
+                    Text("tab.aisles.title")
                 }
 
             AllMedicinesView()
                 .tabItem {
                     Image(systemName: "square.grid.2x2")
-                    Text("All Medicines")
+                    Text("tab.allMedicines.title")
                 }
         }
     }
