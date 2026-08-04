@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct AllMedicinesView: View {
-    @ObservedObject var viewModel = CatalogViewModel()
+    @EnvironmentObject var viewModel: CatalogViewModel
+    @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
     @State private var filterText: String = ""
     @State private var sortOption: SortOption = .none
 
@@ -32,11 +33,11 @@ struct AllMedicinesView: View {
                     .padding(.trailing, 10)
                 }
                 .padding(.top, 10)
-                
+
                 // Liste des Médicaments
                 List {
-                    ForEach(filteredAndSortedMedicines, id: \.id) { medicine in
-                        NavigationLink(destination: MedicineDetailView(medicine: medicine, viewModel: viewModel)) {
+                    ForEach(viewModel.medicines(matching: filterText, sortedBy: sortOption), id: \.id) { medicine in
+                        NavigationLink(destination: MedicineDetailView(medicine: medicine)) {
                             VStack(alignment: .leading) {
                                 Text(medicine.name)
                                     .font(.headline)
@@ -48,49 +49,19 @@ struct AllMedicinesView: View {
                 }
                 .navigationBarTitle("tab.allMedicines.title")
                 .navigationBarItems(trailing: Button(action: {
-                    viewModel.addRandomMedicine(user: "test_user") // Remplacez par l'utilisateur actuel
+                    Task { await viewModel.addRandomMedicine(user: authenticationViewModel.session?.uid ?? "") }
                 }) {
                     Image(systemName: "plus")
                 })
             }
         }
-        .onAppear {
-            viewModel.fetchMedicines()
-        }
     }
-    
-    var filteredAndSortedMedicines: [Medicine] {
-        var medicines = viewModel.medicines
-
-        // Filtrage
-        if !filterText.isEmpty {
-            medicines = medicines.filter { $0.name.lowercased().contains(filterText.lowercased()) }
-        }
-
-        // Tri
-        switch sortOption {
-        case .name:
-            medicines.sort { $0.name.lowercased() < $1.name.lowercased() }
-        case .stock:
-            medicines.sort { $0.stock < $1.stock }
-        case .none:
-            break
-        }
-
-        return medicines
-    }
-}
-
-enum SortOption: String, CaseIterable, Identifiable {
-    case none
-    case name
-    case stock
-
-    var id: String { self.rawValue }
 }
 
 struct AllMedicinesView_Previews: PreviewProvider {
     static var previews: some View {
         AllMedicinesView()
+            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore()))
+            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
     }
 }

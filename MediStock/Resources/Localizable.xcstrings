@@ -171,9 +171,6 @@
         }
       }
     },
-    "Hello, World!" : {
-
-    },
     "medicineDetail.aisle.label" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -309,9 +306,6 @@
           }
         }
       }
-    },
-    "Stock: %lld" : {
-
     },
     "tab.aisles.title" : {
       "extractionState" : "manual",

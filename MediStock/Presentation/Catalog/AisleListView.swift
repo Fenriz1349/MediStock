@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct AisleListView: View {
-    @ObservedObject var viewModel = CatalogViewModel()
+    @EnvironmentObject var viewModel: CatalogViewModel
+    @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
 
     var body: some View {
         NavigationView {
@@ -21,19 +22,19 @@ struct AisleListView: View {
             }
             .navigationBarTitle("tab.aisles.title")
             .navigationBarItems(trailing: Button(action: {
-                viewModel.addRandomMedicine(user: "test_user") // Remplacez par l'utilisateur actuel
+                Task { await viewModel.addRandomMedicine(user: authenticationViewModel.session?.uid ?? "") }
             }) {
                 Image(systemName: "plus")
             })
-        }
-        .onAppear {
-            viewModel.fetchAisles()
         }
     }
 }
 
 struct AisleListView_Previews: PreviewProvider {
     static var previews: some View {
+        let medicineStore = FirestoreMedicineStore()
         AisleListView()
+            .environmentObject(CatalogViewModel(medicineStore: medicineStore, historyStore: FirestoreHistoryStore()))
+            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
     }
 }

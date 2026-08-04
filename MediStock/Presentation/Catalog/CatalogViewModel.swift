@@ -6,115 +6,79 @@
 //
 
 import Foundation
-import Firebase
 
-class CatalogViewModel: ObservableObject {
-    @Published var medicines: [Medicine] = []
-    @Published var aisles: [String] = []
-    @Published var history: [HistoryEntry] = []
-    private var db = Firestore.firestore()
+/// Presentation-layer state and actions for the read-oriented medicine screens (aisles, per-aisle list, full catalog).
+/// A single shared instance is injected app-wide so only one subscription to the medicine catalog exists.
+@MainActor
+final class CatalogViewModel: ObservableObject {
+    @Published private(set) var medicines: [Medicine] = []
 
-    func fetchMedicines() {
-        db.collection("medicines").addSnapshotListener { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting documents: \(error)")
-            } else {
-                self.medicines = querySnapshot?.documents.compactMap { document in
-                    try? document.data(as: Medicine.self)
-                } ?? []
+    private let medicineStore: MedicineStoring
+    private let historyStore: HistoryStoring
+    private var observationTask: Task<Void, Never>?
+
+    init(medicineStore: MedicineStoring, historyStore: HistoryStoring) {
+        self.medicineStore = medicineStore
+        self.historyStore = historyStore
+    }
+
+    /// Starts observing the medicine catalog. Call once when the app appears.
+    func listen() {
+        observationTask?.cancel()
+        observationTask = Task { [weak self] in
+            guard let stream = self?.medicineStore.observeMedicines() else { return }
+            for await medicines in stream {
+                self?.medicines = medicines
             }
         }
     }
 
-    func fetchAisles() {
-        db.collection("medicines").addSnapshotListener { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting documents: \(error)")
-            } else {
-                let allMedicines = querySnapshot?.documents.compactMap { document in
-                    try? document.data(as: Medicine.self)
-                } ?? []
-                self.aisles = Array(Set(allMedicines.map { $0.aisle })).sorted()
-            }
-        }
+    /// Distinct aisle names, derived from the current catalog.
+    var aisles: [String] {
+        Array(Set(medicines.map(\.aisle))).sorted()
     }
 
-    func addRandomMedicine(user: String) {
+    /// Medicines stored in a given aisle.
+    func medicines(inAisle aisle: String) -> [Medicine] {
+        medicines.filter { $0.aisle == aisle }
+    }
+
+    /// Medicines matching a name filter, sorted per the given option.
+    func medicines(matching filterText: String, sortedBy sortOption: SortOption) -> [Medicine] {
+        var result = medicines
+        if !filterText.isEmpty {
+            result = result.filter { $0.name.lowercased().contains(filterText.lowercased()) }
+        }
+        switch sortOption {
+        case .name:
+            result.sort { $0.name.lowercased() < $1.name.lowercased() }
+        case .stock:
+            result.sort { $0.stock < $1.stock }
+        case .none:
+            break
+        }
+        return result
+    }
+
+    func addRandomMedicine(user: String) async {
         let medicine = Medicine(name: "Medicine \(Int.random(in: 1...100))", stock: Int.random(in: 1...100), aisle: "Aisle \(Int.random(in: 1...10))")
         do {
-            try db.collection("medicines").document(medicine.id ?? UUID().uuidString).setData(from: medicine)
-            addHistory(action: "Added \(medicine.name)", user: user, medicineId: medicine.id ?? "", details: "Added new medicine")
-        } catch let error {
-            print("Error adding document: \(error)")
+            let saved = try await medicineStore.save(medicine)
+            try await historyStore.record(HistoryEntry(medicineId: saved.id ?? "", user: user, action: "Added \(saved.name)", details: "Added new medicine"))
+        } catch {
+            print("Error adding medicine: \(error.localizedDescription)")
         }
     }
 
-    func deleteMedicines(at offsets: IndexSet) {
-        offsets.map { medicines[$0] }.forEach { medicine in
-            if let id = medicine.id {
-                db.collection("medicines").document(id).delete { error in
-                    if let error = error {
-                        print("Error removing document: \(error)")
-                    }
-                }
-            }
-        }
-    }
-
-    func increaseStock(_ medicine: Medicine, user: String) {
-        updateStock(medicine, by: 1, user: user)
-    }
-
-    func decreaseStock(_ medicine: Medicine, user: String) {
-        updateStock(medicine, by: -1, user: user)
-    }
-
-    private func updateStock(_ medicine: Medicine, by amount: Int, user: String) {
-        guard let id = medicine.id else { return }
-        let newStock = medicine.stock + amount
-        db.collection("medicines").document(id).updateData([
-            "stock": newStock
-        ]) { error in
-            if let error = error {
-                print("Error updating stock: \(error)")
-            } else {
-                if let index = self.medicines.firstIndex(where: { $0.id == id }) {
-                    self.medicines[index].stock = newStock
-                }
-                self.addHistory(action: "\(amount > 0 ? "Increased" : "Decreased") stock of \(medicine.name) by \(amount)", user: user, medicineId: id, details: "Stock changed from \(medicine.stock - amount) to \(newStock)")
-            }
-        }
-    }
-
-    func updateMedicine(_ medicine: Medicine, user: String) {
-        guard let id = medicine.id else { return }
+    func delete(_ medicine: Medicine) async {
         do {
-            try db.collection("medicines").document(id).setData(from: medicine)
-            addHistory(action: "Updated \(medicine.name)", user: user, medicineId: id, details: "Updated medicine details")
-        } catch let error {
-            print("Error updating document: \(error)")
+            try await medicineStore.delete(medicine)
+        } catch {
+            print("Error deleting medicine: \(error.localizedDescription)")
         }
     }
 
-    private func addHistory(action: String, user: String, medicineId: String, details: String) {
-        let history = HistoryEntry(medicineId: medicineId, user: user, action: action, details: details)
-        do {
-            try db.collection("history").document(history.id ?? UUID().uuidString).setData(from: history)
-        } catch let error {
-            print("Error adding history: \(error)")
-        }
-    }
-
-    func fetchHistory(for medicine: Medicine) {
-        guard let medicineId = medicine.id else { return }
-        db.collection("history").whereField("medicineId", isEqualTo: medicineId).addSnapshotListener { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting history: \(error)")
-            } else {
-                self.history = querySnapshot?.documents.compactMap { document in
-                    try? document.data(as: HistoryEntry.self)
-                } ?? []
-            }
-        }
+    deinit {
+        observationTask?.cancel()
     }
 }

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
+    @EnvironmentObject var catalogViewModel: CatalogViewModel
 
     var body: some View {
         Group {
@@ -13,12 +14,15 @@ struct ContentView: View {
         }
         .onAppear {
             authenticationViewModel.listen()
+            catalogViewModel.listen()
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+        ContentView()
+            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore()))
     }
 }
