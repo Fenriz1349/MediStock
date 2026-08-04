@@ -64,7 +64,7 @@ final class AuthenticationViewModelTest: XCTestCase {
 
         viewModel.listen()
         service.emit(user)
-        try? await Task.sleep(nanoseconds: 50_000_000)
+        await TestHelper.waitUntil { viewModel.session != nil }
 
         XCTAssertEqual(viewModel.session, user)
     }

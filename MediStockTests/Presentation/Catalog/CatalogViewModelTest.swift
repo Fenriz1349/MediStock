@@ -17,7 +17,7 @@ final class CatalogViewModelTest: XCTestCase {
 
         viewModel.listen()
         medicineStore.emit([medicine])
-        try? await Task.sleep(nanoseconds: 50_000_000)
+        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
 
         XCTAssertEqual(viewModel.medicines, [medicine])
     }
@@ -34,7 +34,7 @@ final class CatalogViewModelTest: XCTestCase {
 
         viewModel.listen()
         medicineStore.emit(medicines)
-        try? await Task.sleep(nanoseconds: 50_000_000)
+        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
 
         XCTAssertEqual(viewModel.aisles, ["Rayon A", "Rayon B"])
     }
@@ -50,7 +50,7 @@ final class CatalogViewModelTest: XCTestCase {
 
         viewModel.listen()
         medicineStore.emit(medicines)
-        try? await Task.sleep(nanoseconds: 50_000_000)
+        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
 
         XCTAssertEqual(viewModel.medicines(inAisle: "Rayon A").map(\.id), ["1"])
     }
@@ -67,7 +67,7 @@ final class CatalogViewModelTest: XCTestCase {
 
         viewModel.listen()
         medicineStore.emit(medicines)
-        try? await Task.sleep(nanoseconds: 50_000_000)
+        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
 
         let result = viewModel.medicines(matching: "dol", sortedBy: .none)
 
@@ -86,7 +86,7 @@ final class CatalogViewModelTest: XCTestCase {
 
         viewModel.listen()
         medicineStore.emit(medicines)
-        try? await Task.sleep(nanoseconds: 50_000_000)
+        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
 
         let result = viewModel.medicines(matching: "", sortedBy: .stock)
 
