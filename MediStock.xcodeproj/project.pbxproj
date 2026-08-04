@@ -39,6 +39,9 @@
 		682D9FF03021EE9000DBC11E /* CatalogViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D9FEF3021EE9000DBC11E /* CatalogViewModelTest.swift */; };
 		682D9FF33021EEAC00DBC11E /* MedicineDetailViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D9FF23021EEAC00DBC11E /* MedicineDetailViewModelTest.swift */; };
 		682D9FF5302204AB00DBC11E /* SortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D9FF4302204A600DBC11E /* SortOption.swift */; };
+		682D9FF730220D4C00DBC11E /* MedistockUI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */; };
+		682D9FF830220D4C00DBC11E /* MedistockUI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */; };
+		682D9FF930220D4C00DBC11E /* MedistockUI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */; };
 		68D144E630136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
 		68D144E730136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
 		68D144E830136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
@@ -97,6 +100,7 @@
 		682D9FEF3021EE9000DBC11E /* CatalogViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewModelTest.swift; sourceTree = "<group>"; };
 		682D9FF23021EEAC00DBC11E /* MedicineDetailViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailViewModelTest.swift; sourceTree = "<group>"; };
 		682D9FF4302204A600DBC11E /* SortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOption.swift; sourceTree = "<group>"; };
+		682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = MedistockUI.xctestplan; path = MediStockUITests/MedistockUI.xctestplan; sourceTree = "<group>"; };
 		68D144E530136D3900696204 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		68D144ED301393C600696204 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
 		68D144EF3013998100696204 /* MedicineStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineStoring.swift; sourceTree = "<group>"; };
@@ -151,6 +155,7 @@
 		53E0D88A2C06084700DE1134 = {
 			isa = PBXGroup;
 			children = (
+				682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */,
 				68D1450B3013AC0D00696204 /* MediStock.xctestplan */,
 				53E0D8952C06084700DE1134 /* MediStock */,
 				68D144E530136D3900696204 /* GoogleService-Info.plist */,
@@ -468,6 +473,7 @@
 				53E0D89B2C06084900DE1134 /* Assets.xcassets in Resources */,
 				68D144FD30139D5200696204 /* Localizable.xcstrings in Resources */,
 				68D144E630136D3900696204 /* GoogleService-Info.plist in Resources */,
+				682D9FF730220D4C00DBC11E /* MedistockUI.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -476,6 +482,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				68D144E730136D3900696204 /* GoogleService-Info.plist in Resources */,
+				682D9FF930220D4C00DBC11E /* MedistockUI.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,6 +491,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				68D144E830136D3900696204 /* GoogleService-Info.plist in Resources */,
+				682D9FF830220D4C00DBC11E /* MedistockUI.xctestplan in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
