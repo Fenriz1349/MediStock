@@ -1,0 +1,59 @@
+name: CI
+
+# Run on every PR targeting dev/main, and on every direct push to these branches.
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev, main]
+
+jobs:
+  build-and-test:
+    # "macos-latest" always resolves to GitHub's current default macOS image, so this stays
+    # correct without us tracking Apple/GitHub's release naming over time.
+    runs-on: macos-latest
+    steps:
+      # Clone the repo at the commit that triggered this run.
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # GitHub's macOS runners ship several Xcode versions at once; pick the one we build with.
+      # No official GitHub action does this, so we use this popular, widely-used third-party one.
+      # "latest-stable" avoids hardcoding a version number that may not exist on the runner yet.
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      # GoogleService-Info.plist is gitignored (per-environment config, see README).
+      # Rebuild it here from a repo secret so the app can call FirebaseApp.configure() without crashing.
+      - name: Write GoogleService-Info.plist
+        run: echo "${{ secrets.GOOGLESERVICE_INFO_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
+
+      # Fetch the Firebase SDK (and any other SPM dependency) as its own step, so it's visible
+      # in the logs separately from the actual build, and cacheable later.
+      - name: Resolve Swift Package dependencies
+        run: xcodebuild -resolvePackageDependencies -project MediStock.xcodeproj
+
+      # Compile the app for the iOS Simulator. No real device/certificate involved, so no code
+      # signing is needed.
+      - name: Build
+        run: |
+          xcodebuild build \
+            -project MediStock.xcodeproj \
+            -scheme MediStock \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO
+
+      # Run the unit tests (MediStockTests) on an actual simulator instance, since "test" needs
+      # a concrete device to run the app on, unlike "build" which only needs a platform.
+      # Unlike the two "latest" settings above, xcodebuild has no "any available device" keyword,
+      # so this device name is the one place that may need adjusting if it isn't on the runner
+      # (the failure log lists the actually available simulators).
+      - name: Test
+        run: |
+          xcodebuild test \
+            -project MediStock.xcodeproj \
+            -scheme MediStock \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            CODE_SIGNING_ALLOWED=NO
