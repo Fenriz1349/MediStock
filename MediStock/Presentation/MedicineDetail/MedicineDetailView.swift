@@ -1,9 +1,16 @@
+//
+//  MedicineDetailView.swift
+//  MediStock
+//
+//  Created by Julien Cotte on 24/07/2026.
+//
+
 import SwiftUI
 
 struct MedicineDetailView: View {
     @State var medicine: Medicine
-    @ObservedObject var viewModel = MedicineStockViewModel()
-    @EnvironmentObject var session: SessionStore
+    @StateObject private var viewModel = MedicineDetailViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore())
+    @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
 
     var body: some View {
         ScrollView {
@@ -27,12 +34,12 @@ struct MedicineDetailView: View {
             }
             .padding(.vertical)
         }
-        .navigationBarTitle("Medicine Details", displayMode: .inline)
+        .navigationBarTitle("medicineDetail.navigationTitle", displayMode: .inline)
         .onAppear {
-            viewModel.fetchHistory(for: medicine)
+            viewModel.listen(forMedicineId: medicine.id ?? "")
         }
         .onChange(of: medicine) { _ in
-            viewModel.updateMedicine(medicine, user: session.session?.uid ?? "")
+            Task { await viewModel.updateMedicine(medicine, user: authenticationViewModel.session?.uid ?? "") }
         }
     }
 }
@@ -40,11 +47,9 @@ struct MedicineDetailView: View {
 extension MedicineDetailView {
     private var medicineNameSection: some View {
         VStack(alignment: .leading) {
-            Text("Name")
+            Text("medicineDetail.name.label")
                 .font(.headline)
-            TextField("Name", text: $medicine.name, onCommit: {
-                viewModel.updateMedicine(medicine, user: session.session?.uid ?? "")
-            })
+            TextField("medicineDetail.name.label", text: $medicine.name)
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .padding(.bottom, 10)
         }
@@ -53,24 +58,22 @@ extension MedicineDetailView {
 
     private var medicineStockSection: some View {
         VStack(alignment: .leading) {
-            Text("Stock")
+            Text("medicineDetail.stock.label")
                 .font(.headline)
             HStack {
                 Button(action: {
-                    viewModel.decreaseStock(medicine, user: session.session?.uid ?? "")
+                    Task { await viewModel.decreaseStock(medicine, user: authenticationViewModel.session?.uid ?? "") }
                 }) {
                     Image(systemName: "minus.circle")
                         .font(.title)
                         .foregroundColor(.red)
                 }
-                TextField("Stock", value: $medicine.stock, formatter: NumberFormatter(), onCommit: {
-                    viewModel.updateMedicine(medicine, user: session.session?.uid ?? "")
-                })
+                TextField("medicineDetail.stock.label", value: $medicine.stock, formatter: NumberFormatter())
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .keyboardType(.numberPad)
                 .frame(width: 100)
                 Button(action: {
-                    viewModel.increaseStock(medicine, user: session.session?.uid ?? "")
+                    Task { await viewModel.increaseStock(medicine, user: authenticationViewModel.session?.uid ?? "") }
                 }) {
                     Image(systemName: "plus.circle")
                         .font(.title)
@@ -84,11 +87,9 @@ extension MedicineDetailView {
 
     private var medicineAisleSection: some View {
         VStack(alignment: .leading) {
-            Text("Aisle")
+            Text("medicineDetail.aisle.label")
                 .font(.headline)
-            TextField("Aisle", text: $medicine.aisle, onCommit: {
-                viewModel.updateMedicine(medicine, user: session.session?.uid ?? "")
-            })
+            TextField("medicineDetail.aisle.label", text: $medicine.aisle)
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .padding(.bottom, 10)
         }
@@ -97,18 +98,18 @@ extension MedicineDetailView {
 
     private var historySection: some View {
         VStack(alignment: .leading) {
-            Text("History")
+            Text("medicineDetail.history.title")
                 .font(.headline)
                 .padding(.top, 20)
-            ForEach(viewModel.history.filter { $0.medicineId == medicine.id }, id: \.id) { entry in
+            ForEach(viewModel.history, id: \.id) { entry in
                 VStack(alignment: .leading, spacing: 5) {
                     Text(entry.action)
                         .font(.headline)
-                    Text("User: \(entry.user)")
+                    Text(String(localized: "medicineDetail.history.user", defaultValue: "Utilisateur : \(entry.user)"))
                         .font(.subheadline)
-                    Text("Date: \(entry.timestamp.formatted())")
+                    Text(String(localized: "medicineDetail.history.date", defaultValue: "Date : \(entry.timestamp.formatted())"))
                         .font(.subheadline)
-                    Text("Details: \(entry.details)")
+                    Text(String(localized: "medicineDetail.history.details", defaultValue: "Détails : \(entry.details)"))
                         .font(.subheadline)
                 }
                 .padding()
@@ -124,7 +125,7 @@ extension MedicineDetailView {
 struct MedicineDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleMedicine = Medicine(name: "Sample", stock: 10, aisle: "Aisle 1")
-        let sampleViewModel = MedicineStockViewModel()
-        MedicineDetailView(medicine: sampleMedicine, viewModel: sampleViewModel).environmentObject(SessionStore())
+        MedicineDetailView(medicine: sampleMedicine)
+            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
     }
 }
