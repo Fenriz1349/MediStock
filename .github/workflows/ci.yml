@@ -7,6 +7,12 @@ on:
   push:
     branches: [dev, main]
 
+# Only one run at a time per branch/PR: a new run for the same ref cancels whatever was
+# already running for it (avoids duplicate runs when a push and a PR event fire close together).
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-test:
     # "macos-latest" always resolves to GitHub's current default macOS image, so this stays
