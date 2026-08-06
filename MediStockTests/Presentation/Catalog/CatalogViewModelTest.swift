@@ -100,10 +100,20 @@ final class CatalogViewModelTest: XCTestCase {
         let historyStore = MockHistoryStoring()
         let viewModel = CatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
 
-        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "Rayon 1", user: "user-1")
+        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56", user: "user-1")
 
-        XCTAssertEqual(medicineStore.savedMedicines, [TestHelper.makeMedicine(id: nil, name: "Doliprane", stock: 10, aisle: "Rayon 1")])
+        XCTAssertEqual(medicineStore.savedMedicines, [TestHelper.makeMedicine(id: nil, name: "Doliprane", stock: 10, aisle: "AD56")])
         XCTAssertEqual(historyStore.recordedEntries.count, 1)
+    }
+
+    @MainActor
+    func testAddMedicineStripsRedundantAisleLabel() async {
+        let medicineStore = MockMedicineStoring()
+        let viewModel = CatalogViewModel(medicineStore: medicineStore, historyStore: MockHistoryStoring())
+
+        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "Rayon AD56", user: "user-1")
+
+        XCTAssertEqual(medicineStore.savedMedicines.first?.aisle, "AD56")
     }
 
     @MainActor
