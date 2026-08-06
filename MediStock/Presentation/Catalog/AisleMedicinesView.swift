@@ -23,6 +23,14 @@ struct AisleMedicinesView: View {
                     }
                 }
             }
+            .onDelete { offsets in
+                let medicines = viewModel.medicines(inAisle: aisle)
+                Task {
+                    for index in offsets {
+                        await viewModel.delete(medicines[index])
+                    }
+                }
+            }
         }
         .navigationBarTitle(AisleCode.format(code: aisle, aisleLabel: String(localized: "medicineDetail.aisle.label")))
     }
