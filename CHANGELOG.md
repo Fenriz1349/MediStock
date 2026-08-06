@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/Fenriz1349/MediStock/compare/v1.4.0...v1.4.1) (2026-08-06)
+
+
+### Bug Fixes
+
+* add ci-skip.yml to prevent CI for bump version bot ([e99c69c](https://github.com/Fenriz1349/MediStock/commit/e99c69c4bec7d118a143cfdad098eb738c8534a4))
+* fix package destination ([93c1680](https://github.com/Fenriz1349/MediStock/commit/93c1680402cfb9cf5cae83bee1191d029e78d930))
+
 ## [1.4.0](https://github.com/Fenriz1349/MediStock/compare/v1.3.1...v1.4.0) (2026-08-06)
 
 
