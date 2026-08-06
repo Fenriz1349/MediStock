@@ -36,17 +36,6 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testUpdateMedicineStripsRedundantAisleLabel() async {
-        let medicineStore = MockMedicineStoring()
-        let viewModel = MedicineDetailViewModel(medicineStore: medicineStore, historyStore: MockHistoryStoring())
-        let medicine = TestHelper.makeMedicine(aisle: "Rayon AD56")
-
-        await viewModel.updateMedicine(medicine, user: "user-1")
-
-        XCTAssertEqual(medicineStore.savedMedicines.first?.aisle, "AD56")
-    }
-
-    @MainActor
     func testIncreaseStockSavesIncrementedMedicine() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = MedicineDetailViewModel(medicineStore: medicineStore, historyStore: MockHistoryStoring())

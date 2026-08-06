@@ -36,7 +36,9 @@ struct MedicineDetailView: View {
             viewModel.listen(forMedicineId: medicine.id ?? "")
         }
         .onChange(of: medicine) { _ in
-            Task { await viewModel.updateMedicine(medicine, user: authenticationViewModel.session?.uid ?? "") }
+            var cleaned = medicine
+            cleaned.aisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: medicine.aisle)
+            Task { await viewModel.updateMedicine(cleaned, user: authenticationViewModel.session?.uid ?? "") }
         }
     }
 }

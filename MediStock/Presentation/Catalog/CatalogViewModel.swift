@@ -62,8 +62,7 @@ final class CatalogViewModel: ObservableObject {
     }
 
     func addMedicine(name: String, stock: Int, aisle: String, user: String) async {
-        let cleanedAisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: aisle)
-        let medicine = Medicine(name: name, stock: stock, aisle: cleanedAisle)
+        let medicine = Medicine(name: name, stock: stock, aisle: aisle)
         do {
             let saved = try await medicineStore.save(medicine)
             try await historyStore.record(HistoryEntry(medicineId: saved.id ?? "", user: user, action: "Added \(saved.name)", details: "Added new medicine"))

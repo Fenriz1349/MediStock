@@ -33,11 +33,12 @@ struct AddMedicineView: View {
             }
             .navigationBarTitle("addMedicine.navigationTitle", displayMode: .inline)
             .navigationBarItems(trailing: Button("addMedicine.saveButton") {
+                let cleanedAisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: aisle)
                 Task {
                     await catalogViewModel.addMedicine(
                         name: name,
                         stock: stock,
-                        aisle: aisle,
+                        aisle: cleanedAisle,
                         user: authenticationViewModel.session?.uid ?? ""
                     )
                     dismiss()
