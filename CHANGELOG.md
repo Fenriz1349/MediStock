@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/Fenriz1349/MediStock/compare/v1.4.1...v1.5.0) (2026-08-06)
+
+
+### Features
+
+* add delete on medecine ([0bac8c2](https://github.com/Fenriz1349/MediStock/commit/0bac8c2846e3ffd797911a0e40fe702dbdb58e49))
+* add delete on medecine ([406a724](https://github.com/Fenriz1349/MediStock/commit/406a724247b7caccdb6a7ee2c7529ffea4500590))
+
 ## [1.4.1](https://github.com/Fenriz1349/MediStock/compare/v1.4.0...v1.4.1) (2026-08-06)
 
 
