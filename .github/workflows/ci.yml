@@ -1,11 +1,21 @@
 name: CI
 
 # Run on every PR targeting dev/main, and on every direct push to these branches.
+# Skipped when a change only touches release-please's own files (see ci-skip.yml, which reports
+# a trivial success for this same check in that case instead).
 on:
   pull_request:
     branches: [dev, main]
+    paths-ignore:
+      - "Version.xcconfig"
+      - ".release-please-manifest.json"
+      - "CHANGELOG.md"
   push:
     branches: [dev, main]
+    paths-ignore:
+      - "Version.xcconfig"
+      - ".release-please-manifest.json"
+      - "CHANGELOG.md"
 
 # Only one run at a time per branch/PR: a new run for the same ref cancels whatever was
 # already running for it (avoids duplicate runs when a push and a PR event fire close together).
