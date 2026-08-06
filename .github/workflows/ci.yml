@@ -1,11 +1,21 @@
 name: CI
 
 # Run on every PR targeting dev/main, and on every direct push to these branches.
+# Skipped when a change only touches release-please's own files (see ci-skip.yml, which reports
+# a trivial success for this same check in that case instead).
 on:
   pull_request:
     branches: [dev, main]
+    paths-ignore:
+      - "Version.xcconfig"
+      - ".release-please-manifest.json"
+      - "CHANGELOG.md"
   push:
     branches: [dev, main]
+    paths-ignore:
+      - "Version.xcconfig"
+      - ".release-please-manifest.json"
+      - "CHANGELOG.md"
 
 # Only one run at a time per branch/PR: a new run for the same ref cancels whatever was
 # already running for it (avoids duplicate runs when a push and a PR event fire close together).
@@ -36,10 +46,20 @@ jobs:
       - name: Write GoogleService-Info.plist
         run: echo "${{ secrets.GOOGLESERVICE_INFO_PLIST_BASE64 }}" | base64 --decode > GoogleService-Info.plist
 
+      # Xcode normally resolves packages into a hashed, unpredictable DerivedData path, which
+      # can't be cached reliably. Pin a fixed path instead (used by every xcodebuild call below)
+      # so the cache step can target it consistently across runs.
+      - name: Cache resolved Swift packages
+        uses: actions/cache@v4
+        with:
+          path: DerivedData/SourcePackages
+          key: spm-${{ hashFiles('MediStock.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+          restore-keys: spm-
+
       # Fetch the Firebase SDK (and any other SPM dependency) as its own step, so it's visible
-      # in the logs separately from the actual build, and cacheable later.
+      # in the logs separately from the actual build. A cache hit above makes this near-instant.
       - name: Resolve Swift Package dependencies
-        run: xcodebuild -resolvePackageDependencies -project MediStock.xcodeproj
+        run: xcodebuild -resolvePackageDependencies -project MediStock.xcodeproj -scheme MediStock -derivedDataPath DerivedData
 
       # Compile the app for the iOS Simulator. No real device/certificate involved, so no code
       # signing is needed.
@@ -49,6 +69,7 @@ jobs:
             -project MediStock.xcodeproj \
             -scheme MediStock \
             -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath DerivedData \
             CODE_SIGNING_ALLOWED=NO
 
       # Run the unit tests (MediStockTests) on an actual simulator instance, since "test" needs
@@ -62,4 +83,5 @@ jobs:
             -project MediStock.xcodeproj \
             -scheme MediStock \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -derivedDataPath DerivedData \
             CODE_SIGNING_ALLOWED=NO
