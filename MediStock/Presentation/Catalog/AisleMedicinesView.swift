@@ -24,7 +24,7 @@ struct AisleMedicinesView: View {
                 }
             }
         }
-        .navigationBarTitle(aisle)
+        .navigationBarTitle(AisleCode.format(code: aisle, aisleLabel: String(localized: "medicineDetail.aisle.label")))
     }
 }
 

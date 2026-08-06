@@ -23,20 +23,21 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testAislesAreDistinctAndSorted() async {
+    func testAislesAreDistinctAndSortedNumerically() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = CatalogViewModel(medicineStore: medicineStore, historyStore: MockHistoryStoring())
         let medicines = [
-            TestHelper.makeMedicine(id: "1", aisle: "Rayon B"),
-            TestHelper.makeMedicine(id: "2", aisle: "Rayon A"),
-            TestHelper.makeMedicine(id: "3", aisle: "Rayon A")
+            TestHelper.makeMedicine(id: "1", aisle: "AD10"),
+            TestHelper.makeMedicine(id: "2", aisle: "AD2"),
+            TestHelper.makeMedicine(id: "3", aisle: "AD2")
         ]
 
         viewModel.listen()
         medicineStore.emit(medicines)
         await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
 
-        XCTAssertEqual(viewModel.aisles, ["Rayon A", "Rayon B"])
+        // A plain string sort would put "AD10" before "AD2"; natural sort must not.
+        XCTAssertEqual(viewModel.aisles, ["AD2", "AD10"])
     }
 
     @MainActor

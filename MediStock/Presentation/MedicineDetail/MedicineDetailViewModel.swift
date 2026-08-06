@@ -34,8 +34,10 @@ final class MedicineDetailViewModel: ObservableObject {
     }
 
     func updateMedicine(_ medicine: Medicine, user: String) async {
+        var cleaned = medicine
+        cleaned.aisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: medicine.aisle)
         do {
-            _ = try await medicineStore.save(medicine)
+            _ = try await medicineStore.save(cleaned)
             try await recordHistory(action: "Updated \(medicine.name)", details: "Updated medicine details", medicineId: medicine.id, user: user)
         } catch {
             print("Error updating medicine: \(error.localizedDescription)")

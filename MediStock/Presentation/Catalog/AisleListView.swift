@@ -17,7 +17,7 @@ struct AisleListView: View {
             List {
                 ForEach(viewModel.aisles, id: \.self) { aisle in
                     NavigationLink(destination: AisleMedicinesView(aisle: aisle)) {
-                        Text(aisle)
+                        Text(AisleCode.format(code: aisle, aisleLabel: String(localized: "medicineDetail.aisle.label")))
                     }
                 }
             }

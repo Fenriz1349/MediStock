@@ -33,9 +33,10 @@ final class CatalogViewModel: ObservableObject {
         }
     }
 
-    /// Distinct aisle names, derived from the current catalog.
+    /// Distinct aisle codes, derived from the current catalog, sorted the way Finder orders file
+    /// names (e.g. "AD2" before "AD10" — a plain string sort would put "AD10" first).
     var aisles: [String] {
-        Array(Set(medicines.map(\.aisle))).sorted()
+        Array(Set(medicines.map(\.aisle))).sorted(by: AisleCode.areInOrder)
     }
 
     /// Medicines stored in a given aisle.
@@ -61,7 +62,8 @@ final class CatalogViewModel: ObservableObject {
     }
 
     func addMedicine(name: String, stock: Int, aisle: String, user: String) async {
-        let medicine = Medicine(name: name, stock: stock, aisle: aisle)
+        let cleanedAisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: aisle)
+        let medicine = Medicine(name: name, stock: stock, aisle: cleanedAisle)
         do {
             let saved = try await medicineStore.save(medicine)
             try await historyStore.record(HistoryEntry(medicineId: saved.id ?? "", user: user, action: "Added \(saved.name)", details: "Added new medicine"))

@@ -21,11 +21,13 @@ struct MedicineFormContent: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.bottom, 10)
 
-            Text("medicineDetail.aisle.label")
-                .font(.headline)
-            TextField("medicineDetail.aisle.label", text: $aisle)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.bottom, 10)
+            HStack {
+                Text("medicineDetail.aisle.label")
+                    .font(.headline)
+                TextField("medicineDetail.aisle.label", text: $aisle)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+            .padding(.bottom, 10)
         }
         .padding(.horizontal)
     }
@@ -33,6 +35,6 @@ struct MedicineFormContent: View {
 
 #Preview {
     Form {
-        MedicineFormContent(name: .constant("Doliprane"), aisle: .constant("Rayon 1"))
+        MedicineFormContent(name: .constant("Doliprane"), aisle: .constant("AD56"))
     }
 }
