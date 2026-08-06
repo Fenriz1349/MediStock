@@ -1,6 +1,40 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+    "addMedicine.navigationTitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Medicine"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouveau médicament"
+          }
+        }
+      }
+    },
+    "addMedicine.saveButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer"
+          }
+        }
+      }
+    },
     "allMedicines.filterField" : {
       "extractionState" : "manual",
       "localizations" : {

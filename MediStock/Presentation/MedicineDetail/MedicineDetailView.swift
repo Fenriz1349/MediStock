@@ -20,14 +20,11 @@ struct MedicineDetailView: View {
                     .font(.largeTitle)
                     .padding(.top, 20)
 
-                // Medicine Name
-                medicineNameSection
+                // Medicine Name & Aisle
+                MedicineFormContent(name: $medicine.name, aisle: $medicine.aisle)
 
                 // Medicine Stock
                 medicineStockSection
-
-                // Medicine Aisle
-                medicineAisleSection
 
                 // History Section
                 historySection
@@ -39,23 +36,14 @@ struct MedicineDetailView: View {
             viewModel.listen(forMedicineId: medicine.id ?? "")
         }
         .onChange(of: medicine) { _ in
-            Task { await viewModel.updateMedicine(medicine, user: authenticationViewModel.session?.uid ?? "") }
+            var cleaned = medicine
+            cleaned.aisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: medicine.aisle)
+            Task { await viewModel.updateMedicine(cleaned, user: authenticationViewModel.session?.uid ?? "") }
         }
     }
 }
 
 extension MedicineDetailView {
-    private var medicineNameSection: some View {
-        VStack(alignment: .leading) {
-            Text("medicineDetail.name.label")
-                .font(.headline)
-            TextField("medicineDetail.name.label", text: $medicine.name)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding(.bottom, 10)
-        }
-        .padding(.horizontal)
-    }
-
     private var medicineStockSection: some View {
         VStack(alignment: .leading) {
             Text("medicineDetail.stock.label")
@@ -80,17 +68,6 @@ extension MedicineDetailView {
                         .foregroundColor(.green)
                 }
             }
-            .padding(.bottom, 10)
-        }
-        .padding(.horizontal)
-    }
-
-    private var medicineAisleSection: some View {
-        VStack(alignment: .leading) {
-            Text("medicineDetail.aisle.label")
-                .font(.headline)
-            TextField("medicineDetail.aisle.label", text: $medicine.aisle)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
             .padding(.bottom, 10)
         }
         .padding(.horizontal)

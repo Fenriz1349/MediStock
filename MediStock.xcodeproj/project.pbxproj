@@ -41,9 +41,10 @@
 		682D9FF730220D4C00DBC11E /* MedistockUI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */; };
 		682D9FF830220D4C00DBC11E /* MedistockUI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */; };
 		682D9FF930220D4C00DBC11E /* MedistockUI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */; };
-		6852BE9130235A580078D739 /* Version.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 6852BE9030235A580078D739 /* Version.xcconfig */; };
-		6852BE9230235A580078D739 /* Version.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 6852BE9030235A580078D739 /* Version.xcconfig */; };
-		6852BE9330235A580078D739 /* Version.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 6852BE9030235A580078D739 /* Version.xcconfig */; };
+		6836B20830248295003E756D /* AisleCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6836B20730248295003E756D /* AisleCode.swift */; };
+		6836B20B3024922E003E756D /* AisleCodeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6836B20A3024922E003E756D /* AisleCodeTest.swift */; };
+		6887EC1F30246BBB00DAF7E8 /* MedicineFormContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */; };
+		6887EC2130246BCC00DAF7E8 /* AddMedicineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */; };
 		68D144E630136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
 		68D144E730136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
 		68D144E830136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
@@ -102,7 +103,11 @@
 		682D9FF23021EEAC00DBC11E /* MedicineDetailViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailViewModelTest.swift; sourceTree = "<group>"; };
 		682D9FF4302204A600DBC11E /* SortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOption.swift; sourceTree = "<group>"; };
 		682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = MedistockUI.xctestplan; path = MediStockUITests/MedistockUI.xctestplan; sourceTree = "<group>"; };
+		6836B20730248295003E756D /* AisleCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleCode.swift; sourceTree = "<group>"; };
+		6836B20A3024922E003E756D /* AisleCodeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleCodeTest.swift; sourceTree = "<group>"; };
 		6852BE9030235A580078D739 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
+		6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineFormContent.swift; sourceTree = "<group>"; };
+		6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineView.swift; sourceTree = "<group>"; };
 		68D144E530136D3900696204 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		68D144ED301393C600696204 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
 		68D144EF3013998100696204 /* MedicineStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineStoring.swift; sourceTree = "<group>"; };
@@ -202,8 +207,9 @@
 		53E0D8A62C06084900DE1134 /* MediStockTests */ = {
 			isa = PBXGroup;
 			children = (
-				68D145093013AA1600696204 /* TestHelper.swift */,
+				6836B20930249223003E756D /* BusinessRules */,
 				68D145033013A57500696204 /* Presentation */,
+				68D145093013AA1600696204 /* TestHelper.swift */,
 			);
 			path = MediStockTests;
 			sourceTree = "<group>";
@@ -242,11 +248,28 @@
 			path = MedicineDetail;
 			sourceTree = "<group>";
 		};
+		6836B2063024826F003E756D /* BusinessRules */ = {
+			isa = PBXGroup;
+			children = (
+				6836B20730248295003E756D /* AisleCode.swift */,
+			);
+			path = BusinessRules;
+			sourceTree = "<group>";
+		};
+		6836B20930249223003E756D /* BusinessRules */ = {
+			isa = PBXGroup;
+			children = (
+				6836B20A3024922E003E756D /* AisleCodeTest.swift */,
+			);
+			path = BusinessRules;
+			sourceTree = "<group>";
+		};
 		68D144E93013907000696204 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
 				68D144EB3013909800696204 /* Models */,
 				68D144EC301390B100696204 /* Repositories */,
+				6836B2063024826F003E756D /* BusinessRules */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -346,6 +369,8 @@
 				53E0D8E52C066F4100DE1134 /* AisleListView.swift */,
 				53E0D8D92C06098F00DE1134 /* AisleMedicinesView.swift */,
 				53E0D8ED2C06718100DE1134 /* AllMedicinesView.swift */,
+				6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */,
+				6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */,
 			);
 			path = Catalog;
 			sourceTree = "<group>";
@@ -427,7 +452,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 2630;
 				TargetAttributes = {
 					53E0D8922C06084700DE1134 = {
 						CreatedOnToolsVersion = 15.4;
@@ -476,7 +501,6 @@
 				68D144FD30139D5200696204 /* Localizable.xcstrings in Resources */,
 				68D144E630136D3900696204 /* GoogleService-Info.plist in Resources */,
 				682D9FF730220D4C00DBC11E /* MedistockUI.xctestplan in Resources */,
-				6852BE9330235A580078D739 /* Version.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,7 +510,6 @@
 			files = (
 				68D144E730136D3900696204 /* GoogleService-Info.plist in Resources */,
 				682D9FF930220D4C00DBC11E /* MedistockUI.xctestplan in Resources */,
-				6852BE9130235A580078D739 /* Version.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -496,7 +519,6 @@
 			files = (
 				68D144E830136D3900696204 /* GoogleService-Info.plist in Resources */,
 				682D9FF830220D4C00DBC11E /* MedistockUI.xctestplan in Resources */,
-				6852BE9230235A580078D739 /* Version.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -515,8 +537,11 @@
 				53E0D8DE2C0609A800DE1134 /* CatalogViewModel.swift in Sources */,
 				53E0D8992C06084700DE1134 /* ContentView.swift in Sources */,
 				682D9FF5302204AB00DBC11E /* SortOption.swift in Sources */,
+				6887EC1F30246BBB00DAF7E8 /* MedicineFormContent.swift in Sources */,
 				68D144F23013999000696204 /* HistoryStoring.swift in Sources */,
+				6887EC2130246BCC00DAF7E8 /* AddMedicineView.swift in Sources */,
 				68D145023013A52800696204 /* AuthenticationViewModel.swift in Sources */,
+				6836B20830248295003E756D /* AisleCode.swift in Sources */,
 				53E0D8DC2C06099C00DE1134 /* Medicine.swift in Sources */,
 				53E0D8DA2C06098F00DE1134 /* AisleMedicinesView.swift in Sources */,
 				68D144F4301399A300696204 /* AuthenticationServicing.swift in Sources */,
@@ -537,6 +562,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				682D9FF33021EEAC00DBC11E /* MedicineDetailViewModelTest.swift in Sources */,
+				6836B20B3024922E003E756D /* AisleCodeTest.swift in Sources */,
 				68D1450A3013AA1600696204 /* TestHelper.swift in Sources */,
 				68D145063013A58700696204 /* AuthenticationViewModelTest.swift in Sources */,
 				682D9FF03021EE9000DBC11E /* CatalogViewModelTest.swift in Sources */,
@@ -574,6 +600,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -604,6 +631,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = A9J8B8CPN4;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -627,6 +655,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -639,6 +668,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -669,6 +699,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = A9J8B8CPN4;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -685,6 +716,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
@@ -699,7 +731,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MediStock/Preview Content\"";
-				DEVELOPMENT_TEAM = A9J8B8CPN4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -727,7 +758,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"MediStock/Preview Content\"";
-				DEVELOPMENT_TEAM = A9J8B8CPN4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -750,11 +780,9 @@
 		53E0D8BB2C06084900DE1134 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = A9J8B8CPN4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MARKETING_VERSION = 1.0;
@@ -771,11 +799,9 @@
 		53E0D8BC2C06084900DE1134 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = A9J8B8CPN4;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
 				MARKETING_VERSION = 1.0;
@@ -792,10 +818,8 @@
 		53E0D8BE2C06084900DE1134 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = A9J8B8CPN4;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rebonnte.MediStockUITests;
@@ -811,10 +835,8 @@
 		53E0D8BF2C06084900DE1134 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = A9J8B8CPN4;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.rebonnte.MediStockUITests;

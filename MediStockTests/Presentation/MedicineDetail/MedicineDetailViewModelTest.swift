@@ -27,7 +27,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let viewModel = MedicineDetailViewModel(medicineStore: medicineStore, historyStore: historyStore)
-        let medicine = TestHelper.makeMedicine(name: "Doliprane")
+        let medicine = TestHelper.makeMedicine(name: "Doliprane", aisle: "AD56")
 
         await viewModel.updateMedicine(medicine, user: "user-1")
 

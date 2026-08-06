@@ -12,6 +12,7 @@ struct AllMedicinesView: View {
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
     @State private var filterText: String = ""
     @State private var sortOption: SortOption = .none
+    @State private var isPresentingAddMedicine = false
 
     var body: some View {
         NavigationView {
@@ -49,10 +50,15 @@ struct AllMedicinesView: View {
                 }
                 .navigationBarTitle("tab.allMedicines.title")
                 .navigationBarItems(trailing: Button(action: {
-                    Task { await viewModel.addRandomMedicine(user: authenticationViewModel.session?.uid ?? "") }
+                    isPresentingAddMedicine = true
                 }) {
                     Image(systemName: "plus")
                 })
+                .sheet(isPresented: $isPresentingAddMedicine) {
+                    AddMedicineView()
+                        .environmentObject(viewModel)
+                        .environmentObject(authenticationViewModel)
+                }
             }
         }
     }
