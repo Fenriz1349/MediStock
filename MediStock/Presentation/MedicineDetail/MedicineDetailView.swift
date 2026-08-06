@@ -10,7 +10,9 @@ import SwiftUI
 struct MedicineDetailView: View {
     @State var medicine: Medicine
     @StateObject private var viewModel = MedicineDetailViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore())
+    @EnvironmentObject var catalogViewModel: CatalogViewModel
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ScrollView {
@@ -32,6 +34,15 @@ struct MedicineDetailView: View {
             .padding(.vertical)
         }
         .navigationBarTitle("medicineDetail.navigationTitle", displayMode: .inline)
+        .navigationBarItems(trailing: Button(action: {
+            Task {
+                await catalogViewModel.delete(medicine)
+                dismiss()
+            }
+        }) {
+            Image(systemName: "trash")
+                .foregroundColor(.red)
+        })
         .onAppear {
             viewModel.listen(forMedicineId: medicine.id ?? "")
         }
@@ -103,6 +114,7 @@ struct MedicineDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleMedicine = Medicine(name: "Sample", stock: 10, aisle: "Aisle 1")
         MedicineDetailView(medicine: sampleMedicine)
+            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore()))
             .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
     }
 }

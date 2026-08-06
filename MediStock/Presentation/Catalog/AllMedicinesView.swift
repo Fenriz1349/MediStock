@@ -47,6 +47,14 @@ struct AllMedicinesView: View {
                             }
                         }
                     }
+                    .onDelete { offsets in
+                        let medicines = viewModel.medicines(matching: filterText, sortedBy: sortOption)
+                        Task {
+                            for index in offsets {
+                                await viewModel.delete(medicines[index])
+                            }
+                        }
+                    }
                 }
                 .navigationBarTitle("tab.allMedicines.title")
                 .navigationBarItems(trailing: Button(action: {
