@@ -94,14 +94,14 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testAddRandomMedicineSavesAndRecordsHistory() async {
+    func testAddMedicineSavesAndRecordsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let viewModel = CatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
 
-        await viewModel.addRandomMedicine(user: "user-1")
+        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "Rayon 1", user: "user-1")
 
-        XCTAssertEqual(medicineStore.savedMedicines.count, 1)
+        XCTAssertEqual(medicineStore.savedMedicines, [TestHelper.makeMedicine(id: nil, name: "Doliprane", stock: 10, aisle: "Rayon 1")])
         XCTAssertEqual(historyStore.recordedEntries.count, 1)
     }
 

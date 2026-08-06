@@ -60,8 +60,8 @@ final class CatalogViewModel: ObservableObject {
         return result
     }
 
-    func addRandomMedicine(user: String) async {
-        let medicine = Medicine(name: "Medicine \(Int.random(in: 1...100))", stock: Int.random(in: 1...100), aisle: "Aisle \(Int.random(in: 1...10))")
+    func addMedicine(name: String, stock: Int, aisle: String, user: String) async {
+        let medicine = Medicine(name: name, stock: stock, aisle: aisle)
         do {
             let saved = try await medicineStore.save(medicine)
             try await historyStore.record(HistoryEntry(medicineId: saved.id ?? "", user: user, action: "Added \(saved.name)", details: "Added new medicine"))

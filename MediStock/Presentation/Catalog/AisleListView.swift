@@ -10,6 +10,7 @@ import SwiftUI
 struct AisleListView: View {
     @EnvironmentObject var viewModel: CatalogViewModel
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
+    @State private var isPresentingAddMedicine = false
 
     var body: some View {
         NavigationView {
@@ -22,10 +23,15 @@ struct AisleListView: View {
             }
             .navigationBarTitle("tab.aisles.title")
             .navigationBarItems(trailing: Button(action: {
-                Task { await viewModel.addRandomMedicine(user: authenticationViewModel.session?.uid ?? "") }
+                isPresentingAddMedicine = true
             }) {
                 Image(systemName: "plus")
             })
+            .sheet(isPresented: $isPresentingAddMedicine) {
+                AddMedicineView()
+                    .environmentObject(viewModel)
+                    .environmentObject(authenticationViewModel)
+            }
         }
     }
 }
