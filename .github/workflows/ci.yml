@@ -59,7 +59,7 @@ jobs:
       # Fetch the Firebase SDK (and any other SPM dependency) as its own step, so it's visible
       # in the logs separately from the actual build. A cache hit above makes this near-instant.
       - name: Resolve Swift Package dependencies
-        run: xcodebuild -resolvePackageDependencies -project MediStock.xcodeproj -derivedDataPath DerivedData
+        run: xcodebuild -resolvePackageDependencies -project MediStock.xcodeproj -scheme MediStock -derivedDataPath DerivedData
 
       # Compile the app for the iOS Simulator. No real device/certificate involved, so no code
       # signing is needed.
