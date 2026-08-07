@@ -107,6 +107,30 @@ final class CatalogViewModelTest: XCTestCase {
                                                                               stock: 10,
                                                                               aisle: "AD56")])
         XCTAssertEqual(historyStore.recordedEntries.count, 1)
+        XCTAssertNil(viewModel.error)
+    }
+
+    @MainActor
+    func testAddMedicineSaveFailureSetsTypedError() async {
+        let medicineStore = MockMedicineStoring()
+        medicineStore.saveError = MedicineError.networkUnavailable
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
+
+        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56", user: "user-1")
+
+        XCTAssertEqual(viewModel.error, .networkUnavailable)
+    }
+
+    @MainActor
+    func testAddMedicineHistoryFailureSetsTypedError() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        historyStore.recordError = MedicineError.unknown
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
+
+        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56", user: "user-1")
+
+        XCTAssertEqual(viewModel.error, .unknown)
     }
 
     @MainActor
@@ -118,6 +142,18 @@ final class CatalogViewModelTest: XCTestCase {
         await viewModel.delete(medicine)
 
         XCTAssertEqual(medicineStore.deletedMedicines, [medicine])
+        XCTAssertNil(viewModel.error)
+    }
+
+    @MainActor
+    func testDeleteFailureSetsTypedError() async {
+        let medicineStore = MockMedicineStoring()
+        medicineStore.deleteError = MedicineError.permissionDenied
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
+
+        await viewModel.delete(TestHelper.makeMedicine())
+
+        XCTAssertEqual(viewModel.error, .permissionDenied)
     }
 }
 
@@ -125,6 +161,8 @@ final class CatalogViewModelTest: XCTestCase {
 final class MockMedicineStoring: MedicineStoring {
     private(set) var savedMedicines: [Medicine] = []
     private(set) var deletedMedicines: [Medicine] = []
+    var saveError: Error?
+    var deleteError: Error?
 
     private let medicinesStream: AsyncStream<[Medicine]>
     private let medicinesContinuation: AsyncStream<[Medicine]>.Continuation
@@ -144,6 +182,7 @@ final class MockMedicineStoring: MedicineStoring {
     }
 
     func save(_ medicine: Medicine) async throws -> Medicine {
+        if let saveError { throw saveError }
         savedMedicines.append(medicine)
         var saved = medicine
         if saved.id == nil { saved.id = UUID().uuidString }
@@ -151,6 +190,7 @@ final class MockMedicineStoring: MedicineStoring {
     }
 
     func delete(_ medicine: Medicine) async throws {
+        if let deleteError { throw deleteError }
         deletedMedicines.append(medicine)
     }
 }
@@ -158,6 +198,7 @@ final class MockMedicineStoring: MedicineStoring {
 /// In-memory fake of `HistoryStoring` for testing, with a controllable history stream.
 final class MockHistoryStoring: HistoryStoring {
     private(set) var recordedEntries: [HistoryEntry] = []
+    var recordError: Error?
 
     private let historyStream: AsyncStream<[HistoryEntry]>
     private let historyContinuation: AsyncStream<[HistoryEntry]>.Continuation
@@ -177,6 +218,7 @@ final class MockHistoryStoring: HistoryStoring {
     }
 
     func record(_ entry: HistoryEntry) async throws {
+        if let recordError { throw recordError }
         recordedEntries.append(entry)
     }
 }
