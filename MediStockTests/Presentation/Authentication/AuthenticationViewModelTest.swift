@@ -154,6 +154,7 @@ final class MockAuthenticationServicing: AuthenticationServicing {
         case generic
     }
 
+    var currentUser: AppUser?
     var signInResult: Result<AppUser, Error> = .failure(Failure.generic)
     var signUpResult: Result<AppUser, Error> = .failure(Failure.generic)
     var signOutError: Error?

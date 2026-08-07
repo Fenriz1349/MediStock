@@ -100,25 +100,28 @@ final class CatalogViewModelTest: XCTestCase {
         let historyStore = MockHistoryStoring()
         let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
 
-        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56", user: "user-1")
+        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56")
 
         XCTAssertEqual(medicineStore.savedMedicines, [TestHelper.makeMedicine(id: nil,
                                                                               name: "Doliprane",
                                                                               stock: 10,
                                                                               aisle: "AD56")])
-        XCTAssertEqual(historyStore.recordedEntries.count, 1)
+        XCTAssertEqual(historyStore.addedMedicines.count, 1)
+        XCTAssertEqual(historyStore.addedMedicines.first?.name, "Doliprane")
         XCTAssertNil(viewModel.error)
     }
 
     @MainActor
-    func testAddMedicineSaveFailureSetsTypedError() async {
+    func testAddMedicineSaveFailureSetsTypedErrorAndSkipsHistory() async {
         let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
         medicineStore.saveError = MedicineError.networkUnavailable
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
 
-        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56", user: "user-1")
+        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56")
 
         XCTAssertEqual(viewModel.error, .networkUnavailable)
+        XCTAssertTrue(historyStore.addedMedicines.isEmpty)
     }
 
     @MainActor
@@ -128,32 +131,48 @@ final class CatalogViewModelTest: XCTestCase {
         historyStore.recordError = MedicineError.unknown
         let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
 
-        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56", user: "user-1")
+        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56")
 
         XCTAssertEqual(viewModel.error, .unknown)
     }
 
     @MainActor
-    func testDeleteCallsStore() async {
+    func testDeleteCallsStoreAndRecordsHistory() async {
         let medicineStore = MockMedicineStoring()
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
+        let historyStore = MockHistoryStoring()
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
         let medicine = TestHelper.makeMedicine()
 
         await viewModel.delete(medicine)
 
         XCTAssertEqual(medicineStore.deletedMedicines, [medicine])
+        XCTAssertEqual(historyStore.deletedMedicines, [medicine])
         XCTAssertNil(viewModel.error)
     }
 
     @MainActor
-    func testDeleteFailureSetsTypedError() async {
+    func testDeleteFailureSetsTypedErrorAndSkipsHistory() async {
         let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
         medicineStore.deleteError = MedicineError.permissionDenied
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
 
         await viewModel.delete(TestHelper.makeMedicine())
 
         XCTAssertEqual(viewModel.error, .permissionDenied)
+        XCTAssertTrue(historyStore.deletedMedicines.isEmpty)
+    }
+
+    @MainActor
+    func testDeleteHistoryFailureSetsTypedError() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        historyStore.recordError = MedicineError.unknown
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
+
+        await viewModel.delete(TestHelper.makeMedicine())
+
+        XCTAssertEqual(viewModel.error, .unknown)
     }
 }
 
@@ -195,9 +214,13 @@ final class MockMedicineStoring: MedicineStoring {
     }
 }
 
-/// In-memory fake of `HistoryStoring` for testing, with a controllable history stream.
+/// In-memory fake of `HistoryStoring` for testing, with a controllable history stream. Tracks each
+/// kind of recorded change separately, matching the protocol's one-method-per-action shape.
 final class MockHistoryStoring: HistoryStoring {
-    private(set) var recordedEntries: [HistoryEntry] = []
+    private(set) var addedMedicines: [Medicine] = []
+    private(set) var updatedMedicines: [Medicine] = []
+    private(set) var stockChanges: [(medicine: Medicine, previousStock: Int)] = []
+    private(set) var deletedMedicines: [Medicine] = []
     var recordError: Error?
 
     private let historyStream: AsyncStream<[HistoryEntry]>
@@ -217,8 +240,23 @@ final class MockHistoryStoring: HistoryStoring {
         historyContinuation.yield(entries)
     }
 
-    func record(_ entry: HistoryEntry) async throws {
+    func recordAddition(of medicine: Medicine) async throws {
         if let recordError { throw recordError }
-        recordedEntries.append(entry)
+        addedMedicines.append(medicine)
+    }
+
+    func recordUpdate(of medicine: Medicine) async throws {
+        if let recordError { throw recordError }
+        updatedMedicines.append(medicine)
+    }
+
+    func recordStockChange(of medicine: Medicine, from previousStock: Int) async throws {
+        if let recordError { throw recordError }
+        stockChanges.append((medicine, previousStock))
+    }
+
+    func recordDeletion(of medicine: Medicine) async throws {
+        if let recordError { throw recordError }
+        deletedMedicines.append(medicine)
     }
 }
