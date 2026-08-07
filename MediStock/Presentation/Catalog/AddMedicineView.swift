@@ -15,7 +15,7 @@ struct AddMedicineView: View {
 
     @State private var name = ""
     @State private var aisle = ""
-    @State private var stock = 0
+    @State private var stockText = ""
 
     var body: some View {
         NavigationView {
@@ -25,25 +25,28 @@ struct AddMedicineView: View {
                 VStack(alignment: .leading) {
                     Text("medicineDetail.stock.label")
                         .font(.headline)
-                    TextField("medicineDetail.stock.label", value: $stock, formatter: NumberFormatter())
+                    TextField("medicineDetail.stock.label", text: $stockText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .keyboardType(.numberPad)
                 }
                 .padding(.horizontal)
             }
             .navigationBarTitle("addMedicine.navigationTitle", displayMode: .inline)
-            .navigationBarItems(trailing: Button("addMedicine.saveButton") {
-                let cleanedAisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: aisle)
-                Task {
-                    await catalogViewModel.addMedicine(
-                        name: name,
-                        stock: stock,
-                        aisle: cleanedAisle,
-                        user: authenticationViewModel.session?.uid ?? ""
-                    )
-                    dismiss()
+            .navigationBarItems(
+                leading: Button("addMedicine.cancelButton") { dismiss() },
+                trailing: Button("addMedicine.saveButton") {
+                    let cleanedAisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: aisle)
+                    Task {
+                        await catalogViewModel.addMedicine(
+                            name: name,
+                            stock: Int(stockText) ?? 0,
+                            aisle: cleanedAisle,
+                            user: authenticationViewModel.session?.uid ?? ""
+                        )
+                        dismiss()
+                    }
                 }
-            })
+            )
         }
     }
 }
