@@ -67,13 +67,10 @@ extension MedicineDetailView {
                         .font(.title)
                         .foregroundColor(.red)
                 }
-                TextField("medicineDetail.stock.label", value: $medicine.stock, formatter: NumberFormatter())
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .keyboardType(.numberPad)
-                .frame(width: 100)
-                Button(action: {
-                    Task { await viewModel.increaseStock(medicine, user: authenticationViewModel.session?.uid ?? "") }
-                }) {
+                Text(medicine.stock, format: .number)
+                    .font(.title2)
+                    .frame(width: 100)
+                Button(action: {}) {
                     Image(systemName: "plus.circle")
                         .font(.title)
                         .foregroundColor(.green)
