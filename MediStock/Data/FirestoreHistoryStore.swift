@@ -26,6 +26,7 @@ final class FirestoreHistoryStore: HistoryStoring {
         AsyncStream { continuation in
             let listener = collection
                 .whereField("medicineId", isEqualTo: medicineId)
+                .order(by: "timestamp", descending: true)
                 .addSnapshotListener { snapshot, error in
                     guard let snapshot else {
                         if let error { print("Error observing history: \(error)") }
