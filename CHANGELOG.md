@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.11.0](https://github.com/Fenriz1349/MediStock/compare/v1.10.0...v1.11.0) (2026-08-07)
+
+
+### Features
+
+* add currentUser in FirebaseAuthenticationService, implement actual FirestoreHistoryStore functions, remove authenticationVM from all view ([1d3af89](https://github.com/Fenriz1349/MediStock/commit/1d3af89125ee3ec3b7249d8cf217786b0249d452))
+* add timestamp ordering ([40a4d6a](https://github.com/Fenriz1349/MediStock/commit/40a4d6aa2e9780b5b7720ce0c8d3145183331228))
+* update recordAddition and recordDeletion details label ([2dab844](https://github.com/Fenriz1349/MediStock/commit/2dab8444fd93ef6cb38532f773a4763401626375))
+
 ## [1.10.0](https://github.com/Fenriz1349/MediStock/compare/v1.9.0...v1.10.0) (2026-08-07)
 
 
