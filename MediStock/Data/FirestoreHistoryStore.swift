@@ -33,7 +33,7 @@ final class FirestoreHistoryStore: HistoryStoring {
         let documentRef = entry.id.map(collection.document) ?? collection.document()
         var dto = HistoryEntryDTO(entry: entry)
         dto.id = documentRef.documentID
-        try await documentRef.setData(from: dto)
+        try documentRef.setData(from: dto)
     }
 }
 

@@ -10,6 +10,7 @@ import SwiftUI
 struct AllMedicinesView: View {
     @EnvironmentObject var viewModel: CatalogViewModel
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
+    @Environment(\.diContainer) private var container
     @State private var filterText: String = ""
     @State private var sortOption: SortOption = .none
     @State private var isPresentingAddMedicine = false
@@ -38,7 +39,7 @@ struct AllMedicinesView: View {
                 // Liste des Médicaments
                 List {
                     ForEach(viewModel.medicines(matching: filterText, sortedBy: sortOption), id: \.id) { medicine in
-                        NavigationLink(destination: MedicineDetailView(medicine: medicine)) {
+                        NavigationLink(destination: MedicineDetailView(viewModel: container.makeMedicineDetailViewModel(medicine: medicine))) {
                             VStack(alignment: .leading) {
                                 Text(medicine.name)
                                     .font(.headline)

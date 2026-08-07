@@ -9,12 +9,13 @@ import SwiftUI
 
 struct AisleMedicinesView: View {
     @EnvironmentObject var viewModel: CatalogViewModel
+    @Environment(\.diContainer) private var container
     var aisle: String
 
     var body: some View {
         List {
             ForEach(viewModel.medicines(inAisle: aisle), id: \.id) { medicine in
-                NavigationLink(destination: MedicineDetailView(medicine: medicine)) {
+                NavigationLink(destination: MedicineDetailView(viewModel: container.makeMedicineDetailViewModel(medicine: medicine))) {
                     VStack(alignment: .leading) {
                         Text(medicine.name)
                             .font(.headline)

@@ -31,7 +31,7 @@ final class FirestoreMedicineStore: MedicineStoring {
         let documentRef = medicine.id.map(collection.document) ?? collection.document()
         var dto = MedicineDTO(medicine: medicine)
         dto.id = documentRef.documentID
-        try await documentRef.setData(from: dto)
+        try documentRef.setData(from: dto)
         return dto.toDomain()
     }
 
@@ -59,3 +59,4 @@ private struct MedicineDTO: Codable {
         Medicine(id: id, name: name, stock: stock, aisle: aisle)
     }
 }
+
