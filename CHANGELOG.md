@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.11.0](https://github.com/Fenriz1349/MediStock/compare/v1.10.0...v1.11.0) (2026-08-07)
+
+
+### Features
+
+* add currentUser in FirebaseAuthenticationService, implement actual FirestoreHistoryStore functions, remove authenticationVM from all view ([1d3af89](https://github.com/Fenriz1349/MediStock/commit/1d3af89125ee3ec3b7249d8cf217786b0249d452))
+* add timestamp ordering ([40a4d6a](https://github.com/Fenriz1349/MediStock/commit/40a4d6aa2e9780b5b7720ce0c8d3145183331228))
+* update recordAddition and recordDeletion details label ([2dab844](https://github.com/Fenriz1349/MediStock/commit/2dab8444fd93ef6cb38532f773a4763401626375))
+
+## [1.10.0](https://github.com/Fenriz1349/MediStock/compare/v1.9.0...v1.10.0) (2026-08-07)
+
+
+### Features
+
+* add mapError in FirestoreMedicineStore and FirestoreHistoryStore ([ebfc974](https://github.com/Fenriz1349/MediStock/commit/ebfc9745fb73562f15075aff58287b5e5af9e03e))
+* add MedicineError and MedicineErrorMessage ([09c16b8](https://github.com/Fenriz1349/MediStock/commit/09c16b8e5ef57ec28fed24753f64569a19771df6))
+* add Toasty display in MedicineDetailView, AllMedicinesView, AisleListView and ContentView ([0f5e485](https://github.com/Fenriz1349/MediStock/commit/0f5e48519b94c1322411dadb4122a9779896a482))
+* rework VM with error handlign and no try? ([2860fd4](https://github.com/Fenriz1349/MediStock/commit/2860fd496f139a855dea8a597918e7d2d77bd6ce))
+
+
+### Bug Fixes
+
+* fix catalogViewModel.listen() in ContentView ([d1b3d72](https://github.com/Fenriz1349/MediStock/commit/d1b3d729d75988c162d16b7ce3b489e46679e557))
+
+## [1.9.0](https://github.com/Fenriz1349/MediStock/compare/v1.8.0...v1.9.0) (2026-08-07)
+
+
+### Features
+
+* add AuthenticationError and AuthenticationErrorMessage for localisation, add mapError in FirebaseAuthenticationService ([1ea58ad](https://github.com/Fenriz1349/MediStock/commit/1ea58ad82508e09dc46c418ccd12d1ce809db982))
+* add PasswordPolicy to handle password validation rules, PasswordRequirement to handle localisation ([1f2bac5](https://github.com/Fenriz1349/MediStock/commit/1f2bac5c7fb00fbf62919c0a61b1588aa9a6c62a))
+* add Toasty in UserView and AuthenticationView to display errorMessage ([4635353](https://github.com/Fenriz1349/MediStock/commit/463535321f166b74e40d884ce3352baf466b77fa))
+* add ToastyContainer over ContentView ([a729335](https://github.com/Fenriz1349/MediStock/commit/a7293357ee73adaff1c3cef544cbc8e062ed6412))
+* rework AuthenticationViewModel to catch error un AuthenticationError instead of print ([627b07a](https://github.com/Fenriz1349/MediStock/commit/627b07a7c8605ba2a9049f45c514913c5ace3fe9))
+
 ## [1.8.0](https://github.com/Fenriz1349/MediStock/compare/v1.7.0...v1.8.0) (2026-08-07)
 
 

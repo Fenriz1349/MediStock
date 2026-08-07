@@ -11,6 +11,10 @@ import Foundation
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
     @Published private(set) var session: AppUser?
+    /// Reset to `nil` at the start of every action, then set again on failure — the View observes
+    /// this to trigger a toast, resolving the localized message itself (this ViewModel never
+    /// touches the display language).
+    @Published private(set) var error: AuthenticationError?
 
     private let authenticationService: AuthenticationServicing
     private var observationTask: Task<Void, Never>?
@@ -37,10 +41,13 @@ final class AuthenticationViewModel: ObservableObject {
     ///   - email: The account's email address.
     ///   - password: The account's password.
     func signIn(email: String, password: String) async {
+        error = nil
         do {
             session = try await authenticationService.signIn(email: email, password: password)
+        } catch let authError as AuthenticationError {
+            error = authError
         } catch {
-            print("Error signing in: \(error.localizedDescription)")
+            self.error = .unknown
         }
     }
 
@@ -49,34 +56,41 @@ final class AuthenticationViewModel: ObservableObject {
     ///   - email: The email address to register the new account with.
     ///   - password: The password to set for the new account.
     func signUp(email: String, password: String) async {
+        error = nil
         do {
             session = try await authenticationService.signUp(email: email, password: password)
+        } catch let authError as AuthenticationError {
+            error = authError
         } catch {
-            print("Error creating user: \(error.localizedDescription)")
+            self.error = .unknown
         }
     }
 
     /// Signs out the current session locally. Does not touch the account itself — use
     /// `deleteAccount()` to remove it (App Store guideline 5.1.1(v)).
     func signOut() {
+        error = nil
         do {
             try authenticationService.signOut()
             session = nil
+        } catch let authError as AuthenticationError {
+            error = authError
         } catch {
-            print("Error signing out: \(error.localizedDescription)")
+            self.error = .unknown
         }
     }
 
     /// Permanently deletes the account and clears the session. Irreversible — the View is
     /// responsible for confirming with the user before calling this.
     func deleteAccount() async {
+        error = nil
         do {
             try await authenticationService.deleteAccount()
             session = nil
+        } catch let authError as AuthenticationError {
+            error = authError
         } catch {
-            // Full error dump, not just localizedDescription: Firebase's requiresRecentLogin case
-            // in particular carries the actionable info (its error code) outside the description.
-            print("Error deleting account: \(error)")
+            self.error = .unknown
         }
     }
 

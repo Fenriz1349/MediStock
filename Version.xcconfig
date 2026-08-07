@@ -10,5 +10,5 @@
 
 // Single source of truth for the app's version. Kept as plain text (not in project.pbxproj)
 // so automation (release-please) can bump it without touching the Xcode project file.
-MARKETING_VERSION = 1.8.0 // x-release-please-version
+MARKETING_VERSION = 1.11.0 // x-release-please-version
 CURRENT_PROJECT_VERSION = 1

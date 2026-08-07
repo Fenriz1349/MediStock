@@ -10,7 +10,6 @@ import SwiftUI
 /// Screen to create a new medicine, reached from the Catalog screens' "+" button.
 struct AddMedicineView: View {
     @EnvironmentObject var catalogViewModel: CatalogViewModel
-    @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
     @Environment(\.dismiss) private var dismiss
 
     @State private var name = ""
@@ -40,8 +39,7 @@ struct AddMedicineView: View {
                         await catalogViewModel.addMedicine(
                             name: name,
                             stock: Int(stockText) ?? 0,
-                            aisle: cleanedAisle,
-                            user: authenticationViewModel.session?.uid ?? ""
+                            aisle: cleanedAisle
                         )
                         dismiss()
                     }
@@ -54,6 +52,5 @@ struct AddMedicineView: View {
 #Preview {
     AddMedicineView()
         .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                            historyStore: FirestoreHistoryStore()))
-        .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+                                            historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
 }

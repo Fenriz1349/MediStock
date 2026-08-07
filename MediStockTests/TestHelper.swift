@@ -71,12 +71,8 @@ enum TestHelper {
     static func makeMedicineDetailViewModel(
         medicine: Medicine = TestHelper.makeMedicine(),
         medicineStore: MedicineStoring = MockMedicineStoring(),
-        historyStore: HistoryStoring = MockHistoryStoring(),
-        authenticationService: AuthenticationServicing = MockAuthenticationServicing()
+        historyStore: HistoryStoring = MockHistoryStoring()
     ) -> MedicineDetailViewModel {
-        MedicineDetailViewModel(medicine: medicine,
-                                medicineStore: medicineStore,
-                                historyStore: historyStore,
-                                authenticationService: authenticationService)
+        MedicineDetailViewModel(medicine: medicine, medicineStore: medicineStore, historyStore: historyStore)
     }
 }

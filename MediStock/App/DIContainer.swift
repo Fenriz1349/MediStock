@@ -18,7 +18,7 @@ struct DIContainer {
 
     init(
         medicineStore: MedicineStoring = FirestoreMedicineStore(),
-        historyStore: HistoryStoring = FirestoreHistoryStore(),
+        historyStore: HistoryStoring = FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
         authenticationService: AuthenticationServicing = FirebaseAuthenticationService()
     ) {
         self.medicineStore = medicineStore
@@ -41,8 +41,7 @@ struct DIContainer {
         MedicineDetailViewModel(
             medicine: medicine,
             medicineStore: medicineStore,
-            historyStore: historyStore,
-            authenticationService: authenticationService
+            historyStore: historyStore
         )
     }
 }
