@@ -27,10 +27,13 @@ struct MediStockApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(authenticationViewModel)
-                .environmentObject(catalogViewModel)
-                .environment(\.diContainer, container)
+            ToastyContainer(manager: toasty) {
+                ContentView()
+                    .environmentObject(authenticationViewModel)
+                    .environmentObject(catalogViewModel)
+                    .environment(\.diContainer, container)
+                    .environmentObject(toasty)
+            }
         }
     }
 }

@@ -41,6 +41,10 @@
 		686916783025D20200E86CFE /* AisleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916773025D20200E86CFE /* AisleLabel.swift */; };
 		6869167A3025DE0A00E86CFE /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916793025DE0A00E86CFE /* UserView.swift */; };
 		6869167D3025F0AC00E86CFE /* Toasty in Frameworks */ = {isa = PBXBuildFile; productRef = 6869167C3025F0AC00E86CFE /* Toasty */; };
+		686916803025F47300E86CFE /* AuthenticationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6869167F3025F47300E86CFE /* AuthenticationError.swift */; };
+		686916823025F70600E86CFE /* PasswordPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916813025F70600E86CFE /* PasswordPolicy.swift */; };
+		686916843025FA5100E86CFE /* PasswordRequirementLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916833025FA5100E86CFE /* PasswordRequirementLabel.swift */; };
+		686916863025FB0200E86CFE /* PasswordPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916853025FB0200E86CFE /* PasswordPolicyTests.swift */; };
 		6887EC1F30246BBB00DAF7E8 /* MedicineFormContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */; };
 		6887EC2130246BCC00DAF7E8 /* AddMedicineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */; };
 		68D144E630136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
@@ -109,6 +113,10 @@
 		686916753025C2FE00E86CFE /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		686916773025D20200E86CFE /* AisleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleLabel.swift; sourceTree = "<group>"; };
 		686916793025DE0A00E86CFE /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
+		6869167F3025F47300E86CFE /* AuthenticationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationError.swift; sourceTree = "<group>"; };
+		686916813025F70600E86CFE /* PasswordPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordPolicy.swift; sourceTree = "<group>"; };
+		686916833025FA5100E86CFE /* PasswordRequirementLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordRequirementLabel.swift; sourceTree = "<group>"; };
+		686916853025FB0200E86CFE /* PasswordPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordPolicyTests.swift; sourceTree = "<group>"; };
 		6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineFormContent.swift; sourceTree = "<group>"; };
 		6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineView.swift; sourceTree = "<group>"; };
 		68D144E530136D3900696204 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -250,6 +258,7 @@
 			isa = PBXGroup;
 			children = (
 				6836B20730248295003E756D /* AisleCode.swift */,
+				686916813025F70600E86CFE /* PasswordPolicy.swift */,
 			);
 			path = BusinessRules;
 			sourceTree = "<group>";
@@ -258,8 +267,17 @@
 			isa = PBXGroup;
 			children = (
 				6836B20A3024922E003E756D /* AisleCodeTest.swift */,
+				686916853025FB0200E86CFE /* PasswordPolicyTests.swift */,
 			);
 			path = BusinessRules;
+			sourceTree = "<group>";
+		};
+		6869167E3025F45000E86CFE /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				6869167F3025F47300E86CFE /* AuthenticationError.swift */,
+			);
+			path = Errors;
 			sourceTree = "<group>";
 		};
 		68D144E93013907000696204 /* Domain */ = {
@@ -267,6 +285,7 @@
 			children = (
 				68D144EB3013909800696204 /* Models */,
 				68D144EC301390B100696204 /* Repositories */,
+				6869167E3025F45000E86CFE /* Errors */,
 				6836B2063024826F003E756D /* BusinessRules */,
 			);
 			path = Domain;
@@ -336,8 +355,9 @@
 		68D145003013A50500696204 /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
-				53E0D8D72C06097900DE1134 /* AuthenticationView.swift */,
 				68D145013013A52800696204 /* AuthenticationViewModel.swift */,
+				53E0D8D72C06097900DE1134 /* AuthenticationView.swift */,
+				686916833025FA5100E86CFE /* PasswordRequirementLabel.swift */,
 				686916793025DE0A00E86CFE /* UserView.swift */,
 			);
 			path = Authentication;
@@ -542,13 +562,16 @@
 				6836B20830248295003E756D /* AisleCode.swift in Sources */,
 				53E0D8DC2C06099C00DE1134 /* Medicine.swift in Sources */,
 				53E0D8DA2C06098F00DE1134 /* AisleMedicinesView.swift in Sources */,
+				686916823025F70600E86CFE /* PasswordPolicy.swift in Sources */,
 				68D144F4301399A300696204 /* AuthenticationServicing.swift in Sources */,
 				682D9FED3021EE6500DBC11E /* MedicineDetailViewModel.swift in Sources */,
 				68D144F03013998100696204 /* MedicineStoring.swift in Sources */,
+				686916803025F47300E86CFE /* AuthenticationError.swift in Sources */,
 				53E0D8E62C066F4100DE1134 /* AisleListView.swift in Sources */,
 				686916723025BC3000E86CFE /* MedicineDetailStockSection.swift in Sources */,
 				53E0D8972C06084700DE1134 /* MediStockApp.swift in Sources */,
 				53E0D8E82C066F6500DE1134 /* MedicineDetailView.swift in Sources */,
+				686916843025FA5100E86CFE /* PasswordRequirementLabel.swift in Sources */,
 				68D144FA30139B2F00696204 /* FirebaseAuthenticationService.swift in Sources */,
 				68D144F630139B1D00696204 /* FirestoreMedicineStore.swift in Sources */,
 				686916783025D20200E86CFE /* AisleLabel.swift in Sources */,
@@ -565,6 +588,7 @@
 				6836B20B3024922E003E756D /* AisleCodeTest.swift in Sources */,
 				68D1450A3013AA1600696204 /* TestHelper.swift in Sources */,
 				68D145063013A58700696204 /* AuthenticationViewModelTest.swift in Sources */,
+				686916863025FB0200E86CFE /* PasswordPolicyTests.swift in Sources */,
 				682D9FF03021EE9000DBC11E /* CatalogViewModelTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
