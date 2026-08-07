@@ -14,7 +14,7 @@ final class AuthenticationViewModelTest: XCTestCase {
         let service = MockAuthenticationServicing()
         let user = TestHelper.makeAppUser()
         service.signInResult = .success(user)
-        let viewModel = AuthenticationViewModel(authenticationService: service)
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
 
         await viewModel.signIn(email: "test@example.com", password: "password")
 
@@ -25,7 +25,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     func testSignInFailureKeepsSessionNil() async {
         let service = MockAuthenticationServicing()
         service.signInResult = .failure(MockAuthenticationServicing.Failure.generic)
-        let viewModel = AuthenticationViewModel(authenticationService: service)
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
 
         await viewModel.signIn(email: "test@example.com", password: "wrong")
 
@@ -37,7 +37,7 @@ final class AuthenticationViewModelTest: XCTestCase {
         let service = MockAuthenticationServicing()
         let user = TestHelper.makeAppUser(uid: "456", email: "new@example.com")
         service.signUpResult = .success(user)
-        let viewModel = AuthenticationViewModel(authenticationService: service)
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
 
         await viewModel.signUp(email: "new@example.com", password: "password")
 
@@ -48,7 +48,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     func testSignOutClearsSession() async {
         let service = MockAuthenticationServicing()
         service.signInResult = .success(TestHelper.makeAppUser())
-        let viewModel = AuthenticationViewModel(authenticationService: service)
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
         await viewModel.signIn(email: "test@example.com", password: "password")
 
         viewModel.signOut()
@@ -59,7 +59,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     @MainActor
     func testListenReflectsSessionStream() async {
         let service = MockAuthenticationServicing()
-        let viewModel = AuthenticationViewModel(authenticationService: service)
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
         let user = TestHelper.makeAppUser(uid: "789", email: "stream@example.com")
 
         viewModel.listen()
@@ -71,7 +71,7 @@ final class AuthenticationViewModelTest: XCTestCase {
 }
 
 /// In-memory fake of `AuthenticationServicing` for testing, with a controllable session stream.
-private final class MockAuthenticationServicing: AuthenticationServicing {
+final class MockAuthenticationServicing: AuthenticationServicing {
     enum Failure: Error {
         case generic
     }
