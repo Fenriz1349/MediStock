@@ -45,6 +45,7 @@
 		686916823025F70600E86CFE /* PasswordPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916813025F70600E86CFE /* PasswordPolicy.swift */; };
 		686916843025FA5100E86CFE /* PasswordRequirementLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916833025FA5100E86CFE /* PasswordRequirementLabel.swift */; };
 		686916863025FB0200E86CFE /* PasswordPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916853025FB0200E86CFE /* PasswordPolicyTests.swift */; };
+		686916883025FE4200E86CFE /* AuthenticationErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916873025FE4200E86CFE /* AuthenticationErrorMessage.swift */; };
 		6887EC1F30246BBB00DAF7E8 /* MedicineFormContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */; };
 		6887EC2130246BCC00DAF7E8 /* AddMedicineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */; };
 		68D144E630136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
@@ -117,6 +118,7 @@
 		686916813025F70600E86CFE /* PasswordPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordPolicy.swift; sourceTree = "<group>"; };
 		686916833025FA5100E86CFE /* PasswordRequirementLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordRequirementLabel.swift; sourceTree = "<group>"; };
 		686916853025FB0200E86CFE /* PasswordPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordPolicyTests.swift; sourceTree = "<group>"; };
+		686916873025FE4200E86CFE /* AuthenticationErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationErrorMessage.swift; sourceTree = "<group>"; };
 		6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineFormContent.swift; sourceTree = "<group>"; };
 		6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineView.swift; sourceTree = "<group>"; };
 		68D144E530136D3900696204 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -358,6 +360,7 @@
 				68D145013013A52800696204 /* AuthenticationViewModel.swift */,
 				53E0D8D72C06097900DE1134 /* AuthenticationView.swift */,
 				686916833025FA5100E86CFE /* PasswordRequirementLabel.swift */,
+				686916873025FE4200E86CFE /* AuthenticationErrorMessage.swift */,
 				686916793025DE0A00E86CFE /* UserView.swift */,
 			);
 			path = Authentication;
@@ -544,6 +547,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				686916883025FE4200E86CFE /* AuthenticationErrorMessage.swift in Sources */,
 				686916763025C2FE00E86CFE /* DIContainer.swift in Sources */,
 				53E0D8E22C065FFE00DE1134 /* AppDelegate.swift in Sources */,
 				68D144F830139B2700696204 /* FirestoreHistoryStore.swift in Sources */,

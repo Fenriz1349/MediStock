@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import Toasty
 
 struct AuthenticationView: View {
     @State private var email = ""
     @State private var password = ""
     @EnvironmentObject var viewModel: AuthenticationViewModel
+    @EnvironmentObject var toasty: ToastyManager
 
     var body: some View {
         let unmetPasswordRequirements = PasswordPolicy.unmetRequirements(for: password)
@@ -47,6 +49,11 @@ struct AuthenticationView: View {
             .disabled(!unmetPasswordRequirements.isEmpty)
         }
         .padding()
+        .onChange(of: viewModel.error) { _, error in
+            if let error {
+                toasty.showError(error.localizedMessage)
+            }
+        }
     }
 }
 
@@ -54,5 +61,6 @@ struct AuthenticationView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticationView()
             .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+            .environmentObject(ToastyManager())
     }
 }
