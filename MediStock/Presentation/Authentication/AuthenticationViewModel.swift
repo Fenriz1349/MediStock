@@ -15,6 +15,8 @@ final class AuthenticationViewModel: ObservableObject {
     private let authenticationService: AuthenticationServicing
     private var observationTask: Task<Void, Never>?
 
+    /// - Parameter authenticationService: Domain-level auth abstraction, kept behind a protocol so
+    ///   this ViewModel never depends on Firebase directly.
     init(authenticationService: AuthenticationServicing) {
         self.authenticationService = authenticationService
     }
@@ -30,6 +32,10 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
+    /// Signs in with an existing account and updates `session` on success.
+    /// - Parameters:
+    ///   - email: The account's email address.
+    ///   - password: The account's password.
     func signIn(email: String, password: String) async {
         do {
             session = try await authenticationService.signIn(email: email, password: password)
@@ -38,6 +44,10 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
+    /// Creates a new account and updates `session` on success.
+    /// - Parameters:
+    ///   - email: The email address to register the new account with.
+    ///   - password: The password to set for the new account.
     func signUp(email: String, password: String) async {
         do {
             session = try await authenticationService.signUp(email: email, password: password)
@@ -46,6 +56,8 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
+    /// Signs out the current session locally. Does not touch the account itself — use
+    /// `deleteAccount()` to remove it (App Store guideline 5.1.1(v)).
     func signOut() {
         do {
             try authenticationService.signOut()
@@ -55,6 +67,8 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
+    /// Permanently deletes the account and clears the session. Irreversible — the View is
+    /// responsible for confirming with the user before calling this.
     func deleteAccount() async {
         do {
             try await authenticationService.deleteAccount()
