@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import Toasty
 
 /// Account screen: shows the connected user's email, lets them sign out or permanently delete
 /// their account. Uses `AuthenticationViewModel` directly (same VM as `AuthenticationView`) since
 /// every action here is an authentication concern — no dedicated ViewModel needed.
 struct UserView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
+    @EnvironmentObject var toasty: ToastyManager
     @State private var isPresentingDeleteConfirmation = false
 
     var body: some View {
@@ -49,10 +51,16 @@ struct UserView: View {
                 Text("user.deleteAccount.confirmMessage")
             }
         }
+        .onChange(of: viewModel.error) { _, error in
+            if let error {
+                toasty.showError(error.localizedMessage)
+            }
+        }
     }
 }
 
 #Preview {
     UserView()
         .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+        .environmentObject(ToastyManager())
 }

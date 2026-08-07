@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Firebase
+import Toasty
 
 @main
 struct MediStockApp: App {
@@ -14,6 +15,7 @@ struct MediStockApp: App {
     private let container: DIContainer
     @StateObject private var authenticationViewModel: AuthenticationViewModel
     @StateObject private var catalogViewModel: CatalogViewModel
+    @StateObject private var toasty = ToastyManager()
 
     init() {
         FirebaseApp.configure()
@@ -25,10 +27,13 @@ struct MediStockApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(authenticationViewModel)
-                .environmentObject(catalogViewModel)
-                .environment(\.diContainer, container)
+            ToastyContainer(manager: toasty) {
+                ContentView()
+                    .environmentObject(authenticationViewModel)
+                    .environmentObject(catalogViewModel)
+                    .environment(\.diContainer, container)
+                    .environmentObject(toasty)
+            }
         }
     }
 }
