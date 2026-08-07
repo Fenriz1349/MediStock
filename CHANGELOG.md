@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/Fenriz1349/MediStock/compare/v1.6.0...v1.7.0) (2026-08-07)
+
+
+### Features
+
+* add AisleLabel to handal localisation and label name, fix navigation ([dff3537](https://github.com/Fenriz1349/MediStock/commit/dff35373499ba90aa7a452667c6f67615d7cf2ea))
+
 ## [1.6.0](https://github.com/Fenriz1349/MediStock/compare/v1.5.0...v1.6.0) (2026-08-07)
 
 
