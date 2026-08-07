@@ -23,6 +23,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
-            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore()))
+            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
+                                                historyStore: FirestoreHistoryStore()))
     }
 }

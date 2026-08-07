@@ -28,7 +28,9 @@ final class MedicineDetailViewModelTest: XCTestCase {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let medicine = TestHelper.makeMedicine(name: "Doliprane", aisle: "AD56")
-        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine, medicineStore: medicineStore, historyStore: historyStore)
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore)
 
         await viewModel.updateLabel(name: "Dafalgan", aisle: "AD10")
 
@@ -42,7 +44,9 @@ final class MedicineDetailViewModelTest: XCTestCase {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let medicine = TestHelper.makeMedicine(stock: 10)
-        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine, medicineStore: medicineStore, historyStore: historyStore)
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore)
 
         await viewModel.increase()
 
@@ -56,7 +60,9 @@ final class MedicineDetailViewModelTest: XCTestCase {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let medicine = TestHelper.makeMedicine(stock: 10)
-        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine, medicineStore: medicineStore, historyStore: historyStore)
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore)
 
         await viewModel.decrease()
 
@@ -70,7 +76,9 @@ final class MedicineDetailViewModelTest: XCTestCase {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let medicine = TestHelper.makeMedicine()
-        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine, medicineStore: medicineStore, historyStore: historyStore)
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore)
 
         await viewModel.delete()
 
@@ -84,7 +92,10 @@ final class MedicineDetailViewModelTest: XCTestCase {
         let historyStore = MockHistoryStoring()
         let authenticationService = MockAuthenticationServicing()
         let medicine = TestHelper.makeMedicine()
-        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine, medicineStore: medicineStore, historyStore: historyStore, authenticationService: authenticationService)
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore,
+                                                               authenticationService: authenticationService)
 
         viewModel.listen()
         authenticationService.emit(TestHelper.makeAppUser(uid: "user-42"))

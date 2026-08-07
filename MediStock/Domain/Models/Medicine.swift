@@ -9,7 +9,7 @@ import Foundation
 
 /// A stocked medicine reference, located in a given aisle with a tracked quantity.
 struct Medicine: Identifiable, Codable, Equatable {
-    var id: String? = nil
+    var id: String?
     var name: String
     var stock: Int
     var aisle: String

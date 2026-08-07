@@ -19,19 +19,19 @@ struct MedicineDetailStockSection: View {
             Text("medicineDetail.stock.label")
                 .font(.headline)
             HStack {
-                Button(action: onDecrease) {
+                Button(action: onDecrease, label: {
                     Image(systemName: "minus.circle")
                         .font(.title)
                         .foregroundColor(.red)
-                }
+                })
                 Text(stock, format: .number)
                     .font(.title2)
                     .frame(width: 100)
-                Button(action: onIncrease) {
+                Button(action: onIncrease, label: {
                     Image(systemName: "plus.circle")
                         .font(.title)
                         .foregroundColor(.green)
-                }
+                })
             }
             .padding(.bottom, 10)
         }

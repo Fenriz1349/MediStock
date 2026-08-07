@@ -29,10 +29,11 @@ final class FirestoreMedicineStore: MedicineStoring {
 
     func save(_ medicine: Medicine) async throws -> Medicine {
         let documentRef = medicine.id.map(collection.document) ?? collection.document()
-        var dto = MedicineDTO(medicine: medicine)
-        dto.id = documentRef.documentID
+        let dto = MedicineDTO(medicine: medicine)
         try documentRef.setData(from: dto)
-        return dto.toDomain()
+        var saved = medicine
+        saved.id = documentRef.documentID
+        return saved
     }
 
     func delete(_ medicine: Medicine) async throws {
@@ -59,4 +60,3 @@ private struct MedicineDTO: Codable {
         Medicine(id: id, name: name, stock: stock, aisle: aisle)
     }
 }
-

@@ -43,7 +43,8 @@ struct AllMedicinesView: View {
                             VStack(alignment: .leading) {
                                 Text(medicine.name)
                                     .font(.headline)
-                                Text(String(localized: "allMedicines.medicineStock", defaultValue: "Stock : \(medicine.stock)"))
+                                Text(String(localized: "allMedicines.medicineStock",
+                                            defaultValue: "Stock : \(medicine.stock)"))
                                     .font(.subheadline)
                             }
                         }
@@ -60,9 +61,9 @@ struct AllMedicinesView: View {
                 .navigationBarTitle("tab.allMedicines.title")
                 .navigationBarItems(trailing: Button(action: {
                     isPresentingAddMedicine = true
-                }) {
+                }, label: {
                     Image(systemName: "plus")
-                })
+                }))
                 .sheet(isPresented: $isPresentingAddMedicine) {
                     AddMedicineView()
                         .environmentObject(viewModel)
@@ -76,7 +77,8 @@ struct AllMedicinesView: View {
 struct AllMedicinesView_Previews: PreviewProvider {
     static var previews: some View {
         AllMedicinesView()
-            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore()))
+            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
+                                                historyStore: FirestoreHistoryStore()))
             .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
     }
 }

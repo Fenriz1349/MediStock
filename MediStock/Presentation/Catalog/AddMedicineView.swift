@@ -35,7 +35,8 @@ struct AddMedicineView: View {
             .navigationBarItems(
                 leading: Button("addMedicine.cancelButton") { dismiss() },
                 trailing: Button("addMedicine.saveButton") {
-                    let cleanedAisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: aisle)
+                    let cleanedAisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"),
+                                                            from: aisle)
                     Task {
                         await catalogViewModel.addMedicine(
                             name: name,
@@ -53,6 +54,7 @@ struct AddMedicineView: View {
 
 #Preview {
     AddMedicineView()
-        .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore()))
+        .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
+                                            historyStore: FirestoreHistoryStore()))
         .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
 }

@@ -24,9 +24,9 @@ struct AisleListView: View {
             .navigationBarTitle("tab.aisles.title")
             .navigationBarItems(trailing: Button(action: {
                 isPresentingAddMedicine = true
-            }) {
+            }, label: {
                 Image(systemName: "plus")
-            })
+            }))
             .sheet(isPresented: $isPresentingAddMedicine) {
                 AddMedicineView()
                     .environmentObject(viewModel)

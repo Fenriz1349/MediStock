@@ -74,6 +74,9 @@ enum TestHelper {
         historyStore: HistoryStoring = MockHistoryStoring(),
         authenticationService: AuthenticationServicing = MockAuthenticationServicing()
     ) -> MedicineDetailViewModel {
-        MedicineDetailViewModel(medicine: medicine, medicineStore: medicineStore, historyStore: historyStore, authenticationService: authenticationService)
+        MedicineDetailViewModel(medicine: medicine,
+                                medicineStore: medicineStore,
+                                historyStore: historyStore,
+                                authenticationService: authenticationService)
     }
 }

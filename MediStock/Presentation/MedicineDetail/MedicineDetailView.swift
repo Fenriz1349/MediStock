@@ -42,10 +42,10 @@ struct MedicineDetailView: View {
                 await viewModel.delete()
                 dismiss()
             }
-        }) {
+        }, label: {
             Image(systemName: "trash")
                 .foregroundColor(.red)
-        })
+        }))
         .onAppear {
             viewModel.listen()
             name = viewModel.medicine.name
