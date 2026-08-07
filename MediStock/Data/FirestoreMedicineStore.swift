@@ -30,7 +30,7 @@ final class FirestoreMedicineStore: MedicineStoring {
     func save(_ medicine: Medicine) async throws -> Medicine {
         let documentRef = medicine.id.map(collection.document) ?? collection.document()
         let dto = MedicineDTO(medicine: medicine)
-        try documentRef.setData(from: dto)
+        try await documentRef.setData(from: dto)
         var saved = medicine
         saved.id = documentRef.documentID
         return saved

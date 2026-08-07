@@ -15,6 +15,8 @@ import Foundation
 final class MedicineDetailViewModel: ObservableObject {
     @Published private(set) var medicine: Medicine
     @Published private(set) var history: [HistoryEntry] = []
+    @Published var name: String
+    @Published var aisle: String
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
@@ -22,12 +24,15 @@ final class MedicineDetailViewModel: ObservableObject {
     private var currentUserId = ""
     private var historyTask: Task<Void, Never>?
     private var sessionTask: Task<Void, Never>?
+    private var saveLabelTask: Task<Void, Never>?
 
     init(medicine: Medicine,
          medicineStore: MedicineStoring,
          historyStore: HistoryStoring,
          authenticationService: AuthenticationServicing) {
         self.medicine = medicine
+        self.name = medicine.name
+        self.aisle = medicine.aisle
         self.medicineStore = medicineStore
         self.historyStore = historyStore
         self.authenticationService = authenticationService
@@ -51,6 +56,25 @@ final class MedicineDetailViewModel: ObservableObject {
                 self?.currentUserId = user?.uid ?? ""
             }
         }
+    }
+
+    /// Called by the View whenever `name`/`aisle` change. `cleanedAisle` is `aisle` already
+    /// stripped of any redundant label the user may have typed — that's a display/localization
+    /// concern the View resolves before calling this, this ViewModel doesn't know about it.
+    /// Cancels any save still in flight from a previous keystroke before starting this one, so
+    /// rapid typing can't fire overlapping saves that race and land out of order.
+    func scheduleLabelSave(cleanedAisle: String) {
+        saveLabelTask?.cancel()
+        saveLabelTask = Task { [weak self] in
+            await self?.saveLabelIfNeeded(cleanedAisle: cleanedAisle)
+        }
+    }
+
+    /// Skips the save if nothing actually changed vs. the persisted `medicine` (avoids re-saving
+    /// on the initial assignment of `name`/`aisle` from `medicine` in `init`).
+    private func saveLabelIfNeeded(cleanedAisle: String) async {
+        guard name != medicine.name || cleanedAisle != medicine.aisle else { return }
+        await updateLabel(name: name, aisle: cleanedAisle)
     }
 
     /// Updates the medicine's name and aisle. `aisle` is expected already cleaned of any redundant
@@ -99,17 +123,23 @@ final class MedicineDetailViewModel: ObservableObject {
         mutate(&updated)
         do {
             medicine = try await medicineStore.save(updated)
+        } catch {
+            print("Error saving medicine: \(error.localizedDescription)")
+            return
+        }
+        do {
             try await historyStore.record(HistoryEntry(medicineId: medicine.id ?? "",
                                                        user: currentUserId,
                                                        action: action,
                                                        details: details))
         } catch {
-            print("Error updating medicine: \(error.localizedDescription)")
+            print("Error recording history: \(error.localizedDescription)")
         }
     }
 
     deinit {
         historyTask?.cancel()
         sessionTask?.cancel()
+        saveLabelTask?.cancel()
     }
 }

@@ -9,20 +9,18 @@ import SwiftUI
 
 struct MedicineDetailView: View {
     @StateObject var viewModel: MedicineDetailViewModel
-    @State private var name = ""
-    @State private var aisle = ""
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 // Title
-                Text(name)
+                Text(viewModel.name)
                     .font(.largeTitle)
                     .padding(.top, 20)
 
                 // Medicine Name & Aisle
-                MedicineFormContent(name: $name, aisle: $aisle)
+                MedicineFormContent(name: $viewModel.name, aisle: $viewModel.aisle)
 
                 // Medicine Stock
                 MedicineDetailStockSection(
@@ -48,21 +46,13 @@ struct MedicineDetailView: View {
         }))
         .onAppear {
             viewModel.listen()
-            name = viewModel.medicine.name
-            aisle = viewModel.medicine.aisle
         }
-        .onChange(of: name) { _, newValue in save(name: newValue, aisle: aisle) }
-        .onChange(of: aisle) { _, newValue in save(name: name, aisle: newValue) }
-    }
-
-    /// Skips the save triggered by `onAppear` seeding `name`/`aisle` from `viewModel.medicine`:
-    /// that assignment is not a user edit, and comparing against the ViewModel's current values
-    /// (rather than tracking a separate "has the user typed yet" flag) detects that reliably even
-    /// though SwiftUI batches the seeding writes and their resulting onChange firing together.
-    private func save(name: String, aisle: String) {
-        let cleanedAisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: aisle)
-        guard name != viewModel.medicine.name || cleanedAisle != viewModel.medicine.aisle else { return }
-        Task { await viewModel.updateLabel(name: name, aisle: cleanedAisle) }
+        .onChange(of: viewModel.name) { _, _ in
+            viewModel.scheduleLabelSave(cleanedAisle: AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle))
+        }
+        .onChange(of: viewModel.aisle) { _, newValue in
+            viewModel.scheduleLabelSave(cleanedAisle: AisleCode.stripLabel(AisleLabel.localized, from: newValue))
+        }
     }
 }
 

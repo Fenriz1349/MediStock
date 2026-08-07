@@ -9,13 +9,12 @@ import SwiftUI
 
 struct AisleMedicinesView: View {
     @EnvironmentObject var viewModel: CatalogViewModel
-    @Environment(\.diContainer) private var container
     var aisle: String
 
     var body: some View {
         List {
             ForEach(viewModel.medicines(inAisle: aisle), id: \.id) { medicine in
-                NavigationLink(destination: MedicineDetailView(viewModel: container.makeMedicineDetailViewModel(medicine: medicine))) {
+                NavigationLink(value: medicine) {
                     VStack(alignment: .leading) {
                         Text(medicine.name)
                             .font(.headline)
@@ -33,7 +32,7 @@ struct AisleMedicinesView: View {
                 }
             }
         }
-        .navigationBarTitle(AisleCode.format(code: aisle, aisleLabel: String(localized: "medicineDetail.aisle.label")))
+        .navigationBarTitle(AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized))
     }
 }
 

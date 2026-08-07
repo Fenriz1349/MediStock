@@ -16,7 +16,7 @@ struct AllMedicinesView: View {
     @State private var isPresentingAddMedicine = false
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 // Filtrage et Tri
                 HStack {
@@ -39,7 +39,7 @@ struct AllMedicinesView: View {
                 // Liste des Médicaments
                 List {
                     ForEach(viewModel.medicines(matching: filterText, sortedBy: sortOption), id: \.id) { medicine in
-                        NavigationLink(destination: MedicineDetailView(viewModel: container.makeMedicineDetailViewModel(medicine: medicine))) {
+                        NavigationLink(value: medicine) {
                             VStack(alignment: .leading) {
                                 Text(medicine.name)
                                     .font(.headline)
@@ -59,6 +59,9 @@ struct AllMedicinesView: View {
                     }
                 }
                 .navigationBarTitle("tab.allMedicines.title")
+                .navigationDestination(for: Medicine.self) { medicine in
+                    MedicineDetailView(viewModel: container.makeMedicineDetailViewModel(medicine: medicine))
+                }
                 .navigationBarItems(trailing: Button(action: {
                     isPresentingAddMedicine = true
                 }, label: {
