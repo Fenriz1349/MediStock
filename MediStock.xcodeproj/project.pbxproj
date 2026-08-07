@@ -35,6 +35,8 @@
 		682D9FF930220D4C00DBC11E /* MedistockUI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */; };
 		6836B20830248295003E756D /* AisleCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6836B20730248295003E756D /* AisleCode.swift */; };
 		6836B20B3024922E003E756D /* AisleCodeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6836B20A3024922E003E756D /* AisleCodeTest.swift */; };
+		686916723025BC3000E86CFE /* MedicineDetailStockSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916713025BC3000E86CFE /* MedicineDetailStockSection.swift */; };
+		686916743025BC5800E86CFE /* MedicineDetailHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916733025BC5800E86CFE /* MedicineDetailHistorySection.swift */; };
 		6887EC1F30246BBB00DAF7E8 /* MedicineFormContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */; };
 		6887EC2130246BCC00DAF7E8 /* AddMedicineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */; };
 		68D144E630136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
@@ -98,6 +100,8 @@
 		6836B20730248295003E756D /* AisleCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleCode.swift; sourceTree = "<group>"; };
 		6836B20A3024922E003E756D /* AisleCodeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleCodeTest.swift; sourceTree = "<group>"; };
 		6852BE9030235A580078D739 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
+		686916713025BC3000E86CFE /* MedicineDetailStockSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailStockSection.swift; sourceTree = "<group>"; };
+		686916733025BC5800E86CFE /* MedicineDetailHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailHistorySection.swift; sourceTree = "<group>"; };
 		6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineFormContent.swift; sourceTree = "<group>"; };
 		6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineView.swift; sourceTree = "<group>"; };
 		68D144E530136D3900696204 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -212,6 +216,8 @@
 			children = (
 				682D9FEC3021EE6500DBC11E /* MedicineDetailViewModel.swift */,
 				53E0D8E72C066F6500DE1134 /* MedicineDetailView.swift */,
+				686916713025BC3000E86CFE /* MedicineDetailStockSection.swift */,
+				686916733025BC5800E86CFE /* MedicineDetailHistorySection.swift */,
 			);
 			path = MedicineDetail;
 			sourceTree = "<group>";
@@ -510,6 +516,7 @@
 				53E0D8D82C06097900DE1134 /* AuthenticationView.swift in Sources */,
 				53E0D8EA2C066F7A00DE1134 /* HistoryEntry.swift in Sources */,
 				68D144EE301393C600696204 /* AppUser.swift in Sources */,
+				686916743025BC5800E86CFE /* MedicineDetailHistorySection.swift in Sources */,
 				53E0D8DE2C0609A800DE1134 /* CatalogViewModel.swift in Sources */,
 				53E0D8992C06084700DE1134 /* ContentView.swift in Sources */,
 				682D9FF5302204AB00DBC11E /* SortOption.swift in Sources */,
@@ -524,6 +531,7 @@
 				682D9FED3021EE6500DBC11E /* MedicineDetailViewModel.swift in Sources */,
 				68D144F03013998100696204 /* MedicineStoring.swift in Sources */,
 				53E0D8E62C066F4100DE1134 /* AisleListView.swift in Sources */,
+				686916723025BC3000E86CFE /* MedicineDetailStockSection.swift in Sources */,
 				53E0D8972C06084700DE1134 /* MediStockApp.swift in Sources */,
 				53E0D8E82C066F6500DE1134 /* MedicineDetailView.swift in Sources */,
 				68D144FA30139B2F00696204 /* FirebaseAuthenticationService.swift in Sources */,

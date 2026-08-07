@@ -34,10 +34,14 @@ struct MedicineDetailView: View {
                 MedicineFormContent(name: $medicine.name, aisle: $medicine.aisle)
 
                 // Medicine Stock
-                medicineStockSection
+                MedicineDetailStockSection(
+                    stock: viewModel.medicine.stock,
+                    onIncrease: { Task { await viewModel.increase() } },
+                    onDecrease: { Task { await viewModel.decrease() } }
+                )
 
                 // History Section
-                historySection
+                MedicineDetailHistorySection(history: viewModel.history)
             }
             .padding(.vertical)
         }
@@ -54,61 +58,10 @@ struct MedicineDetailView: View {
         .onAppear {
             viewModel.listen()
         }
-        .onChange(of: medicine) { _ in
-            let cleanedAisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: medicine.aisle)
-            Task { await viewModel.updateLabel(name: medicine.name, aisle: cleanedAisle) }
+        .onChange(of: medicine) { oldValue, newValue in
+            let cleanedAisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: newValue.aisle)
+            Task { await viewModel.updateLabel(name: newValue.name, aisle: cleanedAisle) }
         }
-    }
-}
-
-extension MedicineDetailView {
-    private var medicineStockSection: some View {
-        VStack(alignment: .leading) {
-            Text("medicineDetail.stock.label")
-                .font(.headline)
-            HStack {
-                Button(action: { Task { await viewModel.decrease() } }) {
-                    Image(systemName: "minus.circle")
-                        .font(.title)
-                        .foregroundColor(.red)
-                }
-                Text(viewModel.medicine.stock, format: .number)
-                    .font(.title2)
-                    .frame(width: 100)
-                Button(action: { Task { await viewModel.increase() } }) {
-                    Image(systemName: "plus.circle")
-                        .font(.title)
-                        .foregroundColor(.green)
-                }
-            }
-            .padding(.bottom, 10)
-        }
-        .padding(.horizontal)
-    }
-
-    private var historySection: some View {
-        VStack(alignment: .leading) {
-            Text("medicineDetail.history.title")
-                .font(.headline)
-                .padding(.top, 20)
-            ForEach(viewModel.history, id: \.id) { entry in
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(entry.action)
-                        .font(.headline)
-                    Text(String(localized: "medicineDetail.history.user", defaultValue: "Utilisateur : \(entry.user)"))
-                        .font(.subheadline)
-                    Text(String(localized: "medicineDetail.history.date", defaultValue: "Date : \(entry.timestamp.formatted())"))
-                        .font(.subheadline)
-                    Text(String(localized: "medicineDetail.history.details", defaultValue: "Détails : \(entry.details)"))
-                        .font(.subheadline)
-                }
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .padding(.bottom, 5)
-            }
-        }
-        .padding(.horizontal)
     }
 }
 
