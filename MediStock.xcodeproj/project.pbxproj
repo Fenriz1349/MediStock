@@ -183,8 +183,8 @@
 				68D144FE3013A4CC00696204 /* App */,
 				68D144E93013907000696204 /* Domain */,
 				68D144EA3013907900696204 /* Data */,
-				68D144FB30139CF700696204 /* Resources */,
 				68D144FF3013A4DE00696204 /* Presentation */,
+				68D144FB30139CF700696204 /* Resources */,
 				53E0D89C2C06084900DE1134 /* Preview Content */,
 			);
 			path = MediStock;
