@@ -8,7 +8,19 @@
 import SwiftUI
 
 struct MedicineDetailView: View {
-    @State var medicine: Medicine
+    @State private var medicine: Medicine
+    @StateObject private var viewModel: MedicineDetailViewModel
+    @Environment(\.dismiss) private var dismiss
+
+    init(medicine: Medicine) {
+        _medicine = State(initialValue: medicine)
+        _viewModel = StateObject(wrappedValue: MedicineDetailViewModel(
+            medicine: medicine,
+            medicineStore: FirestoreMedicineStore(),
+            historyStore: FirestoreHistoryStore(),
+            authenticationService: FirebaseAuthenticationService()
+        ))
+    }
 
     var body: some View {
         ScrollView {
@@ -30,10 +42,22 @@ struct MedicineDetailView: View {
             .padding(.vertical)
         }
         .navigationBarTitle("medicineDetail.navigationTitle", displayMode: .inline)
-        .navigationBarItems(trailing: Button(action: {}) {
+        .navigationBarItems(trailing: Button(action: {
+            Task {
+                await viewModel.delete()
+                dismiss()
+            }
+        }) {
             Image(systemName: "trash")
                 .foregroundColor(.red)
         })
+        .onAppear {
+            viewModel.listen()
+        }
+        .onChange(of: medicine) { _ in
+            let cleanedAisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: medicine.aisle)
+            Task { await viewModel.updateLabel(name: medicine.name, aisle: cleanedAisle) }
+        }
     }
 }
 
@@ -43,15 +67,15 @@ extension MedicineDetailView {
             Text("medicineDetail.stock.label")
                 .font(.headline)
             HStack {
-                Button(action: {}) {
+                Button(action: { Task { await viewModel.decrease() } }) {
                     Image(systemName: "minus.circle")
                         .font(.title)
                         .foregroundColor(.red)
                 }
-                Text(medicine.stock, format: .number)
+                Text(viewModel.medicine.stock, format: .number)
                     .font(.title2)
                     .frame(width: 100)
-                Button(action: {}) {
+                Button(action: { Task { await viewModel.increase() } }) {
                     Image(systemName: "plus.circle")
                         .font(.title)
                         .foregroundColor(.green)
@@ -67,7 +91,7 @@ extension MedicineDetailView {
             Text("medicineDetail.history.title")
                 .font(.headline)
                 .padding(.top, 20)
-            ForEach([HistoryEntry](), id: \.id) { entry in
+            ForEach(viewModel.history, id: \.id) { entry in
                 VStack(alignment: .leading, spacing: 5) {
                     Text(entry.action)
                         .font(.headline)
