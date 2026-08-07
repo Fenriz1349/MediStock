@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.9.0](https://github.com/Fenriz1349/MediStock/compare/v1.8.0...v1.9.0) (2026-08-07)
+
+
+### Features
+
+* add AuthenticationError and AuthenticationErrorMessage for localisation, add mapError in FirebaseAuthenticationService ([1ea58ad](https://github.com/Fenriz1349/MediStock/commit/1ea58ad82508e09dc46c418ccd12d1ce809db982))
+* add PasswordPolicy to handle password validation rules, PasswordRequirement to handle localisation ([1f2bac5](https://github.com/Fenriz1349/MediStock/commit/1f2bac5c7fb00fbf62919c0a61b1588aa9a6c62a))
+* add Toasty in UserView and AuthenticationView to display errorMessage ([4635353](https://github.com/Fenriz1349/MediStock/commit/463535321f166b74e40d884ce3352baf466b77fa))
+* add ToastyContainer over ContentView ([a729335](https://github.com/Fenriz1349/MediStock/commit/a7293357ee73adaff1c3cef544cbc8e062ed6412))
+* rework AuthenticationViewModel to catch error un AuthenticationError instead of print ([627b07a](https://github.com/Fenriz1349/MediStock/commit/627b07a7c8605ba2a9049f45c514913c5ace3fe9))
+
 ## [1.8.0](https://github.com/Fenriz1349/MediStock/compare/v1.7.0...v1.8.0) (2026-08-07)
 
 

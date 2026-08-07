@@ -1,5 +1,5 @@
 {
-  "originHash" : "c63c63846d9c539229e96de38d6af51417e28c0ee9a0bc48bd0f0f19d923c329",
+  "originHash" : "402b6e62efc5be3d65f867a80dc45cd54215f2297ac4deb881c637446a0a4d74",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -116,6 +116,15 @@
       "state" : {
         "revision" : "55d7a1cc5666b85c13464aea1c4b4a90feccb4c8",
         "version" : "1.38.1"
+      }
+    },
+    {
+      "identity" : "toasty",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Fenriz1349/Toasty",
+      "state" : {
+        "revision" : "ed7e70c0e3f74c24986e69b7b166f5641bfefae0",
+        "version" : "1.3.1"
       }
     }
   ],
