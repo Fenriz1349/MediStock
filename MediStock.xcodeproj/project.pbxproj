@@ -40,6 +40,7 @@
 		686916763025C2FE00E86CFE /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916753025C2FE00E86CFE /* DIContainer.swift */; };
 		686916783025D20200E86CFE /* AisleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916773025D20200E86CFE /* AisleLabel.swift */; };
 		6869167A3025DE0A00E86CFE /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916793025DE0A00E86CFE /* UserView.swift */; };
+		6869167D3025F0AC00E86CFE /* Toasty in Frameworks */ = {isa = PBXBuildFile; productRef = 6869167C3025F0AC00E86CFE /* Toasty */; };
 		6887EC1F30246BBB00DAF7E8 /* MedicineFormContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */; };
 		6887EC2130246BCC00DAF7E8 /* AddMedicineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */; };
 		68D144E630136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
@@ -132,6 +133,7 @@
 			files = (
 				53E0D8D62C06092E00DE1134 /* FirebaseFirestoreSwift in Frameworks */,
 				53E0D8D22C06092E00DE1134 /* FirebaseFirestore in Frameworks */,
+				6869167D3025F0AC00E86CFE /* Toasty in Frameworks */,
 				53E0D8C82C06092E00DE1134 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -394,6 +396,7 @@
 				53E0D8C72C06092E00DE1134 /* FirebaseAuth */,
 				53E0D8D12C06092E00DE1134 /* FirebaseFirestore */,
 				53E0D8D52C06092E00DE1134 /* FirebaseFirestoreSwift */,
+				6869167C3025F0AC00E86CFE /* Toasty */,
 			);
 			productName = MediStock;
 			productReference = 53E0D8932C06084700DE1134 /* MediStock.app */;
@@ -470,6 +473,7 @@
 			mainGroup = 53E0D88A2C06084700DE1134;
 			packageReferences = (
 				53E0D8C02C06092E00DE1134 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				6869167B3025F0AC00E86CFE /* XCRemoteSwiftPackageReference "Toasty" */,
 			);
 			productRefGroup = 53E0D8942C06084700DE1134 /* Products */;
 			projectDirPath = "";
@@ -895,6 +899,14 @@
 				minimumVersion = 10.26.0;
 			};
 		};
+		6869167B3025F0AC00E86CFE /* XCRemoteSwiftPackageReference "Toasty" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fenriz1349/Toasty";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -912,6 +924,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 53E0D8C02C06092E00DE1134 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		6869167C3025F0AC00E86CFE /* Toasty */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6869167B3025F0AC00E86CFE /* XCRemoteSwiftPackageReference "Toasty" */;
+			productName = Toasty;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
