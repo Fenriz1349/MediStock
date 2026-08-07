@@ -31,8 +31,7 @@ final class FirestoreHistoryStore: HistoryStoring {
 
     func record(_ entry: HistoryEntry) async throws {
         let documentRef = entry.id.map(collection.document) ?? collection.document()
-        var dto = HistoryEntryDTO(entry: entry)
-        dto.id = documentRef.documentID
+        let dto = HistoryEntryDTO(entry: entry)
         try await documentRef.setData(from: dto)
     }
 }

@@ -65,7 +65,9 @@ final class CatalogViewModel: ObservableObject {
         let medicine = Medicine(name: name, stock: stock, aisle: aisle)
         do {
             let saved = try await medicineStore.save(medicine)
-            try await historyStore.record(HistoryEntry(medicineId: saved.id ?? "", user: user, action: "Added \(saved.name)", details: "Added new medicine"))
+            try await historyStore.record(HistoryEntry(medicineId: saved.id ?? "",
+                                                       user: user, action: "Added \(saved.name)",
+                                                       details: "Added new medicine"))
         } catch {
             print("Error adding medicine: \(error.localizedDescription)")
         }

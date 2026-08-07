@@ -102,7 +102,10 @@ final class CatalogViewModelTest: XCTestCase {
 
         await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56", user: "user-1")
 
-        XCTAssertEqual(medicineStore.savedMedicines, [TestHelper.makeMedicine(id: nil, name: "Doliprane", stock: 10, aisle: "AD56")])
+        XCTAssertEqual(medicineStore.savedMedicines, [TestHelper.makeMedicine(id: nil,
+                                                                              name: "Doliprane",
+                                                                              stock: 10,
+                                                                              aisle: "AD56")])
         XCTAssertEqual(historyStore.recordedEntries.count, 1)
     }
 

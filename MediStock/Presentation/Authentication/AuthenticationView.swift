@@ -22,14 +22,14 @@ struct AuthenticationView: View {
                 .padding()
             Button(action: {
                 Task { await viewModel.signIn(email: email, password: password) }
-            }) {
+            }, label: {
                 Text("auth.login.button")
-            }
+            })
             Button(action: {
                 Task { await viewModel.signUp(email: email, password: password) }
-            }) {
+            }, label: {
                 Text("auth.signUp.button")
-            }
+            })
         }
         .padding()
     }
@@ -37,6 +37,7 @@ struct AuthenticationView: View {
 
 struct AuthenticationView_Previews: PreviewProvider {
     static var previews: some View {
-        AuthenticationView().environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+        AuthenticationView()
+            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
     }
 }

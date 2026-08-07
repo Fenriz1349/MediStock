@@ -20,11 +20,14 @@ struct MedicineDetailHistorySection: View {
                 VStack(alignment: .leading, spacing: 5) {
                     Text(entry.action)
                         .font(.headline)
-                    Text(String(localized: "medicineDetail.history.user", defaultValue: "Utilisateur : \(entry.user)"))
+                    Text(String(localized: "medicineDetail.history.user",
+                                defaultValue: "Utilisateur : \(entry.user)"))
                         .font(.subheadline)
-                    Text(String(localized: "medicineDetail.history.date", defaultValue: "Date : \(entry.timestamp.formatted())"))
+                    Text(String(localized: "medicineDetail.history.date",
+                                defaultValue: "Date : \(entry.timestamp.formatted())"))
                         .font(.subheadline)
-                    Text(String(localized: "medicineDetail.history.details", defaultValue: "Détails : \(entry.details)"))
+                    Text(String(localized: "medicineDetail.history.details",
+                                defaultValue: "Détails : \(entry.details)"))
                         .font(.subheadline)
                 }
                 .padding()

@@ -14,7 +14,7 @@ struct AisleMedicinesView: View {
     var body: some View {
         List {
             ForEach(viewModel.medicines(inAisle: aisle), id: \.id) { medicine in
-                NavigationLink(destination: MedicineDetailView(medicine: medicine)) {
+                NavigationLink(value: medicine) {
                     VStack(alignment: .leading) {
                         Text(medicine.name)
                             .font(.headline)
@@ -32,13 +32,14 @@ struct AisleMedicinesView: View {
                 }
             }
         }
-        .navigationBarTitle(AisleCode.format(code: aisle, aisleLabel: String(localized: "medicineDetail.aisle.label")))
+        .navigationBarTitle(AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized))
     }
 }
 
 struct AisleMedicinesView_Previews: PreviewProvider {
     static var previews: some View {
         AisleMedicinesView(aisle: "Aisle 1")
-            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore()))
+            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
+                                                historyStore: FirestoreHistoryStore()))
     }
 }

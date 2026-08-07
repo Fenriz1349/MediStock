@@ -8,30 +8,19 @@
 import SwiftUI
 
 struct MedicineDetailView: View {
-    @State private var medicine: Medicine
-    @StateObject private var viewModel: MedicineDetailViewModel
+    @StateObject var viewModel: MedicineDetailViewModel
     @Environment(\.dismiss) private var dismiss
-
-    init(medicine: Medicine) {
-        _medicine = State(initialValue: medicine)
-        _viewModel = StateObject(wrappedValue: MedicineDetailViewModel(
-            medicine: medicine,
-            medicineStore: FirestoreMedicineStore(),
-            historyStore: FirestoreHistoryStore(),
-            authenticationService: FirebaseAuthenticationService()
-        ))
-    }
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 // Title
-                Text(medicine.name)
+                Text(viewModel.name)
                     .font(.largeTitle)
                     .padding(.top, 20)
 
                 // Medicine Name & Aisle
-                MedicineFormContent(name: $medicine.name, aisle: $medicine.aisle)
+                MedicineFormContent(name: $viewModel.name, aisle: $viewModel.aisle)
 
                 // Medicine Stock
                 MedicineDetailStockSection(
@@ -51,16 +40,18 @@ struct MedicineDetailView: View {
                 await viewModel.delete()
                 dismiss()
             }
-        }) {
+        }, label: {
             Image(systemName: "trash")
                 .foregroundColor(.red)
-        })
+        }))
         .onAppear {
             viewModel.listen()
         }
-        .onChange(of: medicine) { oldValue, newValue in
-            let cleanedAisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: newValue.aisle)
-            Task { await viewModel.updateLabel(name: newValue.name, aisle: cleanedAisle) }
+        .onChange(of: viewModel.name) { _, _ in
+            viewModel.scheduleLabelSave(cleanedAisle: AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle))
+        }
+        .onChange(of: viewModel.aisle) { _, newValue in
+            viewModel.scheduleLabelSave(cleanedAisle: AisleCode.stripLabel(AisleLabel.localized, from: newValue))
         }
     }
 }
@@ -68,6 +59,6 @@ struct MedicineDetailView: View {
 struct MedicineDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleMedicine = Medicine(name: "Sample", stock: 10, aisle: "Aisle 1")
-        MedicineDetailView(medicine: sampleMedicine)
+        MedicineDetailView(viewModel: DIContainer().makeMedicineDetailViewModel(medicine: sampleMedicine))
     }
 }
