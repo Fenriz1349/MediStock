@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Toasty
 
 struct AllMedicinesView: View {
     @EnvironmentObject var viewModel: CatalogViewModel
@@ -83,5 +84,6 @@ struct AllMedicinesView_Previews: PreviewProvider {
             .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
                                                 historyStore: FirestoreHistoryStore()))
             .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+            .environmentObject(ToastyManager())
     }
 }
