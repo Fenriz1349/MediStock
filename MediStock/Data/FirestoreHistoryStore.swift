@@ -53,7 +53,7 @@ final class FirestoreHistoryStore: HistoryStoring {
     /// - Throws: `MedicineError`, mapped from whatever Firestore reports.
     func recordAddition(of medicine: Medicine) async throws {
         try await record(action: "Added \(medicine.name)",
-                         details: "Added new medicine",
+                         details: "Added new medicine with initial stock of \(medicine.stock)",
                          medicineId: medicine.id ?? "")
     }
 
@@ -81,7 +81,7 @@ final class FirestoreHistoryStore: HistoryStoring {
     /// - Throws: `MedicineError`, mapped from whatever Firestore reports.
     func recordDeletion(of medicine: Medicine) async throws {
         try await record(action: "Deleted \(medicine.name)",
-                         details: "Removed from catalog",
+                         details: "Removed from catalog with \(medicine.stock) in stock",
                          medicineId: medicine.id ?? "")
     }
 
