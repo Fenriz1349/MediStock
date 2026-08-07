@@ -39,6 +39,7 @@
 		686916743025BC5800E86CFE /* MedicineDetailHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916733025BC5800E86CFE /* MedicineDetailHistorySection.swift */; };
 		686916763025C2FE00E86CFE /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916753025C2FE00E86CFE /* DIContainer.swift */; };
 		686916783025D20200E86CFE /* AisleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916773025D20200E86CFE /* AisleLabel.swift */; };
+		6869167A3025DE0A00E86CFE /* UserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916793025DE0A00E86CFE /* UserView.swift */; };
 		6887EC1F30246BBB00DAF7E8 /* MedicineFormContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */; };
 		6887EC2130246BCC00DAF7E8 /* AddMedicineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */; };
 		68D144E630136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
@@ -106,6 +107,7 @@
 		686916733025BC5800E86CFE /* MedicineDetailHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailHistorySection.swift; sourceTree = "<group>"; };
 		686916753025C2FE00E86CFE /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		686916773025D20200E86CFE /* AisleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleLabel.swift; sourceTree = "<group>"; };
+		686916793025DE0A00E86CFE /* UserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserView.swift; sourceTree = "<group>"; };
 		6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineFormContent.swift; sourceTree = "<group>"; };
 		6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineView.swift; sourceTree = "<group>"; };
 		68D144E530136D3900696204 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 			children = (
 				53E0D8D72C06097900DE1134 /* AuthenticationView.swift */,
 				68D145013013A52800696204 /* AuthenticationViewModel.swift */,
+				686916793025DE0A00E86CFE /* UserView.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -524,6 +527,7 @@
 				53E0D8EA2C066F7A00DE1134 /* HistoryEntry.swift in Sources */,
 				68D144EE301393C600696204 /* AppUser.swift in Sources */,
 				686916743025BC5800E86CFE /* MedicineDetailHistorySection.swift in Sources */,
+				6869167A3025DE0A00E86CFE /* UserView.swift in Sources */,
 				53E0D8DE2C0609A800DE1134 /* CatalogViewModel.swift in Sources */,
 				53E0D8992C06084700DE1134 /* ContentView.swift in Sources */,
 				682D9FF5302204AB00DBC11E /* SortOption.swift in Sources */,

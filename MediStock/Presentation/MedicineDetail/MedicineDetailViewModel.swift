@@ -26,6 +26,12 @@ final class MedicineDetailViewModel: ObservableObject {
     private var sessionTask: Task<Void, Never>?
     private var saveLabelTask: Task<Void, Never>?
 
+    /// - Parameters:
+    ///   - medicine: The medicine to view/edit, injected by the navigation that created this screen.
+    ///   - medicineStore: Domain-level abstraction over medicine persistence.
+    ///   - historyStore: Domain-level abstraction over history persistence.
+    ///   - authenticationService: Domain-level auth abstraction, used only to read the current
+    ///     user's id for history entries — this ViewModel never touches sign-in/out itself.
     init(medicine: Medicine,
          medicineStore: MedicineStoring,
          historyStore: HistoryStoring,
@@ -63,6 +69,7 @@ final class MedicineDetailViewModel: ObservableObject {
     /// concern the View resolves before calling this, this ViewModel doesn't know about it.
     /// Cancels any save still in flight from a previous keystroke before starting this one, so
     /// rapid typing can't fire overlapping saves that race and land out of order.
+    /// - Parameter cleanedAisle: `aisle` already stripped of any redundant localized label.
     func scheduleLabelSave(cleanedAisle: String) {
         saveLabelTask?.cancel()
         saveLabelTask = Task { [weak self] in
@@ -80,6 +87,9 @@ final class MedicineDetailViewModel: ObservableObject {
     /// Updates the medicine's name and aisle. `aisle` is expected already cleaned of any redundant
     /// label the user may have typed — that's a display/localization concern the View resolves,
     /// this ViewModel doesn't know about it.
+    /// - Parameters:
+    ///   - name: The new display name.
+    ///   - aisle: The new aisle code, already cleaned of any redundant localized label.
     func updateLabel(name: String, aisle: String) async {
         await save(action: "Updated \(name)", details: "Updated medicine details") {
             $0.name = name
@@ -118,6 +128,10 @@ final class MedicineDetailViewModel: ObservableObject {
     /// Applies `mutate` to a copy of the current medicine, persists it, and on success updates the
     /// local state and records the change in the history. The single save path for every use case
     /// above, so each of them only has to describe *what* changed, not how to persist/log it.
+    /// - Parameters:
+    ///   - action: Short label for the history entry (e.g. "Increased stock of X by 1").
+    ///   - details: Longer description for the history entry (e.g. "Stock changed from 9 to 10").
+    ///   - mutate: Applied to a copy of the current `medicine` before it's persisted.
     private func save(action: String, details: String, mutate: (inout Medicine) -> Void) async {
         var updated = medicine
         mutate(&updated)

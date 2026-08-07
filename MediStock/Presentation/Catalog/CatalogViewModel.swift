@@ -17,6 +17,10 @@ final class CatalogViewModel: ObservableObject {
     private let historyStore: HistoryStoring
     private var observationTask: Task<Void, Never>?
 
+    /// - Parameters:
+    ///   - medicineStore: Domain-level abstraction over medicine persistence, kept behind a
+    ///     protocol so this ViewModel never depends on Firebase directly.
+    ///   - historyStore: Domain-level abstraction over history persistence.
     init(medicineStore: MedicineStoring, historyStore: HistoryStoring) {
         self.medicineStore = medicineStore
         self.historyStore = historyStore
@@ -40,11 +44,18 @@ final class CatalogViewModel: ObservableObject {
     }
 
     /// Medicines stored in a given aisle.
+    /// - Parameter aisle: The exact aisle code to filter on.
+    /// - Returns: Every medicine whose `aisle` matches, in catalog order.
     func medicines(inAisle aisle: String) -> [Medicine] {
         medicines.filter { $0.aisle == aisle }
     }
 
     /// Medicines matching a name filter, sorted per the given option.
+    /// - Parameters:
+    ///   - filterText: Case-insensitive substring to match against each medicine's name; an empty
+    ///     string matches everything.
+    ///   - sortOption: How to order the filtered results.
+    /// - Returns: The filtered, sorted medicines.
     func medicines(matching filterText: String, sortedBy sortOption: SortOption) -> [Medicine] {
         var result = medicines
         if !filterText.isEmpty {
@@ -61,6 +72,12 @@ final class CatalogViewModel: ObservableObject {
         return result
     }
 
+    /// Creates a new medicine and records its addition in the history.
+    /// - Parameters:
+    ///   - name: The medicine's display name.
+    ///   - stock: The initial quantity in stock.
+    ///   - aisle: The aisle code, already cleaned of any redundant localized label by the caller.
+    ///   - user: Identifier of the user performing the addition, recorded in the history entry.
     func addMedicine(name: String, stock: Int, aisle: String, user: String) async {
         let medicine = Medicine(name: name, stock: stock, aisle: aisle)
         do {
@@ -73,6 +90,9 @@ final class CatalogViewModel: ObservableObject {
         }
     }
 
+    /// Removes a medicine from the catalog. No history entry recorded yet — deliberately deferred
+    /// to `refactor/history-reliability`, which centralizes all history writing.
+    /// - Parameter medicine: The medicine to delete.
     func delete(_ medicine: Medicine) async {
         do {
             try await medicineStore.delete(medicine)
