@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.10.0](https://github.com/Fenriz1349/MediStock/compare/v1.9.0...v1.10.0) (2026-08-07)
+
+
+### Features
+
+* add mapError in FirestoreMedicineStore and FirestoreHistoryStore ([ebfc974](https://github.com/Fenriz1349/MediStock/commit/ebfc9745fb73562f15075aff58287b5e5af9e03e))
+* add MedicineError and MedicineErrorMessage ([09c16b8](https://github.com/Fenriz1349/MediStock/commit/09c16b8e5ef57ec28fed24753f64569a19771df6))
+* add Toasty display in MedicineDetailView, AllMedicinesView, AisleListView and ContentView ([0f5e485](https://github.com/Fenriz1349/MediStock/commit/0f5e48519b94c1322411dadb4122a9779896a482))
+* rework VM with error handlign and no try? ([2860fd4](https://github.com/Fenriz1349/MediStock/commit/2860fd496f139a855dea8a597918e7d2d77bd6ce))
+
+
+### Bug Fixes
+
+* fix catalogViewModel.listen() in ContentView ([d1b3d72](https://github.com/Fenriz1349/MediStock/commit/d1b3d729d75988c162d16b7ce3b489e46679e557))
+
 ## [1.9.0](https://github.com/Fenriz1349/MediStock/compare/v1.8.0...v1.9.0) (2026-08-07)
 
 
