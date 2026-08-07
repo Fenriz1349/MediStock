@@ -9,10 +9,6 @@ import SwiftUI
 
 struct MedicineDetailView: View {
     @State var medicine: Medicine
-    @StateObject private var viewModel = MedicineDetailViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore())
-    @EnvironmentObject var catalogViewModel: CatalogViewModel
-    @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
-    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ScrollView {
@@ -34,23 +30,10 @@ struct MedicineDetailView: View {
             .padding(.vertical)
         }
         .navigationBarTitle("medicineDetail.navigationTitle", displayMode: .inline)
-        .navigationBarItems(trailing: Button(action: {
-            Task {
-                await catalogViewModel.delete(medicine)
-                dismiss()
-            }
-        }) {
+        .navigationBarItems(trailing: Button(action: {}) {
             Image(systemName: "trash")
                 .foregroundColor(.red)
         })
-        .onAppear {
-            viewModel.listen(forMedicineId: medicine.id ?? "")
-        }
-        .onChange(of: medicine) { _ in
-            var cleaned = medicine
-            cleaned.aisle = AisleCode.stripLabel(String(localized: "medicineDetail.aisle.label"), from: medicine.aisle)
-            Task { await viewModel.updateMedicine(cleaned, user: authenticationViewModel.session?.uid ?? "") }
-        }
     }
 }
 
@@ -60,9 +43,7 @@ extension MedicineDetailView {
             Text("medicineDetail.stock.label")
                 .font(.headline)
             HStack {
-                Button(action: {
-                    Task { await viewModel.decreaseStock(medicine, user: authenticationViewModel.session?.uid ?? "") }
-                }) {
+                Button(action: {}) {
                     Image(systemName: "minus.circle")
                         .font(.title)
                         .foregroundColor(.red)
@@ -86,7 +67,7 @@ extension MedicineDetailView {
             Text("medicineDetail.history.title")
                 .font(.headline)
                 .padding(.top, 20)
-            ForEach(viewModel.history, id: \.id) { entry in
+            ForEach([HistoryEntry](), id: \.id) { entry in
                 VStack(alignment: .leading, spacing: 5) {
                     Text(entry.action)
                         .font(.headline)
@@ -111,7 +92,5 @@ struct MedicineDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleMedicine = Medicine(name: "Sample", stock: 10, aisle: "Aisle 1")
         MedicineDetailView(medicine: sampleMedicine)
-            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore()))
-            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
     }
 }
