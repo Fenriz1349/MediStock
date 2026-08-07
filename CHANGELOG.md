@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.8.0](https://github.com/Fenriz1349/MediStock/compare/v1.7.0...v1.8.0) (2026-08-07)
+
+
+### Features
+
+* add UserView with logout and delete account, add it in tabview ([a9c7c18](https://github.com/Fenriz1349/MediStock/commit/a9c7c18e6e85f10e7c3473b75082f50f73aa99b1))
+
+
+### Bug Fixes
+
+* fix alert in UserView ([f0bcdcc](https://github.com/Fenriz1349/MediStock/commit/f0bcdcc86ad332d68e1a964def0de5833c6eaea4))
+
 ## [1.7.0](https://github.com/Fenriz1349/MediStock/compare/v1.6.0...v1.7.0) (2026-08-07)
 
 
