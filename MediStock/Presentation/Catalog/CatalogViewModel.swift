@@ -12,6 +12,10 @@ import Foundation
 @MainActor
 final class CatalogViewModel: ObservableObject {
     @Published private(set) var medicines: [Medicine] = []
+    /// Reset to `nil` at the start of every action, then set again on failure — the View observes
+    /// this to trigger a toast, resolving the localized message itself (this ViewModel never
+    /// touches the display language).
+    @Published private(set) var error: MedicineError?
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
@@ -79,14 +83,17 @@ final class CatalogViewModel: ObservableObject {
     ///   - aisle: The aisle code, already cleaned of any redundant localized label by the caller.
     ///   - user: Identifier of the user performing the addition, recorded in the history entry.
     func addMedicine(name: String, stock: Int, aisle: String, user: String) async {
+        error = nil
         let medicine = Medicine(name: name, stock: stock, aisle: aisle)
         do {
             let saved = try await medicineStore.save(medicine)
             try await historyStore.record(HistoryEntry(medicineId: saved.id ?? "",
                                                        user: user, action: "Added \(saved.name)",
                                                        details: "Added new medicine"))
+        } catch let medicineError as MedicineError {
+            error = medicineError
         } catch {
-            print("Error adding medicine: \(error.localizedDescription)")
+            self.error = .unknown
         }
     }
 
@@ -94,10 +101,13 @@ final class CatalogViewModel: ObservableObject {
     /// to `refactor/history-reliability`, which centralizes all history writing.
     /// - Parameter medicine: The medicine to delete.
     func delete(_ medicine: Medicine) async {
+        error = nil
         do {
             try await medicineStore.delete(medicine)
+        } catch let medicineError as MedicineError {
+            error = medicineError
         } catch {
-            print("Error deleting medicine: \(error.localizedDescription)")
+            self.error = .unknown
         }
     }
 

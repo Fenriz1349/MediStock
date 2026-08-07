@@ -17,6 +17,10 @@ final class MedicineDetailViewModel: ObservableObject {
     @Published private(set) var history: [HistoryEntry] = []
     @Published var name: String
     @Published var aisle: String
+    /// Reset to `nil` at the start of every action, then set again on failure — the View observes
+    /// this to trigger a toast, resolving the localized message itself (this ViewModel never
+    /// touches the display language).
+    @Published private(set) var error: MedicineError?
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
@@ -118,10 +122,13 @@ final class MedicineDetailViewModel: ObservableObject {
     /// Removes the medicine from the catalog. No history entry recorded yet — deliberately
     /// deferred to `refactor/history-reliability`, which centralizes all history writing.
     func delete() async {
+        error = nil
         do {
             try await medicineStore.delete(medicine)
+        } catch let medicineError as MedicineError {
+            error = medicineError
         } catch {
-            print("Error deleting medicine: \(error.localizedDescription)")
+            self.error = .unknown
         }
     }
 
@@ -133,12 +140,16 @@ final class MedicineDetailViewModel: ObservableObject {
     ///   - details: Longer description for the history entry (e.g. "Stock changed from 9 to 10").
     ///   - mutate: Applied to a copy of the current `medicine` before it's persisted.
     private func save(action: String, details: String, mutate: (inout Medicine) -> Void) async {
+        error = nil
         var updated = medicine
         mutate(&updated)
         do {
             medicine = try await medicineStore.save(updated)
+        } catch let medicineError as MedicineError {
+            error = medicineError
+            return
         } catch {
-            print("Error saving medicine: \(error.localizedDescription)")
+            self.error = .unknown
             return
         }
         do {
@@ -146,8 +157,10 @@ final class MedicineDetailViewModel: ObservableObject {
                                                        user: currentUserId,
                                                        action: action,
                                                        details: details))
+        } catch let medicineError as MedicineError {
+            error = medicineError
         } catch {
-            print("Error recording history: \(error.localizedDescription)")
+            self.error = .unknown
         }
     }
 

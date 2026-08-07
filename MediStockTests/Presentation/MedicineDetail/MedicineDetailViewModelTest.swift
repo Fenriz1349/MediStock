@@ -53,6 +53,40 @@ final class MedicineDetailViewModelTest: XCTestCase {
         XCTAssertEqual(medicineStore.savedMedicines.first?.stock, 11)
         XCTAssertEqual(viewModel.medicine.stock, 11)
         XCTAssertEqual(historyStore.recordedEntries.count, 1)
+        XCTAssertNil(viewModel.error)
+    }
+
+    @MainActor
+    func testIncreaseSaveFailureSetsTypedErrorAndSkipsHistory() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        medicineStore.saveError = MedicineError.networkUnavailable
+        let medicine = TestHelper.makeMedicine(stock: 10)
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore)
+
+        await viewModel.increase()
+
+        XCTAssertEqual(viewModel.error, .networkUnavailable)
+        XCTAssertEqual(viewModel.medicine.stock, 10)
+        XCTAssertTrue(historyStore.recordedEntries.isEmpty)
+    }
+
+    @MainActor
+    func testIncreaseHistoryFailureSetsTypedError() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        historyStore.recordError = MedicineError.unknown
+        let medicine = TestHelper.makeMedicine(stock: 10)
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore)
+
+        await viewModel.increase()
+
+        XCTAssertEqual(viewModel.error, .unknown)
+        XCTAssertEqual(viewModel.medicine.stock, 11) // the medicine save itself still succeeded
     }
 
     @MainActor
@@ -84,6 +118,22 @@ final class MedicineDetailViewModelTest: XCTestCase {
 
         XCTAssertEqual(medicineStore.deletedMedicines, [medicine])
         XCTAssertTrue(historyStore.recordedEntries.isEmpty)
+        XCTAssertNil(viewModel.error)
+    }
+
+    @MainActor
+    func testDeleteFailureSetsTypedError() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        medicineStore.deleteError = MedicineError.permissionDenied
+        let medicine = TestHelper.makeMedicine()
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore)
+
+        await viewModel.delete()
+
+        XCTAssertEqual(viewModel.error, .permissionDenied)
     }
 
     @MainActor

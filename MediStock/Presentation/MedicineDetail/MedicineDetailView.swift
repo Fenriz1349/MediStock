@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import Toasty
 
 struct MedicineDetailView: View {
     @StateObject var viewModel: MedicineDetailViewModel
+    @EnvironmentObject var toasty: ToastyManager
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -53,6 +55,11 @@ struct MedicineDetailView: View {
         .onChange(of: viewModel.aisle) { _, newValue in
             viewModel.scheduleLabelSave(cleanedAisle: AisleCode.stripLabel(AisleLabel.localized, from: newValue))
         }
+        .onChange(of: viewModel.error) { _, error in
+            if let error {
+                toasty.showError(error.localizedMessage)
+            }
+        }
     }
 }
 
@@ -60,5 +67,6 @@ struct MedicineDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleMedicine = Medicine(name: "Sample", stock: 10, aisle: "Aisle 1")
         MedicineDetailView(viewModel: DIContainer().makeMedicineDetailViewModel(medicine: sampleMedicine))
+            .environmentObject(ToastyManager())
     }
 }

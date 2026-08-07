@@ -29,10 +29,33 @@ final class FirestoreHistoryStore: HistoryStoring {
         }
     }
 
+    /// - Parameter entry: The history entry to persist.
+    /// - Throws: `MedicineError`, mapped from whatever Firestore reports.
     func record(_ entry: HistoryEntry) async throws {
         let documentRef = entry.id.map(collection.document) ?? collection.document()
         let dto = HistoryEntryDTO(entry: entry)
-        try await documentRef.setData(from: dto)
+        do {
+            try await documentRef.setData(from: dto)
+        } catch {
+            throw Self.mapError(error)
+        }
+    }
+
+    /// Maps a raw error from the Firestore SDK to a Domain-level `MedicineError`, so callers never
+    /// see a Firestore type.
+    /// - Parameter error: The error thrown by a Firestore SDK call.
+    /// - Returns: The corresponding `MedicineError`, or `.unknown` if it isn't one of the specific
+    ///   cases this app handles.
+    private static func mapError(_ error: Error) -> MedicineError {
+        guard let code = FirestoreErrorCode.Code(rawValue: (error as NSError).code) else { return .unknown }
+        switch code {
+        case .unavailable:
+            return .networkUnavailable
+        case .permissionDenied:
+            return .permissionDenied
+        default:
+            return .unknown
+        }
     }
 }
 
