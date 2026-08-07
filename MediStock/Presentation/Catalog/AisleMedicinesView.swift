@@ -40,6 +40,6 @@ struct AisleMedicinesView_Previews: PreviewProvider {
     static var previews: some View {
         AisleMedicinesView(aisle: "Aisle 1")
             .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore()))
+                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
     }
 }

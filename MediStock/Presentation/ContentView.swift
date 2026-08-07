@@ -39,7 +39,7 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
             .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
             .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore()))
+                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
             .environmentObject(ToastyManager())
     }
 }

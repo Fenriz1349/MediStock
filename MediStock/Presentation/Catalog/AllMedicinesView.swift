@@ -10,7 +10,6 @@ import Toasty
 
 struct AllMedicinesView: View {
     @EnvironmentObject var viewModel: CatalogViewModel
-    @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
     @Environment(\.diContainer) private var container
     @State private var filterText: String = ""
     @State private var sortOption: SortOption = .none
@@ -71,7 +70,6 @@ struct AllMedicinesView: View {
                 .sheet(isPresented: $isPresentingAddMedicine) {
                     AddMedicineView()
                         .environmentObject(viewModel)
-                        .environmentObject(authenticationViewModel)
                 }
             }
         }
@@ -82,8 +80,7 @@ struct AllMedicinesView_Previews: PreviewProvider {
     static var previews: some View {
         AllMedicinesView()
             .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore()))
-            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
             .environmentObject(ToastyManager())
     }
 }
