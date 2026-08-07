@@ -74,7 +74,9 @@ final class AuthenticationViewModel: ObservableObject {
             try await authenticationService.deleteAccount()
             session = nil
         } catch {
-            print("Error deleting account: \(error.localizedDescription)")
+            // Full error dump, not just localizedDescription: Firebase's requiresRecentLogin case
+            // in particular carries the actionable info (its error code) outside the description.
+            print("Error deleting account: \(error)")
         }
     }
 

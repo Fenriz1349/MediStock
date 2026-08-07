@@ -37,10 +37,9 @@ struct UserView: View {
             }
             .padding()
             .navigationBarTitle("tab.user.title")
-            .confirmationDialog(
+            .alert(
                 "user.deleteAccount.confirmTitle",
-                isPresented: $isPresentingDeleteConfirmation,
-                titleVisibility: .visible
+                isPresented: $isPresentingDeleteConfirmation
             ) {
                 Button("user.deleteAccount.confirmButton", role: .destructive) {
                     Task { await viewModel.deleteAccount() }
