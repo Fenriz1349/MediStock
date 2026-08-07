@@ -79,8 +79,10 @@ private struct MedicineDTO: Codable {
     var stock: Int
     var aisle: String
 
+    /// `id` is intentionally left `nil` here — `@DocumentID` is only ever meant to be populated by
+    /// Firestore on read. Setting it manually before a write (even to an existing medicine's own
+    /// id) triggers a Firestore SDK warning, since the document's id is never actually a field.
     init(medicine: Medicine) {
-        self.id = medicine.id
         self.name = medicine.name
         self.stock = medicine.stock
         self.aisle = medicine.aisle

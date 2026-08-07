@@ -10,6 +10,10 @@ import FirebaseAuth
 
 /// Firebase Authentication-backed implementation of `AuthenticationServicing`.
 final class FirebaseAuthenticationService: AuthenticationServicing {
+    var currentUser: AppUser? {
+        Auth.auth().currentUser.map { AppUser(uid: $0.uid, email: $0.email) }
+    }
+
     /// - Returns: A stream that yields the current session on subscription and again every time
     ///   Firebase Auth's sign-in state changes, `nil` when signed out.
     func observeSession() -> AsyncStream<AppUser?> {

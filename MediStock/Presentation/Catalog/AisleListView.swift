@@ -10,7 +10,6 @@ import Toasty
 
 struct AisleListView: View {
     @EnvironmentObject var viewModel: CatalogViewModel
-    @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
     @Environment(\.diContainer) private var container
     @State private var isPresentingAddMedicine = false
 
@@ -32,7 +31,6 @@ struct AisleListView: View {
             .sheet(isPresented: $isPresentingAddMedicine) {
                 AddMedicineView()
                     .environmentObject(viewModel)
-                    .environmentObject(authenticationViewModel)
             }
             .navigationDestination(for: String.self) { aisle in
                 AisleMedicinesView(aisle: aisle)
@@ -48,8 +46,8 @@ struct AisleListView_Previews: PreviewProvider {
     static var previews: some View {
         let medicineStore = FirestoreMedicineStore()
         AisleListView()
-            .environmentObject(CatalogViewModel(medicineStore: medicineStore, historyStore: FirestoreHistoryStore()))
-            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+            .environmentObject(CatalogViewModel(medicineStore: medicineStore,
+                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
             .environmentObject(ToastyManager())
     }
 }

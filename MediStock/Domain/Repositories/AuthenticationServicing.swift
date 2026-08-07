@@ -9,6 +9,10 @@ import Foundation
 
 /// Access to the current authentication session and account operations.
 protocol AuthenticationServicing {
+    /// The signed-in user right now, read synchronously (no subscription) — for callers that just
+    /// need a one-off snapshot, e.g. to attribute an action to whoever is currently signed in.
+    var currentUser: AppUser? { get }
+
     /// An ongoing stream of the signed-in user, `nil` when signed out.
     func observeSession() -> AsyncStream<AppUser?>
 
