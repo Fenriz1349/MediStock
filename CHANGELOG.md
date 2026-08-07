@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.6.0](https://github.com/Fenriz1349/MediStock/compare/v1.5.0...v1.6.0) (2026-08-07)
+
+
+### Features
+
+* in AddMedicineView add cancel button, stock textfield starts now with empty fields ([441befa](https://github.com/Fenriz1349/MediStock/commit/441befad7e046bc77149e355204003262860a647))
+
+
+### Bug Fixes
+
+* in MedicineDetailView change  TextField for Text to actually display stock ([31f094d](https://github.com/Fenriz1349/MediStock/commit/31f094ddaf6b77fe3b8fbd4c285e52f3ab926dc2))
+* stock buttons closing detail page ([c450b6e](https://github.com/Fenriz1349/MediStock/commit/c450b6e8e64d0dc5a9d0fc9459cb4911fb9ba1c4))
+
 ## [1.5.0](https://github.com/Fenriz1349/MediStock/compare/v1.4.1...v1.5.0) (2026-08-06)
 
 
