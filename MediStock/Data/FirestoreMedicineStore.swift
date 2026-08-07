@@ -27,18 +27,48 @@ final class FirestoreMedicineStore: MedicineStoring {
         }
     }
 
+    /// - Parameter medicine: The medicine to create or update (existing when `id` is non-nil).
+    /// - Returns: The saved medicine, with `id` set.
+    /// - Throws: `MedicineError`, mapped from whatever Firestore reports.
     func save(_ medicine: Medicine) async throws -> Medicine {
         let documentRef = medicine.id.map(collection.document) ?? collection.document()
         let dto = MedicineDTO(medicine: medicine)
-        try await documentRef.setData(from: dto)
+        do {
+            try await documentRef.setData(from: dto)
+        } catch {
+            throw Self.mapError(error)
+        }
         var saved = medicine
         saved.id = documentRef.documentID
         return saved
     }
 
+    /// - Parameter medicine: The medicine to delete. A no-op if it has no `id`.
+    /// - Throws: `MedicineError`, mapped from whatever Firestore reports.
     func delete(_ medicine: Medicine) async throws {
         guard let id = medicine.id else { return }
-        try await collection.document(id).delete()
+        do {
+            try await collection.document(id).delete()
+        } catch {
+            throw Self.mapError(error)
+        }
+    }
+
+    /// Maps a raw error from the Firestore SDK to a Domain-level `MedicineError`, so callers never
+    /// see a Firestore type.
+    /// - Parameter error: The error thrown by a Firestore SDK call.
+    /// - Returns: The corresponding `MedicineError`, or `.unknown` if it isn't one of the specific
+    ///   cases this app handles.
+    private static func mapError(_ error: Error) -> MedicineError {
+        guard let code = FirestoreErrorCode.Code(rawValue: (error as NSError).code) else { return .unknown }
+        switch code {
+        case .unavailable:
+            return .networkUnavailable
+        case .permissionDenied:
+            return .permissionDenied
+        default:
+            return .unknown
+        }
     }
 }
 

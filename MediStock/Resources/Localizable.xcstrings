@@ -409,6 +409,57 @@
         }
       }
     },
+    "medicine.error.networkUnavailable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No internet connection. Please try again."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas de connexion internet. Réessayez."
+          }
+        }
+      }
+    },
+    "medicine.error.permissionDenied" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You don't have permission to do this."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous n'avez pas la permission de faire ça."
+          }
+        }
+      }
+    },
+    "medicine.error.unknown" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Something went wrong. Please try again."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une erreur est survenue. Réessayez."
+          }
+        }
+      }
+    },
     "medicineDetail.aisle.label" : {
       "extractionState" : "manual",
       "localizations" : {
