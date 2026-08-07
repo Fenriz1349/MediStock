@@ -6,18 +6,29 @@
 //
 
 import SwiftUI
+import Firebase
 
 @main
 struct MediStockApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject private var authenticationViewModel = AuthenticationViewModel(authenticationService: FirebaseAuthenticationService())
-    @StateObject private var catalogViewModel = CatalogViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore())
+    private let container: DIContainer
+    @StateObject private var authenticationViewModel: AuthenticationViewModel
+    @StateObject private var catalogViewModel: CatalogViewModel
+
+    init() {
+        FirebaseApp.configure()
+        let container = DIContainer()
+        self.container = container
+        _authenticationViewModel = StateObject(wrappedValue: container.makeAuthenticationViewModel())
+        _catalogViewModel = StateObject(wrappedValue: container.makeCatalogViewModel())
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(authenticationViewModel)
                 .environmentObject(catalogViewModel)
+                .environment(\.diContainer, container)
         }
     }
 }

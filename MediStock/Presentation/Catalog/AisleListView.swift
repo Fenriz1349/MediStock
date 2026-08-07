@@ -10,22 +10,35 @@ import SwiftUI
 struct AisleListView: View {
     @EnvironmentObject var viewModel: CatalogViewModel
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
+    @Environment(\.diContainer) private var container
+    @State private var isPresentingAddMedicine = false
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ForEach(viewModel.aisles, id: \.self) { aisle in
-                    NavigationLink(destination: AisleMedicinesView(aisle: aisle)) {
-                        Text(aisle)
+                    NavigationLink(value: aisle) {
+                        Text(AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized))
                     }
                 }
             }
             .navigationBarTitle("tab.aisles.title")
             .navigationBarItems(trailing: Button(action: {
-                Task { await viewModel.addRandomMedicine(user: authenticationViewModel.session?.uid ?? "") }
-            }) {
+                isPresentingAddMedicine = true
+            }, label: {
                 Image(systemName: "plus")
-            })
+            }))
+            .sheet(isPresented: $isPresentingAddMedicine) {
+                AddMedicineView()
+                    .environmentObject(viewModel)
+                    .environmentObject(authenticationViewModel)
+            }
+            .navigationDestination(for: String.self) { aisle in
+                AisleMedicinesView(aisle: aisle)
+            }
+            .navigationDestination(for: Medicine.self) { medicine in
+                MedicineDetailView(viewModel: container.makeMedicineDetailViewModel(medicine: medicine))
+            }
         }
     }
 }

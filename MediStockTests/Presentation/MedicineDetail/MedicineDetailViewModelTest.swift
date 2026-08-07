@@ -12,10 +12,11 @@ final class MedicineDetailViewModelTest: XCTestCase {
     @MainActor
     func testListenPopulatesHistory() async {
         let historyStore = MockHistoryStoring()
-        let viewModel = MedicineDetailViewModel(medicineStore: MockMedicineStoring(), historyStore: historyStore)
+        let medicine = TestHelper.makeMedicine()
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine, historyStore: historyStore)
         let entry = TestHelper.makeHistoryEntry()
 
-        viewModel.listen(forMedicineId: "medicine-1")
+        viewModel.listen()
         historyStore.emit([entry])
         await TestHelper.waitUntil { !viewModel.history.isEmpty }
 
@@ -23,37 +24,91 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testUpdateMedicineSavesAndRecordsHistory() async {
+    func testUpdateLabelSavesAndRecordsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
-        let viewModel = MedicineDetailViewModel(medicineStore: medicineStore, historyStore: historyStore)
-        let medicine = TestHelper.makeMedicine(name: "Doliprane")
+        let medicine = TestHelper.makeMedicine(name: "Doliprane", aisle: "AD56")
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore)
 
-        await viewModel.updateMedicine(medicine, user: "user-1")
+        await viewModel.updateLabel(name: "Dafalgan", aisle: "AD10")
 
-        XCTAssertEqual(medicineStore.savedMedicines, [medicine])
+        XCTAssertEqual(medicineStore.savedMedicines.first?.name, "Dafalgan")
+        XCTAssertEqual(medicineStore.savedMedicines.first?.aisle, "AD10")
         XCTAssertEqual(historyStore.recordedEntries.count, 1)
     }
 
     @MainActor
-    func testIncreaseStockSavesIncrementedMedicine() async {
+    func testIncreaseSavesIncrementedMedicineAndUpdatesLocalState() async {
         let medicineStore = MockMedicineStoring()
-        let viewModel = MedicineDetailViewModel(medicineStore: medicineStore, historyStore: MockHistoryStoring())
+        let historyStore = MockHistoryStoring()
         let medicine = TestHelper.makeMedicine(stock: 10)
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore)
 
-        await viewModel.increaseStock(medicine, user: "user-1")
+        await viewModel.increase()
 
         XCTAssertEqual(medicineStore.savedMedicines.first?.stock, 11)
+        XCTAssertEqual(viewModel.medicine.stock, 11)
+        XCTAssertEqual(historyStore.recordedEntries.count, 1)
     }
 
     @MainActor
-    func testDecreaseStockSavesDecrementedMedicine() async {
+    func testDecreaseSavesDecrementedMedicineAndUpdatesLocalState() async {
         let medicineStore = MockMedicineStoring()
-        let viewModel = MedicineDetailViewModel(medicineStore: medicineStore, historyStore: MockHistoryStoring())
+        let historyStore = MockHistoryStoring()
         let medicine = TestHelper.makeMedicine(stock: 10)
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore)
 
-        await viewModel.decreaseStock(medicine, user: "user-1")
+        await viewModel.decrease()
 
         XCTAssertEqual(medicineStore.savedMedicines.first?.stock, 9)
+        XCTAssertEqual(viewModel.medicine.stock, 9)
+        XCTAssertEqual(historyStore.recordedEntries.count, 1)
+    }
+
+    @MainActor
+    func testDeleteCallsStoreWithoutRecordingHistory() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        let medicine = TestHelper.makeMedicine()
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore)
+
+        await viewModel.delete()
+
+        XCTAssertEqual(medicineStore.deletedMedicines, [medicine])
+        XCTAssertTrue(historyStore.recordedEntries.isEmpty)
+    }
+
+    @MainActor
+    func testSaveUsesCurrentSessionUser() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        let authenticationService = MockAuthenticationServicing()
+        let medicine = TestHelper.makeMedicine()
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore,
+                                                               authenticationService: authenticationService)
+
+        viewModel.listen()
+        authenticationService.emit(TestHelper.makeAppUser(uid: "user-42"))
+
+        // The session stream propagates asynchronously; retry the save until it has, instead of
+        // guessing a fixed delay.
+        var lastRecordedUser: String?
+        let deadline = Date().addingTimeInterval(1)
+        while lastRecordedUser != "user-42" && Date() < deadline {
+            await viewModel.increase()
+            lastRecordedUser = historyStore.recordedEntries.last?.user
+        }
+
+        XCTAssertEqual(lastRecordedUser, "user-42")
     }
 }

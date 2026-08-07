@@ -1,0 +1,14 @@
+//
+//  Version.xcconfig
+//  MediStock
+//
+//  Created by Julien Cotte on 05/08/2026.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+// Single source of truth for the app's version. Kept as plain text (not in project.pbxproj)
+// so automation (release-please) can bump it without touching the Xcode project file.
+MARKETING_VERSION = 1.8.0 // x-release-please-version
+CURRENT_PROJECT_VERSION = 1

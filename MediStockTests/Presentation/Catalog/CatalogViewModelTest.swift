@@ -12,7 +12,7 @@ final class CatalogViewModelTest: XCTestCase {
     @MainActor
     func testListenPopulatesMedicines() async {
         let medicineStore = MockMedicineStoring()
-        let viewModel = CatalogViewModel(medicineStore: medicineStore, historyStore: MockHistoryStoring())
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
         let medicine = TestHelper.makeMedicine()
 
         viewModel.listen()
@@ -23,26 +23,27 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testAislesAreDistinctAndSorted() async {
+    func testAislesAreDistinctAndSortedNumerically() async {
         let medicineStore = MockMedicineStoring()
-        let viewModel = CatalogViewModel(medicineStore: medicineStore, historyStore: MockHistoryStoring())
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
         let medicines = [
-            TestHelper.makeMedicine(id: "1", aisle: "Rayon B"),
-            TestHelper.makeMedicine(id: "2", aisle: "Rayon A"),
-            TestHelper.makeMedicine(id: "3", aisle: "Rayon A")
+            TestHelper.makeMedicine(id: "1", aisle: "AD10"),
+            TestHelper.makeMedicine(id: "2", aisle: "AD2"),
+            TestHelper.makeMedicine(id: "3", aisle: "AD2")
         ]
 
         viewModel.listen()
         medicineStore.emit(medicines)
         await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
 
-        XCTAssertEqual(viewModel.aisles, ["Rayon A", "Rayon B"])
+        // A plain string sort would put "AD10" before "AD2"; natural sort must not.
+        XCTAssertEqual(viewModel.aisles, ["AD2", "AD10"])
     }
 
     @MainActor
     func testMedicinesInAisleFiltersCorrectly() async {
         let medicineStore = MockMedicineStoring()
-        let viewModel = CatalogViewModel(medicineStore: medicineStore, historyStore: MockHistoryStoring())
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
         let medicines = [
             TestHelper.makeMedicine(id: "1", aisle: "Rayon A"),
             TestHelper.makeMedicine(id: "2", aisle: "Rayon B")
@@ -58,7 +59,7 @@ final class CatalogViewModelTest: XCTestCase {
     @MainActor
     func testMedicinesMatchingFiltersByName() async {
         let medicineStore = MockMedicineStoring()
-        let viewModel = CatalogViewModel(medicineStore: medicineStore, historyStore: MockHistoryStoring())
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
         let medicines = [
             TestHelper.makeMedicine(id: "1", name: "Doliprane"),
             TestHelper.makeMedicine(id: "2", name: "Advil"),
@@ -77,7 +78,7 @@ final class CatalogViewModelTest: XCTestCase {
     @MainActor
     func testMedicinesMatchingSortsByStock() async {
         let medicineStore = MockMedicineStoring()
-        let viewModel = CatalogViewModel(medicineStore: medicineStore, historyStore: MockHistoryStoring())
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
         let medicines = [
             TestHelper.makeMedicine(id: "1", stock: 20),
             TestHelper.makeMedicine(id: "2", stock: 5),
@@ -94,21 +95,24 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testAddRandomMedicineSavesAndRecordsHistory() async {
+    func testAddMedicineSavesAndRecordsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
-        let viewModel = CatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
 
-        await viewModel.addRandomMedicine(user: "user-1")
+        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56", user: "user-1")
 
-        XCTAssertEqual(medicineStore.savedMedicines.count, 1)
+        XCTAssertEqual(medicineStore.savedMedicines, [TestHelper.makeMedicine(id: nil,
+                                                                              name: "Doliprane",
+                                                                              stock: 10,
+                                                                              aisle: "AD56")])
         XCTAssertEqual(historyStore.recordedEntries.count, 1)
     }
 
     @MainActor
     func testDeleteCallsStore() async {
         let medicineStore = MockMedicineStoring()
-        let viewModel = CatalogViewModel(medicineStore: medicineStore, historyStore: MockHistoryStoring())
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
         let medicine = TestHelper.makeMedicine()
 
         await viewModel.delete(medicine)

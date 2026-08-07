@@ -47,4 +47,36 @@ enum TestHelper {
             try? await Task.sleep(nanoseconds: 10_000_000)
         }
     }
+
+    /// Builds an `AuthenticationViewModel` wired to fresh mocks by default, so tests only need to
+    /// pass what they actually care about configuring/inspecting.
+    @MainActor
+    static func makeAuthenticationViewModel(
+        authenticationService: AuthenticationServicing = MockAuthenticationServicing()
+    ) -> AuthenticationViewModel {
+        AuthenticationViewModel(authenticationService: authenticationService)
+    }
+
+    /// Builds a `CatalogViewModel` wired to fresh mocks by default.
+    @MainActor
+    static func makeCatalogViewModel(
+        medicineStore: MedicineStoring = MockMedicineStoring(),
+        historyStore: HistoryStoring = MockHistoryStoring()
+    ) -> CatalogViewModel {
+        CatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
+    }
+
+    /// Builds a `MedicineDetailViewModel` wired to fresh mocks by default.
+    @MainActor
+    static func makeMedicineDetailViewModel(
+        medicine: Medicine = TestHelper.makeMedicine(),
+        medicineStore: MedicineStoring = MockMedicineStoring(),
+        historyStore: HistoryStoring = MockHistoryStoring(),
+        authenticationService: AuthenticationServicing = MockAuthenticationServicing()
+    ) -> MedicineDetailViewModel {
+        MedicineDetailViewModel(medicine: medicine,
+                                medicineStore: medicineStore,
+                                historyStore: historyStore,
+                                authenticationService: authenticationService)
+    }
 }

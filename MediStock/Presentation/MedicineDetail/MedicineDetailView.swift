@@ -8,124 +8,57 @@
 import SwiftUI
 
 struct MedicineDetailView: View {
-    @State var medicine: Medicine
-    @StateObject private var viewModel = MedicineDetailViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore())
-    @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
+    @StateObject var viewModel: MedicineDetailViewModel
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 // Title
-                Text(medicine.name)
+                Text(viewModel.name)
                     .font(.largeTitle)
                     .padding(.top, 20)
 
-                // Medicine Name
-                medicineNameSection
+                // Medicine Name & Aisle
+                MedicineFormContent(name: $viewModel.name, aisle: $viewModel.aisle)
 
                 // Medicine Stock
-                medicineStockSection
-
-                // Medicine Aisle
-                medicineAisleSection
+                MedicineDetailStockSection(
+                    stock: viewModel.medicine.stock,
+                    onIncrease: { Task { await viewModel.increase() } },
+                    onDecrease: { Task { await viewModel.decrease() } }
+                )
 
                 // History Section
-                historySection
+                MedicineDetailHistorySection(history: viewModel.history)
             }
             .padding(.vertical)
         }
         .navigationBarTitle("medicineDetail.navigationTitle", displayMode: .inline)
+        .navigationBarItems(trailing: Button(action: {
+            Task {
+                await viewModel.delete()
+                dismiss()
+            }
+        }, label: {
+            Image(systemName: "trash")
+                .foregroundColor(.red)
+        }))
         .onAppear {
-            viewModel.listen(forMedicineId: medicine.id ?? "")
+            viewModel.listen()
         }
-        .onChange(of: medicine) { _ in
-            Task { await viewModel.updateMedicine(medicine, user: authenticationViewModel.session?.uid ?? "") }
+        .onChange(of: viewModel.name) { _, _ in
+            viewModel.scheduleLabelSave(cleanedAisle: AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle))
         }
-    }
-}
-
-extension MedicineDetailView {
-    private var medicineNameSection: some View {
-        VStack(alignment: .leading) {
-            Text("medicineDetail.name.label")
-                .font(.headline)
-            TextField("medicineDetail.name.label", text: $medicine.name)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding(.bottom, 10)
+        .onChange(of: viewModel.aisle) { _, newValue in
+            viewModel.scheduleLabelSave(cleanedAisle: AisleCode.stripLabel(AisleLabel.localized, from: newValue))
         }
-        .padding(.horizontal)
-    }
-
-    private var medicineStockSection: some View {
-        VStack(alignment: .leading) {
-            Text("medicineDetail.stock.label")
-                .font(.headline)
-            HStack {
-                Button(action: {
-                    Task { await viewModel.decreaseStock(medicine, user: authenticationViewModel.session?.uid ?? "") }
-                }) {
-                    Image(systemName: "minus.circle")
-                        .font(.title)
-                        .foregroundColor(.red)
-                }
-                TextField("medicineDetail.stock.label", value: $medicine.stock, formatter: NumberFormatter())
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .keyboardType(.numberPad)
-                .frame(width: 100)
-                Button(action: {
-                    Task { await viewModel.increaseStock(medicine, user: authenticationViewModel.session?.uid ?? "") }
-                }) {
-                    Image(systemName: "plus.circle")
-                        .font(.title)
-                        .foregroundColor(.green)
-                }
-            }
-            .padding(.bottom, 10)
-        }
-        .padding(.horizontal)
-    }
-
-    private var medicineAisleSection: some View {
-        VStack(alignment: .leading) {
-            Text("medicineDetail.aisle.label")
-                .font(.headline)
-            TextField("medicineDetail.aisle.label", text: $medicine.aisle)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding(.bottom, 10)
-        }
-        .padding(.horizontal)
-    }
-
-    private var historySection: some View {
-        VStack(alignment: .leading) {
-            Text("medicineDetail.history.title")
-                .font(.headline)
-                .padding(.top, 20)
-            ForEach(viewModel.history, id: \.id) { entry in
-                VStack(alignment: .leading, spacing: 5) {
-                    Text(entry.action)
-                        .font(.headline)
-                    Text(String(localized: "medicineDetail.history.user", defaultValue: "Utilisateur : \(entry.user)"))
-                        .font(.subheadline)
-                    Text(String(localized: "medicineDetail.history.date", defaultValue: "Date : \(entry.timestamp.formatted())"))
-                        .font(.subheadline)
-                    Text(String(localized: "medicineDetail.history.details", defaultValue: "Détails : \(entry.details)"))
-                        .font(.subheadline)
-                }
-                .padding()
-                .background(Color(.systemGray6))
-                .cornerRadius(10)
-                .padding(.bottom, 5)
-            }
-        }
-        .padding(.horizontal)
     }
 }
 
 struct MedicineDetailView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleMedicine = Medicine(name: "Sample", stock: 10, aisle: "Aisle 1")
-        MedicineDetailView(medicine: sampleMedicine)
-            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+        MedicineDetailView(viewModel: DIContainer().makeMedicineDetailViewModel(medicine: sampleMedicine))
     }
 }

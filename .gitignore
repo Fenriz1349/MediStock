@@ -44,3 +44,4 @@ fastlane/test_output
 
 # Local task-tracking log - never committed, personal working notes only
 TASKS.md
+.scannerwork

@@ -10,11 +10,13 @@ import SwiftUI
 struct AllMedicinesView: View {
     @EnvironmentObject var viewModel: CatalogViewModel
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
+    @Environment(\.diContainer) private var container
     @State private var filterText: String = ""
     @State private var sortOption: SortOption = .none
+    @State private var isPresentingAddMedicine = false
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 // Filtrage et Tri
                 HStack {
@@ -37,22 +39,39 @@ struct AllMedicinesView: View {
                 // Liste des Médicaments
                 List {
                     ForEach(viewModel.medicines(matching: filterText, sortedBy: sortOption), id: \.id) { medicine in
-                        NavigationLink(destination: MedicineDetailView(medicine: medicine)) {
+                        NavigationLink(value: medicine) {
                             VStack(alignment: .leading) {
                                 Text(medicine.name)
                                     .font(.headline)
-                                Text(String(localized: "allMedicines.medicineStock", defaultValue: "Stock : \(medicine.stock)"))
+                                Text(String(localized: "allMedicines.medicineStock",
+                                            defaultValue: "Stock : \(medicine.stock)"))
                                     .font(.subheadline)
+                            }
+                        }
+                    }
+                    .onDelete { offsets in
+                        let medicines = viewModel.medicines(matching: filterText, sortedBy: sortOption)
+                        Task {
+                            for index in offsets {
+                                await viewModel.delete(medicines[index])
                             }
                         }
                     }
                 }
                 .navigationBarTitle("tab.allMedicines.title")
+                .navigationDestination(for: Medicine.self) { medicine in
+                    MedicineDetailView(viewModel: container.makeMedicineDetailViewModel(medicine: medicine))
+                }
                 .navigationBarItems(trailing: Button(action: {
-                    Task { await viewModel.addRandomMedicine(user: authenticationViewModel.session?.uid ?? "") }
-                }) {
+                    isPresentingAddMedicine = true
+                }, label: {
                     Image(systemName: "plus")
-                })
+                }))
+                .sheet(isPresented: $isPresentingAddMedicine) {
+                    AddMedicineView()
+                        .environmentObject(viewModel)
+                        .environmentObject(authenticationViewModel)
+                }
             }
         }
     }
@@ -61,7 +80,8 @@ struct AllMedicinesView: View {
 struct AllMedicinesView_Previews: PreviewProvider {
     static var previews: some View {
         AllMedicinesView()
-            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(), historyStore: FirestoreHistoryStore()))
+            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
+                                                historyStore: FirestoreHistoryStore()))
             .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
     }
 }
