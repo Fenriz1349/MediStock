@@ -9,10 +9,10 @@ import SwiftUI
 import Toasty
 
 struct AllMedicinesView: View {
-    @EnvironmentObject var viewModel: CatalogViewModel
+    @EnvironmentObject var catalogViewModel: CatalogViewModel
+    @StateObject private var viewModel = DIContainer().makeAllMedicinesViewModel()
     @Environment(\.diContainer) private var container
     @State private var filterText: String = ""
-    @State private var sortOption: SortOption = .none
     @State private var isPresentingAddMedicine = false
 
     var body: some View {
@@ -26,7 +26,7 @@ struct AllMedicinesView: View {
 
                     Spacer()
 
-                    Picker("allMedicines.sortPicker", selection: $sortOption) {
+                    Picker("allMedicines.sortPicker", selection: $viewModel.sortOption) {
                         Text("allMedicines.sortOption.none").tag(SortOption.none)
                         Text("allMedicines.sortOption.name").tag(SortOption.name)
                         Text("allMedicines.sortOption.stock").tag(SortOption.stock)
@@ -38,7 +38,7 @@ struct AllMedicinesView: View {
 
                 // Liste des Médicaments
                 List {
-                    ForEach(viewModel.medicines(matching: filterText, sortedBy: sortOption), id: \.id) { medicine in
+                    ForEach(viewModel.medicines(matching: filterText), id: \.id) { medicine in
                         NavigationLink(value: medicine) {
                             VStack(alignment: .leading) {
                                 Text(medicine.name)
@@ -50,10 +50,10 @@ struct AllMedicinesView: View {
                         }
                     }
                     .onDelete { offsets in
-                        let medicines = viewModel.medicines(matching: filterText, sortedBy: sortOption)
+                        let medicines = viewModel.medicines(matching: filterText)
                         Task {
                             for index in offsets {
-                                await viewModel.delete(medicines[index])
+                                await catalogViewModel.delete(medicines[index])
                             }
                         }
                     }
@@ -69,7 +69,10 @@ struct AllMedicinesView: View {
                 }))
                 .sheet(isPresented: $isPresentingAddMedicine) {
                     AddMedicineView()
-                        .environmentObject(viewModel)
+                        .environmentObject(catalogViewModel)
+                }
+                .onAppear {
+                    viewModel.listen()
                 }
             }
         }
