@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.12.0](https://github.com/Fenriz1349/MediStock/compare/v1.11.0...v1.12.0) (2026-08-10)
+
+
+### Features
+
+* add AisleListViewModel ([5e942f6](https://github.com/Fenriz1349/MediStock/commit/5e942f6267d4c216be38297b00ec80c3dd8a0156))
+* add AisleMedicinesViewModel to handle specifically AisleMedicinesView ([578c2db](https://github.com/Fenriz1349/MediStock/commit/578c2db0f899fdfa0f159b1292977045732687e9))
+* add AllMedicinesViewModel ([bca6e97](https://github.com/Fenriz1349/MediStock/commit/bca6e9762b5b4063dffaa148df6710860ab345b9))
+* add public listner functions and refactor observe in a private concrete listener creator ([57bf18a](https://github.com/Fenriz1349/MediStock/commit/57bf18ac3fc4fac9034a8872961e40f7f751a0f8))
+
 ## [1.11.0](https://github.com/Fenriz1349/MediStock/compare/v1.10.0...v1.11.0) (2026-08-07)
 
 
