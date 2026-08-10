@@ -13,8 +13,8 @@ import Foundation
 /// Both hit the same stores and can fail for the same reasons.
 /// No localized text here — resolving that is a display concern the View handles, same as `AuthenticationError`.
 enum MedicineError: Error, Equatable {
-    /// The request failed because the device has no network connectivity.
-    case networkUnavailable
+    /// The request failed due to a connectivity problem, detected by `NetworkMonitoring`.
+    case network(NetworkError)
     /// Firestore refused the request — the security rules don't allow it.
     /// Shouldn't normally happen here, the app already requires being signed in for every read/write.
     case permissionDenied

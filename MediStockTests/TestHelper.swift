@@ -53,18 +53,20 @@ enum TestHelper {
     /// So tests only need to pass what they actually care about configuring/inspecting.
     @MainActor
     static func makeAuthenticationViewModel(
-        authenticationService: AuthenticationServicing = MockAuthenticationServicing()
+        authenticationService: AuthenticationServicing = MockAuthenticationServicing(),
+        networkMonitor: NetworkMonitoring = MockNetworkMonitoring()
     ) -> AuthenticationViewModel {
-        AuthenticationViewModel(authenticationService: authenticationService)
+        AuthenticationViewModel(authenticationService: authenticationService, networkMonitor: networkMonitor)
     }
 
     /// Builds a `CatalogViewModel` wired to fresh mocks by default.
     @MainActor
     static func makeCatalogViewModel(
         medicineStore: MedicineStoring = MockMedicineStoring(),
-        historyStore: HistoryStoring = MockHistoryStoring()
+        historyStore: HistoryStoring = MockHistoryStoring(),
+        networkMonitor: NetworkMonitoring = MockNetworkMonitoring()
     ) -> CatalogViewModel {
-        CatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
+        CatalogViewModel(medicineStore: medicineStore, historyStore: historyStore, networkMonitor: networkMonitor)
     }
 
     /// Builds a `MedicineDetailViewModel` wired to fresh mocks by default.
@@ -72,9 +74,15 @@ enum TestHelper {
     static func makeMedicineDetailViewModel(
         medicine: Medicine = TestHelper.makeMedicine(),
         medicineStore: MedicineStoring = MockMedicineStoring(),
-        historyStore: HistoryStoring = MockHistoryStoring()
+        historyStore: HistoryStoring = MockHistoryStoring(),
+        networkMonitor: NetworkMonitoring = MockNetworkMonitoring()
     ) -> MedicineDetailViewModel {
-        MedicineDetailViewModel(medicine: medicine, medicineStore: medicineStore, historyStore: historyStore)
+        MedicineDetailViewModel(
+            medicine: medicine,
+            medicineStore: medicineStore,
+            historyStore: historyStore,
+            networkMonitor: networkMonitor
+        )
     }
 
     /// Builds an `AisleMedicinesViewModel` wired to a fresh mock by default.

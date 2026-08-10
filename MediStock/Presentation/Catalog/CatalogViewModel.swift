@@ -17,17 +17,22 @@ final class CatalogViewModel: ObservableObject {
     /// The View observes this to trigger a toast, resolving the localized message itself.
     /// This ViewModel never touches the display language.
     @Published private(set) var error: MedicineError?
+    /// `true` for the duration of an action, so the View can show a loading indicator.
+    @Published private(set) var isLoading = false
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
+    private let networkMonitor: NetworkMonitoring
 
     /// - Parameters:
     ///   - medicineStore: Domain-level abstraction over medicine persistence, kept behind a protocol.
     ///     This ViewModel never depends on Firebase directly.
     ///   - historyStore: Domain-level abstraction over history persistence.
-    init(medicineStore: MedicineStoring, historyStore: HistoryStoring) {
+    ///   - networkMonitor: Checked before every write. See `verifyNetworkReachable()`.
+    init(medicineStore: MedicineStoring, historyStore: HistoryStoring, networkMonitor: NetworkMonitoring) {
         self.medicineStore = medicineStore
         self.historyStore = historyStore
+        self.networkMonitor = networkMonitor
     }
 
     /// Creates a new medicine and records its addition in the history.
@@ -37,8 +42,11 @@ final class CatalogViewModel: ObservableObject {
     ///   - aisle: The aisle code, already cleaned of any redundant localized label by the caller.
     func addMedicine(name: String, stock: Int, aisle: String) async {
         error = nil
+        isLoading = true
+        defer { isLoading = false }
         let medicine = Medicine(name: MedicineNameFormat.capitalized(name), stock: stock, aisle: aisle)
         do {
+            try await verifyNetworkReachable()
             let saved = try await medicineStore.save(medicine)
             try await historyStore.recordAddition(of: saved)
         } catch let medicineError as MedicineError {
@@ -52,13 +60,26 @@ final class CatalogViewModel: ObservableObject {
     /// - Parameter medicine: The medicine to delete.
     func delete(_ medicine: Medicine) async {
         error = nil
+        isLoading = true
+        defer { isLoading = false }
         do {
+            try await verifyNetworkReachable()
             try await medicineStore.delete(medicine)
             try await historyStore.recordDeletion(of: medicine)
         } catch let medicineError as MedicineError {
             error = medicineError
         } catch {
             self.error = .unknown
+        }
+    }
+
+    /// Called before every write, so a lack of connectivity surfaces immediately as a typed error.
+    /// - Throws: `MedicineError.network`, wrapping whatever `NetworkError` `networkMonitor` reports.
+    private func verifyNetworkReachable() async throws {
+        do {
+            try await networkMonitor.verifyReachable()
+        } catch let networkError as NetworkError {
+            throw MedicineError.network(networkError)
         }
     }
 }

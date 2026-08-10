@@ -22,8 +22,8 @@ enum AuthenticationError: Error, Equatable {
     /// The account-deletion request was refused because the session is too old.
     /// Firebase requires a fresh sign-in before allowing this sensitive operation.
     case requiresRecentLogin
-    /// The request failed because the device has no network connectivity.
-    case networkUnavailable
+    /// The request failed due to a connectivity problem, detected by `NetworkMonitoring`.
+    case network(NetworkError)
     /// Any other failure, not specifically handled above.
     case unknown
 }

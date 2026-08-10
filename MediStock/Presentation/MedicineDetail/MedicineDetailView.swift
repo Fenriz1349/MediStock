@@ -36,11 +36,18 @@ struct MedicineDetailView: View {
             }
             .padding(.vertical)
         }
+        .overlay {
+            if viewModel.isLoading {
+                LoadingOverlay()
+            }
+        }
         .navigationBarTitle("medicineDetail.navigationTitle", displayMode: .inline)
         .navigationBarItems(trailing: Button(action: {
             Task {
                 await viewModel.delete()
-                dismiss()
+                if viewModel.error == nil {
+                    dismiss()
+                }
             }
         }, label: {
             Image(systemName: "trash")

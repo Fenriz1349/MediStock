@@ -16,7 +16,7 @@ extension AuthenticationError {
         case .emailAlreadyInUse: String(localized: "auth.error.emailAlreadyInUse")
         case .weakPassword: String(localized: "auth.error.weakPassword")
         case .requiresRecentLogin: String(localized: "auth.error.requiresRecentLogin")
-        case .networkUnavailable: String(localized: "auth.error.networkUnavailable")
+        case .network(let networkError): networkError.localizedMessage
         case .unknown: String(localized: "auth.error.unknown")
         }
     }

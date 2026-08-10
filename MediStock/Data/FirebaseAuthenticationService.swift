@@ -95,7 +95,7 @@ final class FirebaseAuthenticationService: AuthenticationServicing {
         case .requiresRecentLogin:
             return .requiresRecentLogin
         case .networkError:
-            return .networkUnavailable
+            return .network(.serverUnreachable)
         default:
             return .unknown
         }

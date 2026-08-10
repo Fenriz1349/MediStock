@@ -62,6 +62,7 @@ struct UserView: View {
 
 #Preview {
     UserView()
-        .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+        .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService(),
+                                                    networkMonitor: NetworkMonitor()))
         .environmentObject(ToastyManager())
 }

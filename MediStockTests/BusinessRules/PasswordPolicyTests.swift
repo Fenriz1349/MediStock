@@ -9,21 +9,21 @@ import XCTest
 @testable import MediStock
 
 final class PasswordPolicyTests: XCTestCase {
-    func testValidPasswordHasNoUnmetRequirements() {
+    func testUnmetRequirements_validPassword_returnsEmpty() {
         XCTAssertTrue(PasswordPolicy.unmetRequirements(for: "Abcdef1!").isEmpty)
         XCTAssertTrue(PasswordPolicy.isValid("Abcdef1!"))
     }
 
-    func testEmptyPasswordFailsEveryRequirement() {
+    func testUnmetRequirements_emptyPassword_returnsAll() {
         XCTAssertEqual(PasswordPolicy.unmetRequirements(for: ""), Set(PasswordRequirement.allCases))
         XCTAssertFalse(PasswordPolicy.isValid(""))
     }
 
-    func testTooShortPasswordFailsMinLength() {
+    func testUnmetRequirements_tooShort_containsMinLength() {
         XCTAssertTrue(PasswordPolicy.unmetRequirements(for: "Ab1!").contains(.minLength))
     }
 
-    func testMissingUppercaseFailsUppercaseOnly() {
+    func testUnmetRequirements_missingUppercase_containsUppercaseOnly() {
         let unmet = PasswordPolicy.unmetRequirements(for: "abcdefg1!")
         XCTAssertTrue(unmet.contains(.uppercase))
         XCTAssertFalse(unmet.contains(.lowercase))
@@ -32,19 +32,19 @@ final class PasswordPolicyTests: XCTestCase {
         XCTAssertFalse(unmet.contains(.minLength))
     }
 
-    func testMissingLowercaseFailsLowercaseOnly() {
+    func testUnmetRequirements_missingLowercase_containsLowercaseOnly() {
         XCTAssertEqual(PasswordPolicy.unmetRequirements(for: "ABCDEFG1!"), [.lowercase])
     }
 
-    func testMissingDigitFailsDigitOnly() {
+    func testUnmetRequirements_missingDigit_containsDigitOnly() {
         XCTAssertEqual(PasswordPolicy.unmetRequirements(for: "Abcdefgh!"), [.digit])
     }
 
-    func testMissingSpecialCharacterFailsSpecialCharacterOnly() {
+    func testUnmetRequirements_missingSpecialCharacter_containsSpecialCharacterOnly() {
         XCTAssertEqual(PasswordPolicy.unmetRequirements(for: "Abcdefg1"), [.specialCharacter])
     }
 
-    func testIsValidFalseWhenAnySingleRequirementIsMissing() {
+    func testIsValid_requirementMissing_returnsFalse() {
         XCTAssertFalse(PasswordPolicy.isValid("abcdefg1!")) // missing uppercase
         XCTAssertFalse(PasswordPolicy.isValid("Abcdefgh!")) // missing digit
         XCTAssertFalse(PasswordPolicy.isValid("Abcdefg1")) // missing special character

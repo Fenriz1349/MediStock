@@ -74,7 +74,8 @@ struct AisleListView_Previews: PreviewProvider {
         let medicineStore = FirestoreMedicineStore()
         AisleListView()
             .environmentObject(CatalogViewModel(medicineStore: medicineStore,
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
+                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
+                                                networkMonitor: NetworkMonitor()))
             .environmentObject(ToastyManager())
     }
 }

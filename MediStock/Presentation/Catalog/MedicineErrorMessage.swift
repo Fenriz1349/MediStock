@@ -12,7 +12,7 @@ import Foundation
 extension MedicineError {
     var localizedMessage: String {
         switch self {
-        case .networkUnavailable: String(localized: "medicine.error.networkUnavailable")
+        case .network(let networkError): networkError.localizedMessage
         case .permissionDenied: String(localized: "medicine.error.permissionDenied")
         case .unknown: String(localized: "medicine.error.unknown")
         }
