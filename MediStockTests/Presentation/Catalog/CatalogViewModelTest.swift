@@ -27,6 +27,17 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
+    func testAddMedicineNormalizesTheNameCapitalization() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
+
+        await viewModel.addMedicine(name: "dOLIPRANE", stock: 10, aisle: "AD56")
+
+        XCTAssertEqual(medicineStore.savedMedicines.first?.name, "Doliprane")
+    }
+
+    @MainActor
     func testAddMedicineSaveFailureSetsTypedErrorAndSkipsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()

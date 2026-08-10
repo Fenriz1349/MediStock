@@ -37,7 +37,7 @@ final class CatalogViewModel: ObservableObject {
     ///   - aisle: The aisle code, already cleaned of any redundant localized label by the caller.
     func addMedicine(name: String, stock: Int, aisle: String) async {
         error = nil
-        let medicine = Medicine(name: name, stock: stock, aisle: aisle)
+        let medicine = Medicine(name: MedicineNameFormat.capitalized(name), stock: stock, aisle: aisle)
         do {
             let saved = try await medicineStore.save(medicine)
             try await historyStore.recordAddition(of: saved)
