@@ -30,7 +30,11 @@ final class CatalogViewModelTest: XCTestCase {
     func testAddMedicine_inFlight_togglesIsLoading() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
+        let networkMonitor = MockNetworkMonitoring()
+        networkMonitor.verifyReachableDelayNanoseconds = 50_000_000
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore,
+                                                         historyStore: historyStore,
+                                                         networkMonitor: networkMonitor)
         XCTAssertFalse(viewModel.isLoading)
 
         let task = Task { await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56") }
@@ -250,13 +254,38 @@ final class MockHistoryStoring: HistoryStoring {
     }
 }
 
-/// In-memory fake of `NetworkMonitoring` for testing.
-/// `isConnected` unused by `verifyReachable()` here — tests only need to control the thrown error.
+/// In-memory fake of `NetworkMonitoring` for testing, with a controllable connectivity stream.
 final class MockNetworkMonitoring: NetworkMonitoring {
-    var isConnected = true
+    var isConnected: Bool
     var verifyReachableError: NetworkError?
+    /// A real suspension point for `verifyReachable()`, off by default.
+    /// Without it, a VM action can race to completion before a test ever gets to observe `isLoading == true`
+    /// — set this in tests that need a reliably observable in-flight window.
+    var verifyReachableDelayNanoseconds: UInt64 = 0
+
+    private let connectivityStream: AsyncStream<Bool>
+    private let connectivityContinuation: AsyncStream<Bool>.Continuation
+
+    init(isConnected: Bool = true) {
+        self.isConnected = isConnected
+        var continuation: AsyncStream<Bool>.Continuation!
+        connectivityStream = AsyncStream { continuation = $0 }
+        connectivityContinuation = continuation
+    }
+
+    func observeConnectivity() -> AsyncStream<Bool> {
+        connectivityStream
+    }
+
+    func emit(_ connected: Bool) {
+        isConnected = connected
+        connectivityContinuation.yield(connected)
+    }
 
     func verifyReachable() async throws {
+        if verifyReachableDelayNanoseconds > 0 {
+            try? await Task.sleep(nanoseconds: verifyReachableDelayNanoseconds)
+        }
         if let verifyReachableError { throw verifyReachableError }
     }
 }

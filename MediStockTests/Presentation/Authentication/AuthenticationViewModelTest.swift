@@ -26,7 +26,10 @@ final class AuthenticationViewModelTest: XCTestCase {
     func testSignIn_inFlight_togglesIsLoading() async {
         let service = MockAuthenticationServicing()
         service.signInResult = .success(TestHelper.makeAppUser())
-        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
+        let networkMonitor = MockNetworkMonitoring()
+        networkMonitor.verifyReachableDelayNanoseconds = 50_000_000
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service,
+                                                                networkMonitor: networkMonitor)
         XCTAssertFalse(viewModel.isLoading)
 
         let task = Task { await viewModel.signIn(email: "test@example.com", password: "password") }
@@ -55,7 +58,8 @@ final class AuthenticationViewModelTest: XCTestCase {
         let service = MockAuthenticationServicing()
         let networkMonitor = MockNetworkMonitoring()
         networkMonitor.verifyReachableError = .notConnected
-        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service, networkMonitor: networkMonitor)
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service,
+                                                                networkMonitor: networkMonitor)
 
         await viewModel.signIn(email: "test@example.com", password: "password")
 
@@ -174,6 +178,28 @@ final class AuthenticationViewModelTest: XCTestCase {
         await TestHelper.waitUntil { viewModel.session != nil }
 
         XCTAssertEqual(viewModel.session, user)
+    }
+
+    @MainActor
+    func testIsConnected_afterInit_reflectsNetworkMonitor() {
+        let networkMonitor = MockNetworkMonitoring()
+        networkMonitor.isConnected = false
+        let viewModel = TestHelper.makeAuthenticationViewModel(networkMonitor: networkMonitor)
+
+        XCTAssertFalse(viewModel.isConnected)
+    }
+
+    @MainActor
+    func testListenConnectivity_connectivityStreamEmits_updatesIsConnected() async {
+        let networkMonitor = MockNetworkMonitoring(isConnected: false)
+        let viewModel = TestHelper.makeAuthenticationViewModel(networkMonitor: networkMonitor)
+        XCTAssertFalse(viewModel.isConnected)
+
+        viewModel.listenConnectivity()
+        networkMonitor.emit(true)
+        await TestHelper.waitUntil { viewModel.isConnected }
+
+        XCTAssertTrue(viewModel.isConnected)
     }
 }
 

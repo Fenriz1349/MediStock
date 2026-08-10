@@ -45,7 +45,11 @@ final class MedicineDetailViewModelTest: XCTestCase {
     func testUpdateLabel_inFlight_togglesIsLoading() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
-        let viewModel = TestHelper.makeMedicineDetailViewModel(medicineStore: medicineStore, historyStore: historyStore)
+        let networkMonitor = MockNetworkMonitoring()
+        networkMonitor.verifyReachableDelayNanoseconds = 50_000_000
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicineStore: medicineStore,
+                                                                historyStore: historyStore,
+                                                                networkMonitor: networkMonitor)
         XCTAssertFalse(viewModel.isLoading)
 
         let task = Task { await viewModel.updateLabel(name: "Dafalgan", aisle: "AD10") }
