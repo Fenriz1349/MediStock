@@ -50,6 +50,11 @@ struct DIContainer {
     func makeAisleMedicinesViewModel(aisle: String) -> AisleMedicinesViewModel {
         AisleMedicinesViewModel(aisle: aisle, medicineStore: medicineStore)
     }
+
+    @MainActor
+    func makeAisleListViewModel() -> AisleListViewModel {
+        AisleListViewModel(medicineStore: medicineStore)
+    }
 }
 
 private struct DIContainerKey: EnvironmentKey {
