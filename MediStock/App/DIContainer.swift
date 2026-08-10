@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 
 /// Composition root: owns the concrete Data-layer implementations and builds ViewModels from them.
-/// Views ask this container for a ViewModel instead of constructing Firestore/Firebase types
-/// themselves, so those concrete types stay out of the View and ViewModel layers.
+/// Views ask this container for a ViewModel instead of constructing Firestore/Firebase types themselves.
+/// So those concrete types stay out of the View and ViewModel layers.
 struct DIContainer {
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
@@ -43,6 +43,22 @@ struct DIContainer {
             medicineStore: medicineStore,
             historyStore: historyStore
         )
+    }
+
+    /// - Parameter aisle: The exact aisle code the screen should show medicines for.
+    @MainActor
+    func makeAisleMedicinesViewModel(aisle: String) -> AisleMedicinesViewModel {
+        AisleMedicinesViewModel(aisle: aisle, medicineStore: medicineStore)
+    }
+
+    @MainActor
+    func makeAisleListViewModel() -> AisleListViewModel {
+        AisleListViewModel(medicineStore: medicineStore)
+    }
+
+    @MainActor
+    func makeAllMedicinesViewModel() -> AllMedicinesViewModel {
+        AllMedicinesViewModel(medicineStore: medicineStore)
     }
 }
 

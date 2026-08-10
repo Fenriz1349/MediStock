@@ -11,16 +11,16 @@ import Foundation
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
     @Published private(set) var session: AppUser?
-    /// Reset to `nil` at the start of every action, then set again on failure — the View observes
-    /// this to trigger a toast, resolving the localized message itself (this ViewModel never
-    /// touches the display language).
+    /// Reset to `nil` at the start of every action, then set again on failure.
+    /// The View observes this to trigger a toast, resolving the localized message itself.
+    /// This ViewModel never touches the display language.
     @Published private(set) var error: AuthenticationError?
 
     private let authenticationService: AuthenticationServicing
     private var observationTask: Task<Void, Never>?
 
-    /// - Parameter authenticationService: Domain-level auth abstraction, kept behind a protocol so
-    ///   this ViewModel never depends on Firebase directly.
+    /// - Parameter authenticationService: Domain-level auth abstraction, kept behind a protocol so this
+    ///   ViewModel never depends on Firebase directly.
     init(authenticationService: AuthenticationServicing) {
         self.authenticationService = authenticationService
     }
@@ -66,8 +66,8 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
-    /// Signs out the current session locally. Does not touch the account itself — use
-    /// `deleteAccount()` to remove it (App Store guideline 5.1.1(v)).
+    /// Signs out the current session locally. Does not touch the account itself.
+    /// Use `deleteAccount()` to remove it (App Store guideline 5.1.1(v)).
     func signOut() {
         error = nil
         do {
@@ -80,8 +80,8 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
-    /// Permanently deletes the account and clears the session. Irreversible — the View is
-    /// responsible for confirming with the user before calling this.
+    /// Permanently deletes the account and clears the session. Irreversible.
+    /// The View is responsible for confirming with the user before calling this.
     func deleteAccount() async {
         error = nil
         do {

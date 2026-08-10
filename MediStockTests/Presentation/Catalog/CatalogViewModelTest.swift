@@ -10,91 +10,6 @@ import XCTest
 
 final class CatalogViewModelTest: XCTestCase {
     @MainActor
-    func testListenPopulatesMedicines() async {
-        let medicineStore = MockMedicineStoring()
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
-        let medicine = TestHelper.makeMedicine()
-
-        viewModel.listen()
-        medicineStore.emit([medicine])
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-
-        XCTAssertEqual(viewModel.medicines, [medicine])
-    }
-
-    @MainActor
-    func testAislesAreDistinctAndSortedNumerically() async {
-        let medicineStore = MockMedicineStoring()
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
-        let medicines = [
-            TestHelper.makeMedicine(id: "1", aisle: "AD10"),
-            TestHelper.makeMedicine(id: "2", aisle: "AD2"),
-            TestHelper.makeMedicine(id: "3", aisle: "AD2")
-        ]
-
-        viewModel.listen()
-        medicineStore.emit(medicines)
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-
-        // A plain string sort would put "AD10" before "AD2"; natural sort must not.
-        XCTAssertEqual(viewModel.aisles, ["AD2", "AD10"])
-    }
-
-    @MainActor
-    func testMedicinesInAisleFiltersCorrectly() async {
-        let medicineStore = MockMedicineStoring()
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
-        let medicines = [
-            TestHelper.makeMedicine(id: "1", aisle: "Rayon A"),
-            TestHelper.makeMedicine(id: "2", aisle: "Rayon B")
-        ]
-
-        viewModel.listen()
-        medicineStore.emit(medicines)
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-
-        XCTAssertEqual(viewModel.medicines(inAisle: "Rayon A").map(\.id), ["1"])
-    }
-
-    @MainActor
-    func testMedicinesMatchingFiltersByName() async {
-        let medicineStore = MockMedicineStoring()
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
-        let medicines = [
-            TestHelper.makeMedicine(id: "1", name: "Doliprane"),
-            TestHelper.makeMedicine(id: "2", name: "Advil"),
-            TestHelper.makeMedicine(id: "3", name: "Dafalgan")
-        ]
-
-        viewModel.listen()
-        medicineStore.emit(medicines)
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-
-        let result = viewModel.medicines(matching: "dol", sortedBy: .none)
-
-        XCTAssertEqual(result.map(\.id), ["1"])
-    }
-
-    @MainActor
-    func testMedicinesMatchingSortsByStock() async {
-        let medicineStore = MockMedicineStoring()
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
-        let medicines = [
-            TestHelper.makeMedicine(id: "1", stock: 20),
-            TestHelper.makeMedicine(id: "2", stock: 5),
-            TestHelper.makeMedicine(id: "3", stock: 10)
-        ]
-
-        viewModel.listen()
-        medicineStore.emit(medicines)
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-
-        let result = viewModel.medicines(matching: "", sortedBy: .stock)
-
-        XCTAssertEqual(result.map(\.id), ["2", "3", "1"])
-    }
-
-    @MainActor
     func testAddMedicineSavesAndRecordsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
@@ -180,6 +95,8 @@ final class CatalogViewModelTest: XCTestCase {
 final class MockMedicineStoring: MedicineStoring {
     private(set) var savedMedicines: [Medicine] = []
     private(set) var deletedMedicines: [Medicine] = []
+    private(set) var requestedSortOptions: [SortOption] = []
+    private(set) var requestedAisles: [String] = []
     var saveError: Error?
     var deleteError: Error?
 
@@ -194,6 +111,16 @@ final class MockMedicineStoring: MedicineStoring {
 
     func observeMedicines() -> AsyncStream<[Medicine]> {
         medicinesStream
+    }
+
+    func observeMedicines(sortedBy sortOption: SortOption) -> AsyncStream<[Medicine]> {
+        requestedSortOptions.append(sortOption)
+        return medicinesStream
+    }
+
+    func observeMedicines(inAisle aisle: String) -> AsyncStream<[Medicine]> {
+        requestedAisles.append(aisle)
+        return medicinesStream
     }
 
     func emit(_ medicines: [Medicine]) {
@@ -214,8 +141,8 @@ final class MockMedicineStoring: MedicineStoring {
     }
 }
 
-/// In-memory fake of `HistoryStoring` for testing, with a controllable history stream. Tracks each
-/// kind of recorded change separately, matching the protocol's one-method-per-action shape.
+/// In-memory fake of `HistoryStoring` for testing, with a controllable history stream.
+/// Tracks each kind of recorded change separately, matching the protocol's one-method-per-action shape.
 final class MockHistoryStoring: HistoryStoring {
     private(set) var addedMedicines: [Medicine] = []
     private(set) var updatedMedicines: [Medicine] = []

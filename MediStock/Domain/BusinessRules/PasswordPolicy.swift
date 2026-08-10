@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// One password strength criterion. `CaseIterable` so the View can enumerate them to display a
-/// checklist without hardcoding the list itself.
+/// One password strength criterion.
+/// `CaseIterable` so the View can enumerate them to display a checklist without hardcoding the list itself.
 enum PasswordRequirement: CaseIterable {
     case minLength
     case uppercase
@@ -18,15 +18,15 @@ enum PasswordRequirement: CaseIterable {
 }
 
 /// Password strength rules, mirroring the policy enforced server-side in the Firebase console
-/// (Authentication > Settings > Password policy) — this is the client-side check so the user gets
-/// immediate feedback instead of a round-trip failure, not a replacement for the server-side one.
+/// (Authentication > Settings > Password policy).
+/// This is the client-side check so the user gets immediate feedback instead of a round-trip failure.
+/// Not a replacement for the server-side one.
 enum PasswordPolicy {
     static let minimumLength = 8
 
     /// - Parameter password: The candidate password.
-    /// - Returns: Every requirement `password` does not currently satisfy; empty if it meets all
-    ///   of them. Returning the unmet set (not just a `Bool`) lets the View show which specific
-    ///   criteria are missing.
+    /// - Returns: Every requirement `password` does not currently satisfy; empty if it meets all of them.
+    ///   Returning the unmet set (not just a `Bool`) lets the View show which specific criteria are missing.
     static func unmetRequirements(for password: String) -> Set<PasswordRequirement> {
         var unmet = Set<PasswordRequirement>()
         if password.count < minimumLength { unmet.insert(.minLength) }

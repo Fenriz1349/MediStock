@@ -9,8 +9,8 @@ import Foundation
 
 /// Access to the current authentication session and account operations.
 protocol AuthenticationServicing {
-    /// The signed-in user right now, read synchronously (no subscription) — for callers that just
-    /// need a one-off snapshot, e.g. to attribute an action to whoever is currently signed in.
+    /// The signed-in user right now, read synchronously (no subscription).
+    /// For callers that just need a one-off snapshot, e.g. to attribute an action to whoever is signed in.
     var currentUser: AppUser? { get }
 
     /// An ongoing stream of the signed-in user, `nil` when signed out.
@@ -25,7 +25,7 @@ protocol AuthenticationServicing {
     /// Ends the current session.
     func signOut() throws
 
-    /// Permanently deletes the signed-in user's account (App Store guideline 5.1.1(v) requires this
-    /// whenever an app supports in-app account creation).
+    /// Permanently deletes the signed-in user's account.
+    /// App Store guideline 5.1.1(v) requires this whenever an app supports in-app account creation.
     func deleteAccount() async throws
 }
