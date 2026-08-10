@@ -36,7 +36,7 @@ final class AllMedicinesViewModelTests: XCTestCase {
     }
 
     @MainActor
-    func testMedicinesMatchingReturnsEverythingWhenFilterIsEmpty() async {
+    func testFilteredMedicinesReturnsEverythingWhenFilterTextIsEmpty() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         let medicines = [TestHelper.makeMedicine(id: "1", name: "Doliprane"), TestHelper.makeMedicine(id: "2", name: "Advil")]
@@ -45,11 +45,11 @@ final class AllMedicinesViewModelTests: XCTestCase {
         medicineStore.emit(medicines)
         await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
 
-        XCTAssertEqual(viewModel.medicines(matching: ""), medicines)
+        XCTAssertEqual(viewModel.filteredMedicines, medicines)
     }
 
     @MainActor
-    func testMedicinesMatchingFindsASubstringAnywhereInTheName() async {
+    func testFilteredMedicinesFindsASubstringAnywhereInTheName() async {
         // Kept local specifically so this can match anywhere in the name, not just a prefix —
         // a Firestore-side query could only do "starts with".
         let medicineStore = MockMedicineStoring()
@@ -63,8 +63,8 @@ final class AllMedicinesViewModelTests: XCTestCase {
         medicineStore.emit(medicines)
         await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
 
-        let result = viewModel.medicines(matching: "liprane")
+        viewModel.filterText = "liprane"
 
-        XCTAssertEqual(result.map(\.id), ["1"])
+        XCTAssertEqual(viewModel.filteredMedicines.map(\.id), ["1"])
     }
 }

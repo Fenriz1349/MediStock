@@ -96,6 +96,7 @@ final class MockMedicineStoring: MedicineStoring {
     private(set) var savedMedicines: [Medicine] = []
     private(set) var deletedMedicines: [Medicine] = []
     private(set) var requestedSortOptions: [SortOption] = []
+    private(set) var requestedAscending: [Bool] = []
     private(set) var requestedAisles: [String] = []
     var saveError: Error?
     var deleteError: Error?
@@ -113,8 +114,9 @@ final class MockMedicineStoring: MedicineStoring {
         medicinesStream
     }
 
-    func observeMedicines(sortedBy sortOption: SortOption) -> AsyncStream<[Medicine]> {
+    func observeMedicines(sortedBy sortOption: SortOption, ascending: Bool) -> AsyncStream<[Medicine]> {
         requestedSortOptions.append(sortOption)
+        requestedAscending.append(ascending)
         return medicinesStream
     }
 
