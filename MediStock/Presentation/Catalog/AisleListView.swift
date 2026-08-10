@@ -18,6 +18,10 @@ struct AisleListView: View {
         NavigationStack {
             VStack {
                 HStack {
+                    TextField("aisleList.filterField", text: $viewModel.filterText)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.leading, 10)
+
                     Spacer()
 
                     Button(action: {
@@ -30,9 +34,14 @@ struct AisleListView: View {
                 .padding(.top, 10)
 
                 List {
-                    ForEach(viewModel.aisles, id: \.self) { aisle in
-                        NavigationLink(value: aisle) {
-                            Text(AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized))
+                    if viewModel.aisles.isEmpty {
+                        Text("aisleList.noResults")
+                            .foregroundColor(.secondary)
+                    } else {
+                        ForEach(viewModel.aisles, id: \.self) { aisle in
+                            NavigationLink(value: aisle) {
+                                Text(AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized))
+                            }
                         }
                     }
                 }

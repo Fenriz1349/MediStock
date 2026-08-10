@@ -52,6 +52,40 @@
         }
       }
     },
+    "aisleList.filterField" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter by aisle"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filtrer par rayon"
+          }
+        }
+      }
+    },
+    "aisleList.noResults" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No aisle found"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun rayon trouvé"
+          }
+        }
+      }
+    },
     "allMedicines.filterField" : {
       "extractionState" : "manual",
       "localizations" : {

@@ -15,6 +15,10 @@ final class AisleListViewModel: ObservableObject {
     @Published private(set) var allAisles: [String] = []
     /// The sort direction applied to `aisles`.
     @Published var sortAscending = true
+    /// Case-insensitive substring to match against each aisle code.
+    /// An empty string matches everything.
+    /// Purely local, same reasoning as `sortAscending` — all the data is already loaded.
+    @Published var filterText = ""
 
     private let medicineStore: MedicineStoring
     private var observationTask: Task<Void, Never>?
@@ -38,10 +42,13 @@ final class AisleListViewModel: ObservableObject {
         }
     }
 
-    /// `allAisles`, ordered per `sortAscending`.
+    /// `allAisles`, filtered by `filterText` and ordered per `sortAscending`.
     /// Purely local — the underlying data is already fully loaded, no query to re-issue.
     var aisles: [String] {
-        sortAscending ? allAisles : allAisles.reversed()
+        let filtered = filterText.isEmpty
+            ? allAisles
+            : allAisles.filter { $0.localizedCaseInsensitiveContains(filterText) }
+        return sortAscending ? filtered : filtered.reversed()
     }
 
     deinit {
