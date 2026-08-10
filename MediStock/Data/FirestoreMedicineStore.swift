@@ -14,8 +14,32 @@ final class FirestoreMedicineStore: MedicineStoring {
     private let collection = Firestore.firestore().collection("medicines")
 
     func observeMedicines() -> AsyncStream<[Medicine]> {
+        observe(collection)
+    }
+
+    /// - Parameter sortOption: How to order the results — translates directly to `.order(by:)`,
+    ///   `.none` leaves the query unordered.
+    func observeMedicines(sortedBy sortOption: SortOption) -> AsyncStream<[Medicine]> {
+        switch sortOption {
+        case .none:
+            observe(collection)
+        case .name:
+            observe(collection.order(by: "name"))
+        case .stock:
+            observe(collection.order(by: "stock"))
+        }
+    }
+
+    /// - Parameter aisle: The exact aisle code to filter on.
+    func observeMedicines(inAisle aisle: String) -> AsyncStream<[Medicine]> {
+        observe(collection.whereField("aisle", isEqualTo: aisle))
+    }
+
+    /// Shared listener setup for every `observeMedicines...` variant above — only the `query`
+    /// itself differs between them.
+    private func observe(_ query: Query) -> AsyncStream<[Medicine]> {
         AsyncStream { continuation in
-            let listener = collection.addSnapshotListener { snapshot, error in
+            let listener = query.addSnapshotListener { snapshot, error in
                 guard let snapshot else {
                     if let error { print("Error observing medicines: \(error)") }
                     return

@@ -263,6 +263,7 @@
 		6836B2063024826F003E756D /* BusinessRules */ = {
 			isa = PBXGroup;
 			children = (
+				682D9FF4302204A600DBC11E /* SortOption.swift */,
 				6836B20730248295003E756D /* AisleCode.swift */,
 				686916813025F70600E86CFE /* PasswordPolicy.swift */,
 			);
@@ -393,7 +394,6 @@
 			isa = PBXGroup;
 			children = (
 				686916773025D20200E86CFE /* AisleLabel.swift */,
-				682D9FF4302204A600DBC11E /* SortOption.swift */,
 				6869168B3026103D00E86CFE /* MedicineErrorMessage.swift */,
 				53E0D8DD2C0609A800DE1134 /* CatalogViewModel.swift */,
 				53E0D8E52C066F4100DE1134 /* AisleListView.swift */,

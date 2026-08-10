@@ -16,13 +16,12 @@ protocol MedicineStoring {
     /// has no "distinct"/"group by" query, so that still has to happen in memory).
     func observeMedicines() -> AsyncStream<[Medicine]>
 
-    /// Server-side filtered and sorted stream.
-    /// - Parameters:
-    ///   - filterText: Matches medicines whose name *starts with* this text (case handling is the
-    ///     implementation's concern) — Firestore has no "contains" query, only range queries, which
-    ///     only support a prefix match. An empty string matches everything.
-    ///   - sortOption: How to order the results.
-    func observeMedicines(matching filterText: String, sortedBy sortOption: SortOption) -> AsyncStream<[Medicine]>
+    /// Server-side sorted stream. Name search is deliberately not a parameter here — Firestore has
+    /// no "contains" query (only prefix range queries, which would conflict with sorting by a
+    /// different field), and re-querying on every keystroke would waste reads for no real benefit.
+    /// Callers filter by name themselves on the already-loaded stream instead.
+    /// - Parameter sortOption: How to order the results.
+    func observeMedicines(sortedBy sortOption: SortOption) -> AsyncStream<[Medicine]>
 
     /// Server-side filtered stream of medicines in a given aisle.
     /// - Parameter aisle: The exact aisle code to filter on.
