@@ -40,6 +40,7 @@
 		6857436A302A52A900839E49 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574369302A52A900839E49 /* NetworkError.swift */; };
 		6857436C302A547100839E49 /* NetworkErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6857436B302A547100839E49 /* NetworkErrorMessage.swift */; };
 		6857436E302A5B4300839E49 /* LoadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6857436D302A5B4300839E49 /* LoadingOverlay.swift */; };
+		68574371302A62ED00839E49 /* OfflineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574370302A62ED00839E49 /* OfflineView.swift */; };
 		686916723025BC3000E86CFE /* MedicineDetailStockSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916713025BC3000E86CFE /* MedicineDetailStockSection.swift */; };
 		686916743025BC5800E86CFE /* MedicineDetailHistorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916733025BC5800E86CFE /* MedicineDetailHistorySection.swift */; };
 		686916763025C2FE00E86CFE /* DIContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 686916753025C2FE00E86CFE /* DIContainer.swift */; };
@@ -129,6 +130,7 @@
 		68574369302A52A900839E49 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		6857436B302A547100839E49 /* NetworkErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkErrorMessage.swift; sourceTree = "<group>"; };
 		6857436D302A5B4300839E49 /* LoadingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingOverlay.swift; sourceTree = "<group>"; };
+		68574370302A62ED00839E49 /* OfflineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineView.swift; sourceTree = "<group>"; };
 		686916713025BC3000E86CFE /* MedicineDetailStockSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailStockSection.swift; sourceTree = "<group>"; };
 		686916733025BC5800E86CFE /* MedicineDetailHistorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailHistorySection.swift; sourceTree = "<group>"; };
 		686916753025C2FE00E86CFE /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
@@ -310,6 +312,16 @@
 			path = BusinessRules;
 			sourceTree = "<group>";
 		};
+		6857436F302A62AC00839E49 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				6857436B302A547100839E49 /* NetworkErrorMessage.swift */,
+				6857436D302A5B4300839E49 /* LoadingOverlay.swift */,
+				68574370302A62ED00839E49 /* OfflineView.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		6869167E3025F45000E86CFE /* Errors */ = {
 			isa = PBXGroup;
 			children = (
@@ -385,10 +397,9 @@
 		68D144FF3013A4DE00696204 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				6857436F302A62AC00839E49 /* Shared */,
 				53E0D8982C06084700DE1134 /* ContentView.swift */,
 				53E0D8EB2C06717200DE1134 /* MainTabView.swift */,
-				6857436B302A547100839E49 /* NetworkErrorMessage.swift */,
-				6857436D302A5B4300839E49 /* LoadingOverlay.swift */,
 				68D145003013A50500696204 /* Authentication */,
 				68D1450C3013B18A00696204 /* Catalog */,
 				682D9FEB3021EE5000DBC11E /* MedicineDetail */,
@@ -630,6 +641,7 @@
 				53E0D8972C06084700DE1134 /* MediStockApp.swift in Sources */,
 				68951E493029D3CA00E2767B /* AllMedicinesViewModel.swift in Sources */,
 				53E0D8E82C066F6500DE1134 /* MedicineDetailView.swift in Sources */,
+				68574371302A62ED00839E49 /* OfflineView.swift in Sources */,
 				686916843025FA5100E86CFE /* PasswordRequirementLabel.swift in Sources */,
 				68D144FA30139B2F00696204 /* FirebaseAuthenticationService.swift in Sources */,
 				68D144F630139B1D00696204 /* FirestoreMedicineStore.swift in Sources */,

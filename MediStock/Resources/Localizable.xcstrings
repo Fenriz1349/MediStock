@@ -630,6 +630,9 @@
         }
       }
     },
+    "MediStock" : {
+
+    },
     "network.error.notConnected" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -660,6 +663,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Le serveur est injoignable. Réessayez dans un instant."
+          }
+        }
+      }
+    },
+    "offline.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No internet connection.\nSigning in requires an active connection."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas de connexion internet.\nUne connexion active est nécessaire pour se connecter."
+          }
+        }
+      }
+    },
+    "offline.retryButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessayer"
           }
         }
       }

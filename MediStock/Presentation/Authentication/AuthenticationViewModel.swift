@@ -17,10 +17,16 @@ final class AuthenticationViewModel: ObservableObject {
     @Published private(set) var error: AuthenticationError?
     /// `true` for the duration of an action, so the View can show a loading indicator.
     @Published private(set) var isLoading = false
+    /// Live mirror of `networkMonitor.observeConnectivity()`.
+    /// There's no session/cache yet to fall back on before sign-in.
+    /// So the View needs to know upfront whether attempting one is even worth it.
+    /// And switch away the moment that changes, in either direction.
+    @Published private(set) var isConnected: Bool
 
     private let authenticationService: AuthenticationServicing
     private let networkMonitor: NetworkMonitoring
     private var observationTask: Task<Void, Never>?
+    private var connectivityTask: Task<Void, Never>?
 
     /// - Parameters:
     ///   - authenticationService: Domain-level auth abstraction, kept behind a protocol so this
@@ -29,6 +35,7 @@ final class AuthenticationViewModel: ObservableObject {
     init(authenticationService: AuthenticationServicing, networkMonitor: NetworkMonitoring) {
         self.authenticationService = authenticationService
         self.networkMonitor = networkMonitor
+        self.isConnected = networkMonitor.isConnected
     }
 
     /// Starts observing the current authentication session. Call once when the app appears.
@@ -38,6 +45,17 @@ final class AuthenticationViewModel: ObservableObject {
             guard let stream = self?.authenticationService.observeSession() else { return }
             for await user in stream {
                 self?.session = user
+            }
+        }
+    }
+
+    /// Starts observing live connectivity. Call once when the app appears.
+    func listenConnectivity() {
+        connectivityTask?.cancel()
+        connectivityTask = Task { [weak self] in
+            guard let stream = self?.networkMonitor.observeConnectivity() else { return }
+            for await connected in stream {
+                self?.isConnected = connected
             }
         }
     }
@@ -121,5 +139,6 @@ final class AuthenticationViewModel: ObservableObject {
 
     deinit {
         observationTask?.cancel()
+        connectivityTask?.cancel()
     }
 }

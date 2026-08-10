@@ -10,6 +10,8 @@ struct ContentView: View {
         Group {
             if authenticationViewModel.session != nil {
                 MainTabView()
+            } else if !authenticationViewModel.isConnected {
+                OfflineView()
             } else {
                 AuthenticationView()
             }
@@ -21,6 +23,7 @@ struct ContentView: View {
         }
         .onAppear {
             authenticationViewModel.listen()
+            authenticationViewModel.listenConnectivity()
         }
         .onChange(of: catalogViewModel.error) { _, error in
             if let error {

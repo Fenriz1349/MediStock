@@ -13,9 +13,13 @@ import Foundation
 /// (captive portal, VPN).
 /// `verifyReachable()` is an actual round-trip to the backend, the source of truth before a write.
 protocol NetworkMonitoring {
-    /// Whether the device currently has an active network interface.
-    /// Use for a live status banner — not as proof the backend is reachable.
+    /// Whether the device currently has an active network interface, right now.
+    /// Not proof the backend is reachable — see `verifyReachable()` for that.
     var isConnected: Bool { get }
+
+    /// A live stream of `isConnected`.
+    /// Yields its current value on subscription, then again every time the interface status changes.
+    func observeConnectivity() -> AsyncStream<Bool>
 
     /// Confirms real reachability of the backend with a round-trip request.
     /// Call before a write so it can be cancelled before Firestore queues it offline.

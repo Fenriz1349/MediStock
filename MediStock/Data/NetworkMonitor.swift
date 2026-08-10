@@ -9,12 +9,8 @@ import Foundation
 import Network
 
 /// `NWPathMonitor`/`URLSession`-backed implementation of `NetworkMonitoring`.
-/// Also `ObservableObject`, so it can be injected directly into the environment for a live status banner.
-/// Same pattern as `ToastyManager`, on top of being passed to ViewModels as `NetworkMonitoring`.
-/// Not `@MainActor` — only the `isConnected` mutation itself needs the main actor, via the `Task` hop below.
-/// So the type stays constructible from any context, needed for `DIContainer`'s default parameters.
-final class NetworkMonitor: NetworkMonitoring, ObservableObject {
-    @Published private(set) var isConnected = true
+final class NetworkMonitor: NetworkMonitoring {
+    private(set) var isConnected: Bool
 
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "com.juliencotte.medistock.networkmonitor")
@@ -23,17 +19,29 @@ final class NetworkMonitor: NetworkMonitoring, ObservableObject {
     private let reachabilityURL = URL(string: "https://firestore.googleapis.com")!
 
     /// Starts the underlying `NWPathMonitor`.
-    /// Updates `isConnected` on the main actor as the interface status changes.
+    /// `isConnected` is also set once synchronously right after starting, from `monitor.currentPath`.
+    /// Without that, it would keep the placeholder value set below until the first callback fires from
+    /// `observeConnectivity()`. Which could be wrong for a moment right after launch.
     init() {
-        monitor.pathUpdateHandler = { [weak self] path in
-            let connected = path.status == .satisfied
-            Task { @MainActor in self?.isConnected = connected }
-        }
+        isConnected = false
         monitor.start(queue: queue)
+        isConnected = monitor.currentPath.status == .satisfied
     }
 
     deinit {
         monitor.cancel()
+    }
+
+    func observeConnectivity() -> AsyncStream<Bool> {
+        AsyncStream { [weak self] continuation in
+            guard let self else { return }
+            continuation.yield(self.isConnected)
+            self.monitor.pathUpdateHandler = { [weak self] path in
+                let connected = path.status == .satisfied
+                self?.isConnected = connected
+                continuation.yield(connected)
+            }
+        }
     }
 
     func verifyReachable() async throws {
