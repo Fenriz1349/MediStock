@@ -9,21 +9,21 @@ import XCTest
 @testable import MediStock
 
 final class MedicineNameFormatTests: XCTestCase {
-    func testCapitalizedUppercasesTheFirstLetterAndLowercasesTheRest() {
+    func testCapitalized_mixedCase_uppercasesFirstLowercasesRest() {
         XCTAssertEqual(MedicineNameFormat.capitalized("doliprane"), "Doliprane")
         XCTAssertEqual(MedicineNameFormat.capitalized("DOLIPRANE"), "Doliprane")
         XCTAssertEqual(MedicineNameFormat.capitalized("dOLIPRANE"), "Doliprane")
     }
 
-    func testCapitalizedLeavesAnAlreadyCapitalizedNameUnchanged() {
+    func testCapitalized_alreadyCapitalized_leavesUnchanged() {
         XCTAssertEqual(MedicineNameFormat.capitalized("Doliprane"), "Doliprane")
     }
 
-    func testCapitalizedHandlesASingleCharacter() {
+    func testCapitalized_singleCharacter_uppercasesIt() {
         XCTAssertEqual(MedicineNameFormat.capitalized("d"), "D")
     }
 
-    func testCapitalizedReturnsEmptyStringUnchanged() {
+    func testCapitalized_emptyString_returnsUnchanged() {
         XCTAssertEqual(MedicineNameFormat.capitalized(""), "")
     }
 }

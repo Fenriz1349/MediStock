@@ -10,7 +10,7 @@ import XCTest
 
 final class AisleListViewModelTests: XCTestCase {
     @MainActor
-    func testListenPopulatesDistinctSortedAisles() async {
+    func testListen_medicinesEmitted_populatesDistinctSortedAisles() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAisleListViewModel(medicineStore: medicineStore)
         let medicines = [
@@ -29,7 +29,7 @@ final class AisleListViewModelTests: XCTestCase {
     }
 
     @MainActor
-    func testListenReflectsSubsequentEmissions() async {
+    func testListen_subsequentEmission_updatesAisles() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAisleListViewModel(medicineStore: medicineStore)
 
@@ -43,7 +43,7 @@ final class AisleListViewModelTests: XCTestCase {
     }
 
     @MainActor
-    func testSortAscendingFalseReversesTheOrder() async {
+    func testAisles_sortAscendingFalse_reversesOrder() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAisleListViewModel(medicineStore: medicineStore)
         viewModel.listen()
@@ -56,7 +56,7 @@ final class AisleListViewModelTests: XCTestCase {
     }
 
     @MainActor
-    func testFilterTextMatchesASubstringAnywhereInTheAisleCode() async {
+    func testAisles_filterText_matchesSubstringAnywhere() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAisleListViewModel(medicineStore: medicineStore)
         viewModel.listen()
@@ -69,7 +69,7 @@ final class AisleListViewModelTests: XCTestCase {
     }
 
     @MainActor
-    func testFilterTextReturnsEverythingWhenEmpty() async {
+    func testAisles_filterTextEmpty_returnsEverything() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAisleListViewModel(medicineStore: medicineStore)
         viewModel.listen()

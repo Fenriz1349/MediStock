@@ -10,14 +10,14 @@ import XCTest
 
 final class AisleMedicinesViewModelTest: XCTestCase {
     @MainActor
-    func testExposesTheAisleItWasConstructedWith() {
+    func testAisle_afterInit_exposesConstructorValue() {
         let viewModel = TestHelper.makeAisleMedicinesViewModel(aisle: "AD56")
 
         XCTAssertEqual(viewModel.aisle, "AD56")
     }
 
     @MainActor
-    func testListenPopulatesMedicines() async {
+    func testListen_medicinesEmitted_populatesMedicines() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAisleMedicinesViewModel(medicineStore: medicineStore)
         let medicine = TestHelper.makeMedicine()
@@ -30,7 +30,7 @@ final class AisleMedicinesViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testListenReflectsSubsequentEmissions() async {
+    func testListen_subsequentEmission_updatesMedicines() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAisleMedicinesViewModel(medicineStore: medicineStore)
         let first = TestHelper.makeMedicine(id: "1")

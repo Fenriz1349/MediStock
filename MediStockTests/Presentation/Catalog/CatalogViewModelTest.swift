@@ -10,7 +10,7 @@ import XCTest
 
 final class CatalogViewModelTest: XCTestCase {
     @MainActor
-    func testAddMedicineSavesAndRecordsHistory() async {
+    func testAddMedicine_success_savesAndRecordsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
@@ -27,7 +27,23 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testAddMedicineNormalizesTheNameCapitalization() async {
+    func testAddMedicine_inFlight_togglesIsLoading() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
+        XCTAssertFalse(viewModel.isLoading)
+
+        let task = Task { await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56") }
+        await TestHelper.waitUntil { viewModel.isLoading }
+        XCTAssertTrue(viewModel.isLoading)
+
+        await task.value
+
+        XCTAssertFalse(viewModel.isLoading)
+    }
+
+    @MainActor
+    func testAddMedicine_name_normalizesCapitalization() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
@@ -38,7 +54,7 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testAddMedicineSaveFailureSetsTypedErrorAndSkipsHistory() async {
+    func testAddMedicine_saveFailure_setsTypedErrorAndSkipsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         medicineStore.saveError = MedicineError.network(.serverUnreachable)
@@ -51,7 +67,7 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testAddMedicineSkipsTheStoreWhenNetworkIsUnreachable() async {
+    func testAddMedicine_networkUnreachable_skipsStore() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let networkMonitor = MockNetworkMonitoring()
@@ -67,7 +83,7 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testAddMedicineHistoryFailureSetsTypedError() async {
+    func testAddMedicine_historyFailure_setsTypedError() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         historyStore.recordError = MedicineError.unknown
@@ -79,7 +95,7 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testDeleteCallsStoreAndRecordsHistory() async {
+    func testDelete_success_callsStoreAndRecordsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
@@ -93,7 +109,7 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testDeleteFailureSetsTypedErrorAndSkipsHistory() async {
+    func testDelete_failure_setsTypedErrorAndSkipsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         medicineStore.deleteError = MedicineError.permissionDenied
@@ -106,7 +122,7 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testDeleteHistoryFailureSetsTypedError() async {
+    func testDelete_historyFailure_setsTypedError() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         historyStore.recordError = MedicineError.unknown

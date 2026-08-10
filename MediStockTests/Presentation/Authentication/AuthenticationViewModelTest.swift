@@ -10,7 +10,7 @@ import XCTest
 
 final class AuthenticationViewModelTest: XCTestCase {
     @MainActor
-    func testSignInSuccessUpdatesSession() async {
+    func testSignIn_success_updatesSession() async {
         let service = MockAuthenticationServicing()
         let user = TestHelper.makeAppUser()
         service.signInResult = .success(user)
@@ -23,7 +23,23 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testSignInFailureKeepsSessionNilAndSetsTypedError() async {
+    func testSignIn_inFlight_togglesIsLoading() async {
+        let service = MockAuthenticationServicing()
+        service.signInResult = .success(TestHelper.makeAppUser())
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
+        XCTAssertFalse(viewModel.isLoading)
+
+        let task = Task { await viewModel.signIn(email: "test@example.com", password: "password") }
+        await TestHelper.waitUntil { viewModel.isLoading }
+        XCTAssertTrue(viewModel.isLoading)
+
+        await task.value
+
+        XCTAssertFalse(viewModel.isLoading)
+    }
+
+    @MainActor
+    func testSignIn_failure_keepsSessionNilAndSetsTypedError() async {
         let service = MockAuthenticationServicing()
         service.signInResult = .failure(AuthenticationError.wrongCredentials)
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
@@ -35,7 +51,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testSignInSkipsTheServiceWhenNetworkIsUnreachable() async {
+    func testSignIn_networkUnreachable_skipsService() async {
         let service = MockAuthenticationServicing()
         let networkMonitor = MockNetworkMonitoring()
         networkMonitor.verifyReachableError = .notConnected
@@ -48,7 +64,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testSignInFailureWithUntypedErrorSetsUnknown() async {
+    func testSignIn_untypedError_setsUnknown() async {
         let service = MockAuthenticationServicing()
         service.signInResult = .failure(MockAuthenticationServicing.Failure.generic)
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
@@ -59,7 +75,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testSignUpSuccessUpdatesSession() async {
+    func testSignUp_success_updatesSession() async {
         let service = MockAuthenticationServicing()
         let user = TestHelper.makeAppUser(uid: "456", email: "new@example.com")
         service.signUpResult = .success(user)
@@ -72,7 +88,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testSignUpFailureSetsTypedError() async {
+    func testSignUp_failure_setsTypedError() async {
         let service = MockAuthenticationServicing()
         service.signUpResult = .failure(AuthenticationError.emailAlreadyInUse)
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
@@ -83,7 +99,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testSignOutClearsSession() async {
+    func testSignOut_success_clearsSession() async {
         let service = MockAuthenticationServicing()
         service.signInResult = .success(TestHelper.makeAppUser())
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
@@ -95,7 +111,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testSignOutFailureSetsTypedError() async {
+    func testSignOut_failure_setsTypedError() async {
         let service = MockAuthenticationServicing()
         service.signOutError = AuthenticationError.unknown
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
@@ -106,7 +122,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testDeleteAccountSuccessClearsSession() async {
+    func testDeleteAccount_success_clearsSession() async {
         let service = MockAuthenticationServicing()
         service.signInResult = .success(TestHelper.makeAppUser())
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
@@ -119,7 +135,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testDeleteAccountFailureSetsTypedErrorAndKeepsSession() async {
+    func testDeleteAccount_failure_setsTypedErrorAndKeepsSession() async {
         let service = MockAuthenticationServicing()
         let user = TestHelper.makeAppUser()
         service.signInResult = .success(user)
@@ -134,7 +150,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testErrorResetsOnNewAttempt() async {
+    func testError_newAttempt_resets() async {
         let service = MockAuthenticationServicing()
         service.signInResult = .failure(AuthenticationError.wrongCredentials)
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
@@ -148,7 +164,7 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testListenReflectsSessionStream() async {
+    func testListen_sessionStreamEmits_reflectsSession() async {
         let service = MockAuthenticationServicing()
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
         let user = TestHelper.makeAppUser(uid: "789", email: "stream@example.com")

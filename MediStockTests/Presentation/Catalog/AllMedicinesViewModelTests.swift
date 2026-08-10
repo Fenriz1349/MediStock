@@ -10,7 +10,7 @@ import XCTest
 
 final class AllMedicinesViewModelTests: XCTestCase {
     @MainActor
-    func testListenPopulatesMedicines() async {
+    func testListen_medicinesEmitted_populatesMedicines() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         let medicine = TestHelper.makeMedicine()
@@ -23,7 +23,7 @@ final class AllMedicinesViewModelTests: XCTestCase {
     }
 
     @MainActor
-    func testChangingSortOptionRequeriesWithTheNewOption() async {
+    func testSortOption_changed_requeriesWithNewOption() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         viewModel.listen()
@@ -36,7 +36,7 @@ final class AllMedicinesViewModelTests: XCTestCase {
     }
 
     @MainActor
-    func testChangingSortAscendingRequeriesWithTheNewDirection() async {
+    func testSortAscending_changed_requeriesWithNewDirection() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         viewModel.listen()
@@ -49,7 +49,7 @@ final class AllMedicinesViewModelTests: XCTestCase {
     }
 
     @MainActor
-    func testSettingFilterTextSwitchesToANamePrefixQuery() async {
+    func testFilterText_set_switchesToNamePrefixQuery() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         viewModel.listen()
@@ -64,7 +64,7 @@ final class AllMedicinesViewModelTests: XCTestCase {
     }
 
     @MainActor
-    func testClearingFilterTextSwitchesBackToTheSortedQuery() async {
+    func testFilterText_cleared_switchesBackToSortedQuery() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         viewModel.listen()
@@ -79,7 +79,7 @@ final class AllMedicinesViewModelTests: XCTestCase {
     }
 
     @MainActor
-    func testSearchResultsAreSortedLocallyByTheCurrentSortOption() async {
+    func testSearchResults_sortOptionSet_sortsLocally() async {
         let medicineStore = MockMedicineStoring()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         viewModel.sortOption = .stock

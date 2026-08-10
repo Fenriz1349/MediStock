@@ -10,7 +10,7 @@ import XCTest
 
 final class MedicineDetailViewModelTest: XCTestCase {
     @MainActor
-    func testListenPopulatesHistory() async {
+    func testListen_historyEmitted_populatesHistory() async {
         let historyStore = MockHistoryStoring()
         let medicine = TestHelper.makeMedicine()
         let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine, historyStore: historyStore)
@@ -24,7 +24,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testUpdateLabelSavesAndRecordsHistory() async {
+    func testUpdateLabel_success_savesAndRecordsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let medicine = TestHelper.makeMedicine(name: "Doliprane", aisle: "AD56")
@@ -42,7 +42,23 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testUpdateLabelNormalizesTheNameCapitalization() async {
+    func testUpdateLabel_inFlight_togglesIsLoading() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicineStore: medicineStore, historyStore: historyStore)
+        XCTAssertFalse(viewModel.isLoading)
+
+        let task = Task { await viewModel.updateLabel(name: "Dafalgan", aisle: "AD10") }
+        await TestHelper.waitUntil { viewModel.isLoading }
+        XCTAssertTrue(viewModel.isLoading)
+
+        await task.value
+
+        XCTAssertFalse(viewModel.isLoading)
+    }
+
+    @MainActor
+    func testUpdateLabel_name_normalizesCapitalization() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let viewModel = TestHelper.makeMedicineDetailViewModel(medicineStore: medicineStore, historyStore: historyStore)
@@ -53,7 +69,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testUpdateLabelSaveFailureSetsTypedErrorAndSkipsHistory() async {
+    func testUpdateLabel_saveFailure_setsTypedErrorAndSkipsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         medicineStore.saveError = MedicineError.network(.serverUnreachable)
@@ -66,7 +82,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testUpdateLabelSkipsTheStoreWhenNetworkIsUnreachable() async {
+    func testUpdateLabel_networkUnreachable_skipsStore() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let networkMonitor = MockNetworkMonitoring()
@@ -82,7 +98,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testIncreaseSavesIncrementedMedicineAndUpdatesLocalState() async {
+    func testIncrease_success_savesAndUpdatesLocalState() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let medicine = TestHelper.makeMedicine(stock: 10)
@@ -101,7 +117,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testIncreaseSaveFailureSetsTypedErrorAndSkipsHistory() async {
+    func testIncrease_saveFailure_setsTypedErrorAndSkipsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         medicineStore.saveError = MedicineError.network(.serverUnreachable)
@@ -118,7 +134,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testIncreaseHistoryFailureSetsTypedError() async {
+    func testIncrease_historyFailure_setsTypedError() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         historyStore.recordError = MedicineError.unknown
@@ -134,7 +150,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testDecreaseSavesDecrementedMedicineAndUpdatesLocalState() async {
+    func testDecrease_success_savesAndUpdatesLocalState() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let medicine = TestHelper.makeMedicine(stock: 10)
@@ -152,7 +168,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testDeleteCallsStoreAndRecordsHistory() async {
+    func testDelete_success_callsStoreAndRecordsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let medicine = TestHelper.makeMedicine()
@@ -168,7 +184,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testDeleteFailureSetsTypedErrorAndSkipsHistory() async {
+    func testDelete_failure_setsTypedErrorAndSkipsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         medicineStore.deleteError = MedicineError.permissionDenied
@@ -184,7 +200,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testDeleteHistoryFailureSetsTypedError() async {
+    func testDelete_historyFailure_setsTypedError() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         historyStore.recordError = MedicineError.unknown
