@@ -12,7 +12,9 @@ import Foundation
 /// So this can't be pushed server-side like the other screens' queries (see `AisleMedicinesViewModel`).
 @MainActor
 final class AisleListViewModel: ObservableObject {
-    @Published private(set) var aisles: [String] = []
+    @Published private(set) var allAisles: [String] = []
+    /// The sort direction applied to `aisles`.
+    @Published var sortAscending = true
 
     private let medicineStore: MedicineStoring
     private var observationTask: Task<Void, Never>?
@@ -31,9 +33,15 @@ final class AisleListViewModel: ObservableObject {
         observationTask = Task { [weak self] in
             guard let self else { return }
             for await medicines in medicineStore.observeMedicines() {
-                self.aisles = Array(Set(medicines.map(\.aisle))).sorted(by: AisleCode.areInOrder)
+                self.allAisles = Array(Set(medicines.map(\.aisle))).sorted(by: AisleCode.areInOrder)
             }
         }
+    }
+
+    /// `allAisles`, ordered per `sortAscending`.
+    /// Purely local — the underlying data is already fully loaded, no query to re-issue.
+    var aisles: [String] {
+        sortAscending ? allAisles : allAisles.reversed()
     }
 
     deinit {
