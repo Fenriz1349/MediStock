@@ -22,6 +22,8 @@ final class MedicineDetailViewModel: ObservableObject {
     /// The View observes this to trigger a toast, resolving the localized message itself.
     /// This ViewModel never touches the display language.
     @Published private(set) var error: MedicineError?
+    /// `true` for the duration of an action, so the View can show a loading indicator.
+    @Published private(set) var isLoading = false
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
@@ -111,6 +113,8 @@ final class MedicineDetailViewModel: ObservableObject {
     /// Removes the medicine from the catalog and records the deletion in the history.
     func delete() async {
         error = nil
+        isLoading = true
+        defer { isLoading = false }
         do {
             try await verifyNetworkReachable()
             try await medicineStore.delete(medicine)
@@ -132,6 +136,8 @@ final class MedicineDetailViewModel: ObservableObject {
     ///     So it reflects the actual saved state, e.g. the assigned `id`.
     private func save(mutate: (inout Medicine) -> Void, recordHistory: (Medicine) async throws -> Void) async {
         error = nil
+        isLoading = true
+        defer { isLoading = false }
         var updated = medicine
         mutate(&updated)
         do {

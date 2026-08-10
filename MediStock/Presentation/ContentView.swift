@@ -14,6 +14,11 @@ struct ContentView: View {
                 AuthenticationView()
             }
         }
+        .overlay {
+            if authenticationViewModel.isLoading || catalogViewModel.isLoading {
+                LoadingOverlay()
+            }
+        }
         .onAppear {
             authenticationViewModel.listen()
         }

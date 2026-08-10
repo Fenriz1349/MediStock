@@ -15,6 +15,8 @@ final class AuthenticationViewModel: ObservableObject {
     /// The View observes this to trigger a toast, resolving the localized message itself.
     /// This ViewModel never touches the display language.
     @Published private(set) var error: AuthenticationError?
+    /// `true` for the duration of an action, so the View can show a loading indicator.
+    @Published private(set) var isLoading = false
 
     private let authenticationService: AuthenticationServicing
     private let networkMonitor: NetworkMonitoring
@@ -46,6 +48,8 @@ final class AuthenticationViewModel: ObservableObject {
     ///   - password: The account's password.
     func signIn(email: String, password: String) async {
         error = nil
+        isLoading = true
+        defer { isLoading = false }
         do {
             try await verifyNetworkReachable()
             session = try await authenticationService.signIn(email: email, password: password)
@@ -62,6 +66,8 @@ final class AuthenticationViewModel: ObservableObject {
     ///   - password: The password to set for the new account.
     func signUp(email: String, password: String) async {
         error = nil
+        isLoading = true
+        defer { isLoading = false }
         do {
             try await verifyNetworkReachable()
             session = try await authenticationService.signUp(email: email, password: password)
@@ -90,6 +96,8 @@ final class AuthenticationViewModel: ObservableObject {
     /// The View is responsible for confirming with the user before calling this.
     func deleteAccount() async {
         error = nil
+        isLoading = true
+        defer { isLoading = false }
         do {
             try await verifyNetworkReachable()
             try await authenticationService.deleteAccount()

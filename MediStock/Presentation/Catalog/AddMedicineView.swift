@@ -41,7 +41,9 @@ struct AddMedicineView: View {
                             stock: Int(stockText) ?? 0,
                             aisle: cleanedAisle
                         )
-                        dismiss()
+                        if catalogViewModel.error == nil {
+                            dismiss()
+                        }
                     }
                 }
             )
