@@ -44,6 +44,12 @@ struct DIContainer {
             historyStore: historyStore
         )
     }
+
+    /// - Parameter aisle: The exact aisle code the screen should show medicines for.
+    @MainActor
+    func makeAisleMedicinesViewModel(aisle: String) -> AisleMedicinesViewModel {
+        AisleMedicinesViewModel(aisle: aisle, medicineStore: medicineStore)
+    }
 }
 
 private struct DIContainerKey: EnvironmentKey {

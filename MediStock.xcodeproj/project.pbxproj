@@ -50,6 +50,7 @@
 		6869168C3026103D00E86CFE /* MedicineErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6869168B3026103D00E86CFE /* MedicineErrorMessage.swift */; };
 		6887EC1F30246BBB00DAF7E8 /* MedicineFormContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */; };
 		6887EC2130246BCC00DAF7E8 /* AddMedicineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */; };
+		68951E413029CFC300E2767B /* AisleMedicinesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68951E403029CFC300E2767B /* AisleMedicinesViewModel.swift */; };
 		68D144E630136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
 		68D144E730136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
 		68D144E830136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
@@ -125,6 +126,7 @@
 		6869168B3026103D00E86CFE /* MedicineErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineErrorMessage.swift; sourceTree = "<group>"; };
 		6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineFormContent.swift; sourceTree = "<group>"; };
 		6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineView.swift; sourceTree = "<group>"; };
+		68951E403029CFC300E2767B /* AisleMedicinesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleMedicinesViewModel.swift; sourceTree = "<group>"; };
 		68D144E530136D3900696204 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		68D144ED301393C600696204 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
 		68D144EF3013998100696204 /* MedicineStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineStoring.swift; sourceTree = "<group>"; };
@@ -397,6 +399,7 @@
 				6869168B3026103D00E86CFE /* MedicineErrorMessage.swift */,
 				53E0D8DD2C0609A800DE1134 /* CatalogViewModel.swift */,
 				53E0D8E52C066F4100DE1134 /* AisleListView.swift */,
+				68951E403029CFC300E2767B /* AisleMedicinesViewModel.swift */,
 				53E0D8D92C06098F00DE1134 /* AisleMedicinesView.swift */,
 				53E0D8ED2C06718100DE1134 /* AllMedicinesView.swift */,
 				6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */,
@@ -588,6 +591,7 @@
 				68D144F630139B1D00696204 /* FirestoreMedicineStore.swift in Sources */,
 				686916783025D20200E86CFE /* AisleLabel.swift in Sources */,
 				53E0D8EE2C06718100DE1134 /* AllMedicinesView.swift in Sources */,
+				68951E413029CFC300E2767B /* AisleMedicinesViewModel.swift in Sources */,
 				53E0D8EC2C06717200DE1134 /* MainTabView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

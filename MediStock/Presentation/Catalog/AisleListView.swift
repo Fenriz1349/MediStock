@@ -33,7 +33,7 @@ struct AisleListView: View {
                     .environmentObject(viewModel)
             }
             .navigationDestination(for: String.self) { aisle in
-                AisleMedicinesView(aisle: aisle)
+                AisleMedicinesView(viewModel: container.makeAisleMedicinesViewModel(aisle: aisle))
             }
             .navigationDestination(for: Medicine.self) { medicine in
                 MedicineDetailView(viewModel: container.makeMedicineDetailViewModel(medicine: medicine))
