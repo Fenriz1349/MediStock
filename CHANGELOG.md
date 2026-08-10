@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.14.0](https://github.com/Fenriz1349/MediStock/compare/v1.13.0...v1.14.0) (2026-08-10)
+
+
+### Features
+
+* add isLoading in every VM / Views handling async ([d7b248a](https://github.com/Fenriz1349/MediStock/commit/d7b248a4ac80429bef3bf8e073a27abb1b266b73))
+* add NetworkMonitor and NetworkMonitoring ([63009ee](https://github.com/Fenriz1349/MediStock/commit/63009ee42b7bc89206cc22db3e8590e03b7f4336))
+* add OfflineView, rework ContentView and offlinemode ([eeae362](https://github.com/Fenriz1349/MediStock/commit/eeae362e0c43bd99ce1640a06e809fc79b8f2086))
+* rework verifyReachable to throw error, implement networkMonitor ([19eccb7](https://github.com/Fenriz1349/MediStock/commit/19eccb7799976d03f79bd712f43c56e7dfa5b0b4))
+
 ## [1.13.0](https://github.com/Fenriz1349/MediStock/compare/v1.12.0...v1.13.0) (2026-08-10)
 
 
