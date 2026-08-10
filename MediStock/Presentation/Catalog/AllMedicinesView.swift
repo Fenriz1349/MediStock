@@ -8,19 +8,19 @@
 import SwiftUI
 import Toasty
 
+/// Full-catalog screen: lists every medicine, with local name search and server-side sort.
 struct AllMedicinesView: View {
     @EnvironmentObject var catalogViewModel: CatalogViewModel
     @StateObject private var viewModel = DIContainer().makeAllMedicinesViewModel()
     @Environment(\.diContainer) private var container
-    @State private var filterText: String = ""
     @State private var isPresentingAddMedicine = false
 
     var body: some View {
         NavigationStack {
             VStack {
-                // Filtrage et Tri
+                // Filter and sort
                 HStack {
-                    TextField("allMedicines.filterField", text: $filterText)
+                    TextField("allMedicines.filterField", text: $viewModel.filterText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding(.leading, 10)
 
@@ -31,14 +31,21 @@ struct AllMedicinesView: View {
                         Text("allMedicines.sortOption.name").tag(SortOption.name)
                         Text("allMedicines.sortOption.stock").tag(SortOption.stock)
                     }
-                    .pickerStyle(MenuPickerStyle())
+                    .pickerStyle(.segmented)
+
+                    Button(action: {
+                        viewModel.sortAscending.toggle()
+                    }, label: {
+                        Image(systemName: viewModel.sortAscending ? "arrow.up" : "arrow.down")
+                    })
+                    .disabled(viewModel.sortOption == .none)
                     .padding(.trailing, 10)
                 }
                 .padding(.top, 10)
 
-                // Liste des Médicaments
+                // Medicine list
                 List {
-                    ForEach(viewModel.medicines(matching: filterText), id: \.id) { medicine in
+                    ForEach(viewModel.filteredMedicines, id: \.id) { medicine in
                         NavigationLink(value: medicine) {
                             VStack(alignment: .leading) {
                                 Text(medicine.name)
@@ -50,7 +57,7 @@ struct AllMedicinesView: View {
                         }
                     }
                     .onDelete { offsets in
-                        let medicines = viewModel.medicines(matching: filterText)
+                        let medicines = viewModel.filteredMedicines
                         Task {
                             for index in offsets {
                                 await catalogViewModel.delete(medicines[index])

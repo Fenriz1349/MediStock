@@ -17,16 +17,18 @@ final class FirestoreMedicineStore: MedicineStoring {
         observe(collection)
     }
 
-    /// - Parameter sortOption: How to order the results — translates directly to `.order(by:)`.
-    ///   `.none` leaves the query unordered.
-    func observeMedicines(sortedBy sortOption: SortOption) -> AsyncStream<[Medicine]> {
+    /// - Parameters:
+    ///   - sortOption: How to order the results — translates directly to `.order(by:)`.
+    ///     `.none` leaves the query unordered.
+    ///   - ascending: The sort direction. Ignored when `sortOption` is `.none`.
+    func observeMedicines(sortedBy sortOption: SortOption, ascending: Bool) -> AsyncStream<[Medicine]> {
         switch sortOption {
         case .none:
             observe(collection)
         case .name:
-            observe(collection.order(by: "name"))
+            observe(collection.order(by: "name", descending: !ascending))
         case .stock:
-            observe(collection.order(by: "stock"))
+            observe(collection.order(by: "stock", descending: !ascending))
         }
     }
 

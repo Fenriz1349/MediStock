@@ -23,8 +23,10 @@ protocol MedicineStoring {
     /// Those would conflict with sorting by a different field.
     /// Re-querying on every keystroke would also waste reads for no real benefit.
     /// Callers filter by name themselves on the already-loaded stream instead.
-    /// - Parameter sortOption: How to order the results.
-    func observeMedicines(sortedBy sortOption: SortOption) -> AsyncStream<[Medicine]>
+    /// - Parameters:
+    ///   - sortOption: How to order the results.
+    ///   - ascending: The sort direction. Ignored when `sortOption` is `.none`.
+    func observeMedicines(sortedBy sortOption: SortOption, ascending: Bool) -> AsyncStream<[Medicine]>
 
     /// Server-side filtered stream of medicines in a given aisle.
     /// - Parameter aisle: The exact aisle code to filter on.
