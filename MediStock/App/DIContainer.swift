@@ -15,25 +15,28 @@ struct DIContainer {
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
     private let authenticationService: AuthenticationServicing
+    private let networkMonitor: NetworkMonitoring
 
     init(
         medicineStore: MedicineStoring = FirestoreMedicineStore(),
         historyStore: HistoryStoring = FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
-        authenticationService: AuthenticationServicing = FirebaseAuthenticationService()
+        authenticationService: AuthenticationServicing = FirebaseAuthenticationService(),
+        networkMonitor: NetworkMonitoring = NetworkMonitor()
     ) {
         self.medicineStore = medicineStore
         self.historyStore = historyStore
         self.authenticationService = authenticationService
+        self.networkMonitor = networkMonitor
     }
 
     @MainActor
     func makeAuthenticationViewModel() -> AuthenticationViewModel {
-        AuthenticationViewModel(authenticationService: authenticationService)
+        AuthenticationViewModel(authenticationService: authenticationService, networkMonitor: networkMonitor)
     }
 
     @MainActor
     func makeCatalogViewModel() -> CatalogViewModel {
-        CatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
+        CatalogViewModel(medicineStore: medicineStore, historyStore: historyStore, networkMonitor: networkMonitor)
     }
 
     @MainActor
@@ -41,7 +44,8 @@ struct DIContainer {
         MedicineDetailViewModel(
             medicine: medicine,
             medicineStore: medicineStore,
-            historyStore: historyStore
+            historyStore: historyStore,
+            networkMonitor: networkMonitor
         )
     }
 

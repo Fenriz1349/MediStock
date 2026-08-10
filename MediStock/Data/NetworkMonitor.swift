@@ -11,7 +11,8 @@ import Network
 /// `NWPathMonitor`/`URLSession`-backed implementation of `NetworkMonitoring`.
 /// Also `ObservableObject`, so it can be injected directly into the environment for a live status banner.
 /// Same pattern as `ToastyManager`, on top of being passed to ViewModels as `NetworkMonitoring`.
-@MainActor
+/// Not `@MainActor` — only the `isConnected` mutation itself needs the main actor, via the `Task` hop below.
+/// So the type stays constructible from any context, needed for `DIContainer`'s default parameters.
 final class NetworkMonitor: NetworkMonitoring, ObservableObject {
     @Published private(set) var isConnected = true
 
@@ -35,11 +36,9 @@ final class NetworkMonitor: NetworkMonitoring, ObservableObject {
         monitor.cancel()
     }
 
-    /// - Returns: `false` immediately if the interface itself is down.
-    ///   Otherwise, whether a real round-trip to the backend succeeded.
-    func verifyReachable() async -> Bool {
-        guard isConnected else { return false }
-        return await ping()
+    func verifyReachable() async throws {
+        guard isConnected else { throw NetworkError.notConnected }
+        guard await ping() else { throw NetworkError.serverUnreachable }
     }
 
     /// Sends a short HEAD request to the backend.

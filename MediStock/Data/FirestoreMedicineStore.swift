@@ -99,7 +99,7 @@ final class FirestoreMedicineStore: MedicineStoring {
         guard let code = FirestoreErrorCode.Code(rawValue: (error as NSError).code) else { return .unknown }
         switch code {
         case .unavailable:
-            return .networkUnavailable
+            return .network(.serverUnreachable)
         case .permissionDenied:
             return .permissionDenied
         default:

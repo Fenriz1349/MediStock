@@ -17,12 +17,16 @@ final class AuthenticationViewModel: ObservableObject {
     @Published private(set) var error: AuthenticationError?
 
     private let authenticationService: AuthenticationServicing
+    private let networkMonitor: NetworkMonitoring
     private var observationTask: Task<Void, Never>?
 
-    /// - Parameter authenticationService: Domain-level auth abstraction, kept behind a protocol so this
-    ///   ViewModel never depends on Firebase directly.
-    init(authenticationService: AuthenticationServicing) {
+    /// - Parameters:
+    ///   - authenticationService: Domain-level auth abstraction, kept behind a protocol so this
+    ///     ViewModel never depends on Firebase directly.
+    ///   - networkMonitor: Checked before every write. See `verifyNetworkReachable()`.
+    init(authenticationService: AuthenticationServicing, networkMonitor: NetworkMonitoring) {
         self.authenticationService = authenticationService
+        self.networkMonitor = networkMonitor
     }
 
     /// Starts observing the current authentication session. Call once when the app appears.
@@ -43,6 +47,7 @@ final class AuthenticationViewModel: ObservableObject {
     func signIn(email: String, password: String) async {
         error = nil
         do {
+            try await verifyNetworkReachable()
             session = try await authenticationService.signIn(email: email, password: password)
         } catch let authError as AuthenticationError {
             error = authError
@@ -58,6 +63,7 @@ final class AuthenticationViewModel: ObservableObject {
     func signUp(email: String, password: String) async {
         error = nil
         do {
+            try await verifyNetworkReachable()
             session = try await authenticationService.signUp(email: email, password: password)
         } catch let authError as AuthenticationError {
             error = authError
@@ -85,12 +91,23 @@ final class AuthenticationViewModel: ObservableObject {
     func deleteAccount() async {
         error = nil
         do {
+            try await verifyNetworkReachable()
             try await authenticationService.deleteAccount()
             session = nil
         } catch let authError as AuthenticationError {
             error = authError
         } catch {
             self.error = .unknown
+        }
+    }
+
+    /// Called before every write, so a lack of connectivity surfaces immediately as a typed error.
+    /// - Throws: `AuthenticationError.network`, wrapping whatever `NetworkError` `networkMonitor` reports.
+    private func verifyNetworkReachable() async throws {
+        do {
+            try await networkMonitor.verifyReachable()
+        } catch let networkError as NetworkError {
+            throw AuthenticationError.network(networkError)
         }
     }
 

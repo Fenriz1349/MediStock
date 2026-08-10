@@ -102,7 +102,8 @@ struct AllMedicinesView_Previews: PreviewProvider {
     static var previews: some View {
         AllMedicinesView()
             .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
+                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
+                                                networkMonitor: NetworkMonitor()))
             .environmentObject(ToastyManager())
     }
 }

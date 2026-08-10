@@ -28,9 +28,11 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService(),
+                                                       networkMonitor: NetworkMonitor()))
             .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
+                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
+                                                networkMonitor: NetworkMonitor()))
             .environmentObject(ToastyManager())
     }
 }

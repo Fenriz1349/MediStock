@@ -25,6 +25,7 @@ final class MedicineDetailViewModel: ObservableObject {
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
+    private let networkMonitor: NetworkMonitoring
     private var historyTask: Task<Void, Never>?
     private var saveLabelTask: Task<Void, Never>?
 
@@ -32,12 +33,19 @@ final class MedicineDetailViewModel: ObservableObject {
     ///   - medicine: The medicine to view/edit, injected by the navigation that created this screen.
     ///   - medicineStore: Domain-level abstraction over medicine persistence.
     ///   - historyStore: Domain-level abstraction over history persistence.
-    init(medicine: Medicine, medicineStore: MedicineStoring, historyStore: HistoryStoring) {
+    ///   - networkMonitor: Checked before every write. See `verifyNetworkReachable()`.
+    init(
+        medicine: Medicine,
+        medicineStore: MedicineStoring,
+        historyStore: HistoryStoring,
+        networkMonitor: NetworkMonitoring
+    ) {
         self.medicine = medicine
         self.name = medicine.name
         self.aisle = medicine.aisle
         self.medicineStore = medicineStore
         self.historyStore = historyStore
+        self.networkMonitor = networkMonitor
     }
 
     /// Starts observing this medicine's history. Call once when the screen appears.
@@ -104,6 +112,7 @@ final class MedicineDetailViewModel: ObservableObject {
     func delete() async {
         error = nil
         do {
+            try await verifyNetworkReachable()
             try await medicineStore.delete(medicine)
             try await historyStore.recordDeletion(of: medicine)
         } catch let medicineError as MedicineError {
@@ -126,6 +135,7 @@ final class MedicineDetailViewModel: ObservableObject {
         var updated = medicine
         mutate(&updated)
         do {
+            try await verifyNetworkReachable()
             medicine = try await medicineStore.save(updated)
         } catch let medicineError as MedicineError {
             error = medicineError
@@ -140,6 +150,16 @@ final class MedicineDetailViewModel: ObservableObject {
             error = medicineError
         } catch {
             self.error = .unknown
+        }
+    }
+
+    /// Called before every write, so a lack of connectivity surfaces immediately as a typed error.
+    /// - Throws: `MedicineError.network`, wrapping whatever `NetworkError` `networkMonitor` reports.
+    private func verifyNetworkReachable() async throws {
+        do {
+            try await networkMonitor.verifyReachable()
+        } catch let networkError as NetworkError {
+            throw MedicineError.network(networkError)
         }
     }
 

@@ -52,5 +52,6 @@ struct AddMedicineView: View {
 #Preview {
     AddMedicineView()
         .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                            historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
+                                            historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
+                                            networkMonitor: NetworkMonitor()))
 }

@@ -8,8 +8,8 @@
 import Foundation
 
 /// Typed connectivity failures, reported by `NetworkMonitoring`.
-/// Wrapped by `MedicineError`/`AuthenticationError` (`.network(NetworkError)`) rather than duplicated as a
-/// separate case in each.
+/// Wrapped by `MedicineError`/`AuthenticationError` as `.network(NetworkError)`.
+/// Not duplicated as a separate case in each.
 /// `NetworkMonitoring` is the single source of truth for *why* the network isn't available.
 /// The other stores only care that it isn't.
 enum NetworkError: Error, Equatable {
