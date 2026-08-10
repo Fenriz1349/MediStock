@@ -17,12 +17,7 @@ protocol MedicineStoring {
     /// So that still has to happen in memory.
     func observeMedicines() -> AsyncStream<[Medicine]>
 
-    /// Server-side sorted stream.
-    /// Name search is deliberately not a parameter here.
-    /// Firestore has no "contains" query, only prefix range queries.
-    /// Those would conflict with sorting by a different field.
-    /// Re-querying on every keystroke would also waste reads for no real benefit.
-    /// Callers filter by name themselves on the already-loaded stream instead.
+    /// Server-side sorted stream, with no name filter applied.
     /// - Parameters:
     ///   - sortOption: How to order the results.
     ///   - ascending: The sort direction. Ignored when `sortOption` is `.none`.
@@ -31,6 +26,14 @@ protocol MedicineStoring {
     /// Server-side filtered stream of medicines in a given aisle.
     /// - Parameter aisle: The exact aisle code to filter on.
     func observeMedicines(inAisle aisle: String) -> AsyncStream<[Medicine]>
+
+    /// Server-side filtered stream of medicines whose name starts with `prefix`.
+    /// Firestore has no "contains" query, only prefix range queries — this can't match anywhere in the name.
+    /// Relies on `Medicine.name` always being stored capitalized (see `MedicineNameFormat`).
+    /// That's what lets the match work regardless of how the user typed `prefix`.
+    /// No accent normalization — an accepted limitation.
+    /// - Parameter prefix: The prefix to match against the start of each medicine's name.
+    func observeMedicines(nameStartingWith prefix: String) -> AsyncStream<[Medicine]>
 
     /// Creates or updates a medicine and returns it with its resolved identifier.
     func save(_ medicine: Medicine) async throws -> Medicine

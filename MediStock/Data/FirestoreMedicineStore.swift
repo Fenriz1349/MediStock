@@ -37,6 +37,16 @@ final class FirestoreMedicineStore: MedicineStoring {
         observe(collection.whereField("aisle", isEqualTo: aisle))
     }
 
+    /// - Parameter prefix: The prefix to match, normalized to `MedicineNameFormat.capitalized(_:)` first —
+    ///   `Medicine.name` is always stored that way, so both sides of the comparison must match.
+    func observeMedicines(nameStartingWith prefix: String) -> AsyncStream<[Medicine]> {
+        let normalizedPrefix = MedicineNameFormat.capitalized(prefix)
+        return observe(collection
+            .order(by: "name")
+            .whereField("name", isGreaterThanOrEqualTo: normalizedPrefix)
+            .whereField("name", isLessThan: normalizedPrefix + "\u{f8ff}"))
+    }
+
     /// Shared listener setup for every `observeMedicines...` variant above.
     /// Only the `query` itself differs between them.
     private func observe(_ query: Query) -> AsyncStream<[Medicine]> {
