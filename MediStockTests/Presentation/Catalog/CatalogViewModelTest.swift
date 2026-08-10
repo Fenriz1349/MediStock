@@ -196,6 +196,14 @@ final class MockMedicineStoring: MedicineStoring {
         medicinesStream
     }
 
+    func observeMedicines(sortedBy sortOption: SortOption) -> AsyncStream<[Medicine]> {
+        medicinesStream
+    }
+
+    func observeMedicines(inAisle aisle: String) -> AsyncStream<[Medicine]> {
+        medicinesStream
+    }
+
     func emit(_ medicines: [Medicine]) {
         medicinesContinuation.yield(medicines)
     }
