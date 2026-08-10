@@ -256,23 +256,6 @@
         }
       }
     },
-    "auth.error.networkUnavailable" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No internet connection. Please try again."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pas de connexion internet. Réessayez."
-          }
-        }
-      }
-    },
     "auth.error.requiresRecentLogin" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -477,23 +460,6 @@
         }
       }
     },
-    "medicine.error.networkUnavailable" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No internet connection. Please try again."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pas de connexion internet. Réessayez."
-          }
-        }
-      }
-    },
     "medicine.error.permissionDenied" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -660,6 +626,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stock"
+          }
+        }
+      }
+    },
+    "network.error.notConnected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No internet connection. Please try again."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas de connexion internet. Réessayez."
+          }
+        }
+      }
+    },
+    "network.error.serverUnreachable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The server could not be reached. Please try again shortly."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le serveur est injoignable. Réessayez dans un instant."
           }
         }
       }

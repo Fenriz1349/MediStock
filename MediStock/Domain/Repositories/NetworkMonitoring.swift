@@ -19,6 +19,7 @@ protocol NetworkMonitoring {
 
     /// Confirms real reachability of the backend with a round-trip request.
     /// Call before a write so it can be cancelled before Firestore queues it offline.
-    /// - Returns: Whether the backend was actually reachable.
-    func verifyReachable() async -> Bool
+    /// - Throws: `NetworkError.notConnected` if the interface itself is down.
+    ///   `NetworkError.serverUnreachable` if the interface is up but the backend didn't respond.
+    func verifyReachable() async throws
 }
