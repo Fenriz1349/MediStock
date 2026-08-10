@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.13.0](https://github.com/Fenriz1349/MediStock/compare/v1.12.0...v1.13.0) (2026-08-10)
+
+
+### Features
+
+* add ascendent / descendent sorting in AisleListView ([8f5d708](https://github.com/Fenriz1349/MediStock/commit/8f5d708b171b71a1bfc4dd90d65dd086f4d565ae))
+* add MedicineNameFormat and MedicineNameFormatTest ([9462ca7](https://github.com/Fenriz1349/MediStock/commit/9462ca77c4cc57da24f1181a674ebcbdbd0bc77b))
+* add observeMedicines, AllMedicinesView use it for text search ([6372185](https://github.com/Fenriz1349/MediStock/commit/63721858b64e9ec85c821f023b553bbdd3e857d1))
+* add search bar in AisleListView ([ae49a1e](https://github.com/Fenriz1349/MediStock/commit/ae49a1e474bd1890c50df50626cfb9ddcd9dbd94))
+* addMedicine use new rule ([bd81755](https://github.com/Fenriz1349/MediStock/commit/bd81755afc16f811e71ffefd1bc23dd22ea837f8))
+* update observeMedicines to add ascending, add ascending / descending button in AllMedicineView ([de1b2b4](https://github.com/Fenriz1349/MediStock/commit/de1b2b4a6eeafe5c2a477a3d1162a93121c4ca2c))
+
 ## [1.12.0](https://github.com/Fenriz1349/MediStock/compare/v1.11.0...v1.12.0) (2026-08-10)
 
 
