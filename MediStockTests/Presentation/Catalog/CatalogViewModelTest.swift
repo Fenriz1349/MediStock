@@ -41,13 +41,29 @@ final class CatalogViewModelTest: XCTestCase {
     func testAddMedicineSaveFailureSetsTypedErrorAndSkipsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
-        medicineStore.saveError = MedicineError.networkUnavailable
+        medicineStore.saveError = MedicineError.network(.serverUnreachable)
         let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
 
         await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56")
 
-        XCTAssertEqual(viewModel.error, .networkUnavailable)
+        XCTAssertEqual(viewModel.error, .network(.serverUnreachable))
         XCTAssertTrue(historyStore.addedMedicines.isEmpty)
+    }
+
+    @MainActor
+    func testAddMedicineSkipsTheStoreWhenNetworkIsUnreachable() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        let networkMonitor = MockNetworkMonitoring()
+        networkMonitor.verifyReachableError = .notConnected
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore,
+                                                         historyStore: historyStore,
+                                                         networkMonitor: networkMonitor)
+
+        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56")
+
+        XCTAssertEqual(viewModel.error, .network(.notConnected))
+        XCTAssertTrue(medicineStore.savedMedicines.isEmpty)
     }
 
     @MainActor
@@ -215,5 +231,16 @@ final class MockHistoryStoring: HistoryStoring {
     func recordDeletion(of medicine: Medicine) async throws {
         if let recordError { throw recordError }
         deletedMedicines.append(medicine)
+    }
+}
+
+/// In-memory fake of `NetworkMonitoring` for testing.
+/// `isConnected` unused by `verifyReachable()` here — tests only need to control the thrown error.
+final class MockNetworkMonitoring: NetworkMonitoring {
+    var isConnected = true
+    var verifyReachableError: NetworkError?
+
+    func verifyReachable() async throws {
+        if let verifyReachableError { throw verifyReachableError }
     }
 }

@@ -35,6 +35,19 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
+    func testSignInSkipsTheServiceWhenNetworkIsUnreachable() async {
+        let service = MockAuthenticationServicing()
+        let networkMonitor = MockNetworkMonitoring()
+        networkMonitor.verifyReachableError = .notConnected
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service, networkMonitor: networkMonitor)
+
+        await viewModel.signIn(email: "test@example.com", password: "password")
+
+        XCTAssertEqual(viewModel.error, .network(.notConnected))
+        XCTAssertNil(viewModel.session)
+    }
+
+    @MainActor
     func testSignInFailureWithUntypedErrorSetsUnknown() async {
         let service = MockAuthenticationServicing()
         service.signInResult = .failure(MockAuthenticationServicing.Failure.generic)

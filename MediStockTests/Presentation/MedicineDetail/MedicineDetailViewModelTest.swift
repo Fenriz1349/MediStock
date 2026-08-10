@@ -56,13 +56,29 @@ final class MedicineDetailViewModelTest: XCTestCase {
     func testUpdateLabelSaveFailureSetsTypedErrorAndSkipsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
-        medicineStore.saveError = MedicineError.networkUnavailable
+        medicineStore.saveError = MedicineError.network(.serverUnreachable)
         let viewModel = TestHelper.makeMedicineDetailViewModel(medicineStore: medicineStore, historyStore: historyStore)
 
         await viewModel.updateLabel(name: "Dafalgan", aisle: "AD10")
 
-        XCTAssertEqual(viewModel.error, .networkUnavailable)
+        XCTAssertEqual(viewModel.error, .network(.serverUnreachable))
         XCTAssertTrue(historyStore.updatedMedicines.isEmpty)
+    }
+
+    @MainActor
+    func testUpdateLabelSkipsTheStoreWhenNetworkIsUnreachable() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        let networkMonitor = MockNetworkMonitoring()
+        networkMonitor.verifyReachableError = .notConnected
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicineStore: medicineStore,
+                                                                historyStore: historyStore,
+                                                                networkMonitor: networkMonitor)
+
+        await viewModel.updateLabel(name: "Dafalgan", aisle: "AD10")
+
+        XCTAssertEqual(viewModel.error, .network(.notConnected))
+        XCTAssertTrue(medicineStore.savedMedicines.isEmpty)
     }
 
     @MainActor
@@ -88,7 +104,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
     func testIncreaseSaveFailureSetsTypedErrorAndSkipsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
-        medicineStore.saveError = MedicineError.networkUnavailable
+        medicineStore.saveError = MedicineError.network(.serverUnreachable)
         let medicine = TestHelper.makeMedicine(stock: 10)
         let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
                                                                medicineStore: medicineStore,
@@ -96,7 +112,7 @@ final class MedicineDetailViewModelTest: XCTestCase {
 
         await viewModel.increase()
 
-        XCTAssertEqual(viewModel.error, .networkUnavailable)
+        XCTAssertEqual(viewModel.error, .network(.serverUnreachable))
         XCTAssertEqual(viewModel.medicine.stock, 10)
         XCTAssertTrue(historyStore.stockChanges.isEmpty)
     }
