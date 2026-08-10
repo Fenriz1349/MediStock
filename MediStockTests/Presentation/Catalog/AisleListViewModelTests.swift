@@ -54,4 +54,28 @@ final class AisleListViewModelTests: XCTestCase {
 
         XCTAssertEqual(viewModel.aisles, ["AD10", "AD2"])
     }
+
+    @MainActor
+    func testFilterTextMatchesASubstringAnywhereInTheAisleCode() async {
+        let medicineStore = MockMedicineStoring()
+        let viewModel = TestHelper.makeAisleListViewModel(medicineStore: medicineStore)
+        viewModel.listen()
+        medicineStore.emit([TestHelper.makeMedicine(id: "1", aisle: "AD2"), TestHelper.makeMedicine(id: "2", aisle: "BD5")])
+        await TestHelper.waitUntil { !viewModel.aisles.isEmpty }
+
+        viewModel.filterText = "d2"
+
+        XCTAssertEqual(viewModel.aisles, ["AD2"])
+    }
+
+    @MainActor
+    func testFilterTextReturnsEverythingWhenEmpty() async {
+        let medicineStore = MockMedicineStoring()
+        let viewModel = TestHelper.makeAisleListViewModel(medicineStore: medicineStore)
+        viewModel.listen()
+        medicineStore.emit([TestHelper.makeMedicine(id: "1", aisle: "AD2"), TestHelper.makeMedicine(id: "2", aisle: "BD5")])
+        await TestHelper.waitUntil { !viewModel.aisles.isEmpty }
+
+        XCTAssertEqual(viewModel.aisles, ["AD2", "BD5"])
+    }
 }
