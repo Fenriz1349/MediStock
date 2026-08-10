@@ -8,52 +8,71 @@
 import SwiftUI
 import Toasty
 
+/// Full-catalog screen: lists every medicine, with server-side name search and sort.
 struct AllMedicinesView: View {
     @EnvironmentObject var catalogViewModel: CatalogViewModel
     @StateObject private var viewModel = DIContainer().makeAllMedicinesViewModel()
     @Environment(\.diContainer) private var container
-    @State private var filterText: String = ""
     @State private var isPresentingAddMedicine = false
 
     var body: some View {
         NavigationStack {
             VStack {
-                // Filtrage et Tri
-                HStack {
-                    TextField("allMedicines.filterField", text: $filterText)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding(.leading, 10)
+                // Filter and sort
+                VStack(alignment: .leading, spacing: 2) {
+                    HStack {
+                        TextField("allMedicines.filterField", text: $viewModel.filterText)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.leading, 10)
 
-                    Spacer()
+                        Spacer()
 
-                    Picker("allMedicines.sortPicker", selection: $viewModel.sortOption) {
-                        Text("allMedicines.sortOption.none").tag(SortOption.none)
-                        Text("allMedicines.sortOption.name").tag(SortOption.name)
-                        Text("allMedicines.sortOption.stock").tag(SortOption.stock)
+                        Picker("allMedicines.sortPicker", selection: $viewModel.sortOption) {
+                            Text("allMedicines.sortOption.none").tag(SortOption.none)
+                            Text("allMedicines.sortOption.name").tag(SortOption.name)
+                            Text("allMedicines.sortOption.stock").tag(SortOption.stock)
+                        }
+                        .pickerStyle(.segmented)
+
+                        Button(action: {
+                            viewModel.sortAscending.toggle()
+                        }, label: {
+                            Image(systemName: viewModel.sortAscending ? "arrow.up" : "arrow.down")
+                        })
+                        .disabled(viewModel.sortOption == .none)
+                        .padding(.trailing, 10)
                     }
-                    .pickerStyle(MenuPickerStyle())
-                    .padding(.trailing, 10)
+
+                    Text("allMedicines.filterField.hint")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.leading, 10)
                 }
                 .padding(.top, 10)
 
-                // Liste des Médicaments
+                // Medicine list
                 List {
-                    ForEach(viewModel.medicines(matching: filterText), id: \.id) { medicine in
-                        NavigationLink(value: medicine) {
-                            VStack(alignment: .leading) {
-                                Text(medicine.name)
-                                    .font(.headline)
-                                Text(String(localized: "allMedicines.medicineStock",
-                                            defaultValue: "Stock : \(medicine.stock)"))
-                                    .font(.subheadline)
+                    if viewModel.medicines.isEmpty {
+                        Text("allMedicines.noResults")
+                            .foregroundColor(.secondary)
+                    } else {
+                        ForEach(viewModel.medicines, id: \.id) { medicine in
+                            NavigationLink(value: medicine) {
+                                VStack(alignment: .leading) {
+                                    Text(medicine.name)
+                                        .font(.headline)
+                                    Text(String(localized: "allMedicines.medicineStock",
+                                                defaultValue: "Stock : \(medicine.stock)"))
+                                        .font(.subheadline)
+                                }
                             }
                         }
-                    }
-                    .onDelete { offsets in
-                        let medicines = viewModel.medicines(matching: filterText)
-                        Task {
-                            for index in offsets {
-                                await catalogViewModel.delete(medicines[index])
+                        .onDelete { offsets in
+                            let medicines = viewModel.medicines
+                            Task {
+                                for index in offsets {
+                                    await catalogViewModel.delete(medicines[index])
+                                }
                             }
                         }
                     }

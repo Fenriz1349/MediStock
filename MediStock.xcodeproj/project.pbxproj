@@ -56,6 +56,8 @@
 		68951E473029D28E00E2767B /* AisleListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68951E463029D28E00E2767B /* AisleListViewModelTests.swift */; };
 		68951E493029D3CA00E2767B /* AllMedicinesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68951E483029D3CA00E2767B /* AllMedicinesViewModel.swift */; };
 		68951E4B3029D3D700E2767B /* AllMedicinesViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68951E4A3029D3D700E2767B /* AllMedicinesViewModelTests.swift */; };
+		68951E4D3029F72E00E2767B /* MedicineNameFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68951E4C3029F72E00E2767B /* MedicineNameFormat.swift */; };
+		68951E4F3029F74100E2767B /* MedicineNameFormatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68951E4E3029F74100E2767B /* MedicineNameFormatTests.swift */; };
 		68D144E630136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
 		68D144E730136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
 		68D144E830136D3900696204 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 68D144E530136D3900696204 /* GoogleService-Info.plist */; };
@@ -137,6 +139,8 @@
 		68951E463029D28E00E2767B /* AisleListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleListViewModelTests.swift; sourceTree = "<group>"; };
 		68951E483029D3CA00E2767B /* AllMedicinesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllMedicinesViewModel.swift; sourceTree = "<group>"; };
 		68951E4A3029D3D700E2767B /* AllMedicinesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllMedicinesViewModelTests.swift; sourceTree = "<group>"; };
+		68951E4C3029F72E00E2767B /* MedicineNameFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineNameFormat.swift; sourceTree = "<group>"; };
+		68951E4E3029F74100E2767B /* MedicineNameFormatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineNameFormatTests.swift; sourceTree = "<group>"; };
 		68D144E530136D3900696204 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		68D144ED301393C600696204 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
 		68D144EF3013998100696204 /* MedicineStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineStoring.swift; sourceTree = "<group>"; };
@@ -281,6 +285,7 @@
 				682D9FF4302204A600DBC11E /* SortOption.swift */,
 				6836B20730248295003E756D /* AisleCode.swift */,
 				686916813025F70600E86CFE /* PasswordPolicy.swift */,
+				68951E4C3029F72E00E2767B /* MedicineNameFormat.swift */,
 			);
 			path = BusinessRules;
 			sourceTree = "<group>";
@@ -290,6 +295,7 @@
 			children = (
 				6836B20A3024922E003E756D /* AisleCodeTest.swift */,
 				686916853025FB0200E86CFE /* PasswordPolicyTests.swift */,
+				68951E4E3029F74100E2767B /* MedicineNameFormatTests.swift */,
 			);
 			path = BusinessRules;
 			sourceTree = "<group>";
@@ -582,6 +588,7 @@
 				686916743025BC5800E86CFE /* MedicineDetailHistorySection.swift in Sources */,
 				6869167A3025DE0A00E86CFE /* UserView.swift in Sources */,
 				53E0D8DE2C0609A800DE1134 /* CatalogViewModel.swift in Sources */,
+				68951E4D3029F72E00E2767B /* MedicineNameFormat.swift in Sources */,
 				53E0D8992C06084700DE1134 /* ContentView.swift in Sources */,
 				682D9FF5302204AB00DBC11E /* SortOption.swift in Sources */,
 				6887EC1F30246BBB00DAF7E8 /* MedicineFormContent.swift in Sources */,
@@ -620,6 +627,7 @@
 				68951E4B3029D3D700E2767B /* AllMedicinesViewModelTests.swift in Sources */,
 				682D9FF33021EEAC00DBC11E /* MedicineDetailViewModelTest.swift in Sources */,
 				68951E473029D28E00E2767B /* AisleListViewModelTests.swift in Sources */,
+				68951E4F3029F74100E2767B /* MedicineNameFormatTests.swift in Sources */,
 				6836B20B3024922E003E756D /* AisleCodeTest.swift in Sources */,
 				68D1450A3013AA1600696204 /* TestHelper.swift in Sources */,
 				68D145063013A58700696204 /* AuthenticationViewModelTest.swift in Sources */,

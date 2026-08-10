@@ -81,7 +81,7 @@ final class MedicineDetailViewModel: ObservableObject {
     ///   - aisle: The new aisle code, already cleaned of any redundant localized label.
     func updateLabel(name: String, aisle: String) async {
         await save(mutate: {
-            $0.name = name
+            $0.name = MedicineNameFormat.capitalized(name)
             $0.aisle = aisle
         }, recordHistory: { try await self.historyStore.recordUpdate(of: $0) })
     }

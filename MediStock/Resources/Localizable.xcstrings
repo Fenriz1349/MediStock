@@ -52,6 +52,40 @@
         }
       }
     },
+    "aisleList.filterField" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter by aisle"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filtrer par rayon"
+          }
+        }
+      }
+    },
+    "aisleList.noResults" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No aisle found"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun rayon trouvé"
+          }
+        }
+      }
+    },
     "allMedicines.filterField" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -69,6 +103,23 @@
         }
       }
     },
+    "allMedicines.filterField.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Matches the start of the name only"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ne recherche que le début du nom"
+          }
+        }
+      }
+    },
     "allMedicines.medicineStock" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -82,6 +133,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stock : %lld"
+          }
+        }
+      }
+    },
+    "allMedicines.noResults" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No medicine found"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun médicament trouvé"
           }
         }
       }

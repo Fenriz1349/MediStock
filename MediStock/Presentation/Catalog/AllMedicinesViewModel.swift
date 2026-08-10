@@ -8,14 +8,24 @@
 import Foundation
 
 /// Presentation-layer state for the full-catalog screen.
-/// Sorting happens server-side (re-queries Firestore whenever `sortOption` changes).
-/// Name search stays local, applied on top of the already-loaded, already-sorted list.
-/// Firestore has no "contains" query.
-/// Re-querying on every keystroke would also waste reads for no benefit, since the data is already loaded.
+/// Sorting and name search both happen server-side.
+/// While `filterText` is non-empty, the query switches to a Firestore prefix match on the name.
+/// `sortOption`/`sortAscending` are then applied locally, on that already filtered (so small) result set.
+/// Firestore requires the first `.order(by:)` to be on the same field as a range filter.
+/// So the name-prefix query and an arbitrary sort field can't both run server-side at once.
 @MainActor
 final class AllMedicinesViewModel: ObservableObject {
     @Published private(set) var medicines: [Medicine] = []
     @Published var sortOption: SortOption = .none {
+        didSet { listen() }
+    }
+    /// The sort direction. Ignored when `sortOption` is `.none`.
+    @Published var sortAscending = true {
+        didSet { listen() }
+    }
+    /// Firestore prefix match on the medicine name.
+    /// Doesn't match anywhere else in the name — only the start.
+    @Published var filterText = "" {
         didSet { listen() }
     }
 
@@ -27,28 +37,39 @@ final class AllMedicinesViewModel: ObservableObject {
         self.medicineStore = medicineStore
     }
 
-    /// Starts observing the medicine catalog, sorted per the current `sortOption`.
-    /// Call once when the screen appears; automatically re-called whenever `sortOption` changes.
+    /// Starts observing the medicine catalog, filtered/sorted per the current `filterText`,
+    /// `sortOption` and `sortAscending`.
+    /// Call once when the screen appears.
+    /// Automatically re-called whenever any of those three change.
     func listen() {
         observationTask?.cancel()
+        let sortOption = sortOption
+        let sortAscending = sortAscending
+        let filterText = filterText
         observationTask = Task { [weak self] in
             guard let self else { return }
-            for await medicines in medicineStore.observeMedicines(sortedBy: sortOption) {
-                self.medicines = medicines
+            if filterText.isEmpty {
+                for await medicines in medicineStore.observeMedicines(sortedBy: sortOption, ascending: sortAscending) {
+                    self.medicines = medicines
+                }
+            } else {
+                for await medicines in medicineStore.observeMedicines(nameStartingWith: filterText) {
+                    self.medicines = Self.sort(medicines, by: sortOption, ascending: sortAscending)
+                }
             }
         }
     }
 
-    /// Medicines whose name contains `filterText`.
-    /// Applied locally over the current (already server-sorted) list.
-    /// Kept local specifically so it can match anywhere in the name, not just a prefix.
-    /// A Firestore-side query could only do "starts with".
-    /// - Parameter filterText: Case-insensitive substring to match against each medicine's name.
-    ///   An empty string matches everything.
-    /// - Returns: The filtered medicines, in their current server-sorted order.
-    func medicines(matching filterText: String) -> [Medicine] {
-        guard !filterText.isEmpty else { return medicines }
-        return medicines.filter { $0.name.lowercased().contains(filterText.lowercased()) }
+    /// Applies `sortOption`/`sortAscending` locally, used only for the already name-filtered result set.
+    private static func sort(_ medicines: [Medicine], by sortOption: SortOption, ascending: Bool) -> [Medicine] {
+        switch sortOption {
+        case .none:
+            medicines
+        case .name:
+            medicines.sorted { ascending ? $0.name < $1.name : $0.name > $1.name }
+        case .stock:
+            medicines.sorted { ascending ? $0.stock < $1.stock : $0.stock > $1.stock }
+        }
     }
 
     deinit {

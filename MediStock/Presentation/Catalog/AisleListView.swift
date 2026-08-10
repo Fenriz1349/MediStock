@@ -16,10 +16,33 @@ struct AisleListView: View {
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(viewModel.aisles, id: \.self) { aisle in
-                    NavigationLink(value: aisle) {
-                        Text(AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized))
+            VStack {
+                HStack {
+                    TextField("aisleList.filterField", text: $viewModel.filterText)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.leading, 10)
+
+                    Spacer()
+
+                    Button(action: {
+                        viewModel.sortAscending.toggle()
+                    }, label: {
+                        Image(systemName: viewModel.sortAscending ? "arrow.up" : "arrow.down")
+                    })
+                    .padding(.trailing, 10)
+                }
+                .padding(.top, 10)
+
+                List {
+                    if viewModel.aisles.isEmpty {
+                        Text("aisleList.noResults")
+                            .foregroundColor(.secondary)
+                    } else {
+                        ForEach(viewModel.aisles, id: \.self) { aisle in
+                            NavigationLink(value: aisle) {
+                                Text(AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized))
+                            }
+                        }
                     }
                 }
             }
