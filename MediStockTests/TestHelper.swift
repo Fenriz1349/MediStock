@@ -92,4 +92,12 @@ enum TestHelper {
     ) -> AisleListViewModel {
         AisleListViewModel(medicineStore: medicineStore)
     }
+
+    /// Builds an `AllMedicinesViewModel` wired to a fresh mock by default.
+    @MainActor
+    static func makeAllMedicinesViewModel(
+        medicineStore: MedicineStoring = MockMedicineStoring()
+    ) -> AllMedicinesViewModel {
+        AllMedicinesViewModel(medicineStore: medicineStore)
+    }
 }

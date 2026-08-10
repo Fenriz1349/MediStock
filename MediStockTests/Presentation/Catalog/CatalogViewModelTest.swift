@@ -180,6 +180,8 @@ final class CatalogViewModelTest: XCTestCase {
 final class MockMedicineStoring: MedicineStoring {
     private(set) var savedMedicines: [Medicine] = []
     private(set) var deletedMedicines: [Medicine] = []
+    private(set) var requestedSortOptions: [SortOption] = []
+    private(set) var requestedAisles: [String] = []
     var saveError: Error?
     var deleteError: Error?
 
@@ -197,11 +199,13 @@ final class MockMedicineStoring: MedicineStoring {
     }
 
     func observeMedicines(sortedBy sortOption: SortOption) -> AsyncStream<[Medicine]> {
-        medicinesStream
+        requestedSortOptions.append(sortOption)
+        return medicinesStream
     }
 
     func observeMedicines(inAisle aisle: String) -> AsyncStream<[Medicine]> {
-        medicinesStream
+        requestedAisles.append(aisle)
+        return medicinesStream
     }
 
     func emit(_ medicines: [Medicine]) {
