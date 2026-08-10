@@ -8,23 +8,26 @@
 import Foundation
 
 /// Presentation-layer state and actions for viewing/editing a single medicine and its history.
-/// Owns the medicine being viewed and depends only on Domain protocols (no other ViewModel),
-/// so the screen that hosts it needs nothing but this ViewModel. Instantiated per detail screen
-/// (scoped to one medicine), unlike the app-wide shared ViewModels. Never knows who the current
-/// user is — `HistoryStoring` resolves that itself when it records an entry.
+/// Owns the medicine being viewed and depends only on Domain protocols (no other ViewModel).
+/// So the screen that hosts it needs nothing but this ViewModel.
+/// Instantiated per detail screen (scoped to one medicine), unlike the app-wide shared ViewModels.
+/// Never knows who the current user is — `HistoryStoring` resolves that itself when it records an entry.
 @MainActor
 final class MedicineDetailViewModel: ObservableObject {
     @Published private(set) var medicine: Medicine
     @Published private(set) var history: [HistoryEntry] = []
     @Published var name: String
     @Published var aisle: String
-    /// Reset to `nil` at the start of every action, then set again on failure — the View observes
-    /// this to trigger a toast, resolving the localized message itself (this ViewModel never
-    /// touches the display language).
+    /// Reset to `nil` at the start of every action, then set again on failure.
+    /// The View observes this to trigger a toast, resolving the localized message itself.
+    /// This ViewModel never touches the display language.
     @Published private(set) var error: MedicineError?
+    /// `true` for the duration of an action, so the View can show a loading indicator.
+    @Published private(set) var isLoading = false
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
+    private let networkMonitor: NetworkMonitoring
     private var historyTask: Task<Void, Never>?
     private var saveLabelTask: Task<Void, Never>?
 
@@ -32,12 +35,19 @@ final class MedicineDetailViewModel: ObservableObject {
     ///   - medicine: The medicine to view/edit, injected by the navigation that created this screen.
     ///   - medicineStore: Domain-level abstraction over medicine persistence.
     ///   - historyStore: Domain-level abstraction over history persistence.
-    init(medicine: Medicine, medicineStore: MedicineStoring, historyStore: HistoryStoring) {
+    ///   - networkMonitor: Checked before every write. See `verifyNetworkReachable()`.
+    init(
+        medicine: Medicine,
+        medicineStore: MedicineStoring,
+        historyStore: HistoryStoring,
+        networkMonitor: NetworkMonitoring
+    ) {
         self.medicine = medicine
         self.name = medicine.name
         self.aisle = medicine.aisle
         self.medicineStore = medicineStore
         self.historyStore = historyStore
+        self.networkMonitor = networkMonitor
     }
 
     /// Starts observing this medicine's history. Call once when the screen appears.
@@ -52,11 +62,12 @@ final class MedicineDetailViewModel: ObservableObject {
         }
     }
 
-    /// Called by the View whenever `name`/`aisle` change. `cleanedAisle` is `aisle` already
-    /// stripped of any redundant label the user may have typed — that's a display/localization
-    /// concern the View resolves before calling this, this ViewModel doesn't know about it.
-    /// Cancels any save still in flight from a previous keystroke before starting this one, so
-    /// rapid typing can't fire overlapping saves that race and land out of order.
+    /// Called by the View whenever `name`/`aisle` change.
+    /// `cleanedAisle` is `aisle` already stripped of any redundant label the user may have typed.
+    /// That's a display/localization concern the View resolves before calling this.
+    /// This ViewModel doesn't know about it.
+    /// Cancels any save still in flight from a previous keystroke before starting this one.
+    /// So rapid typing can't fire overlapping saves that race and land out of order.
     /// - Parameter cleanedAisle: `aisle` already stripped of any redundant localized label.
     func scheduleLabelSave(cleanedAisle: String) {
         saveLabelTask?.cancel()
@@ -65,22 +76,22 @@ final class MedicineDetailViewModel: ObservableObject {
         }
     }
 
-    /// Skips the save if nothing actually changed vs. the persisted `medicine` (avoids re-saving
-    /// on the initial assignment of `name`/`aisle` from `medicine` in `init`).
+    /// Skips the save if nothing actually changed vs. the persisted `medicine`.
+    /// Avoids re-saving on the initial assignment of `name`/`aisle` from `medicine` in `init`.
     private func saveLabelIfNeeded(cleanedAisle: String) async {
         guard name != medicine.name || cleanedAisle != medicine.aisle else { return }
         await updateLabel(name: name, aisle: cleanedAisle)
     }
 
-    /// Updates the medicine's name and aisle. `aisle` is expected already cleaned of any redundant
-    /// label the user may have typed — that's a display/localization concern the View resolves,
-    /// this ViewModel doesn't know about it.
+    /// Updates the medicine's name and aisle.
+    /// `aisle` is expected already cleaned of any redundant label the user may have typed.
+    /// That's a display/localization concern the View resolves — this ViewModel doesn't know about it.
     /// - Parameters:
     ///   - name: The new display name.
     ///   - aisle: The new aisle code, already cleaned of any redundant localized label.
     func updateLabel(name: String, aisle: String) async {
         await save(mutate: {
-            $0.name = name
+            $0.name = MedicineNameFormat.capitalized(name)
             $0.aisle = aisle
         }, recordHistory: { try await self.historyStore.recordUpdate(of: $0) })
     }
@@ -102,7 +113,10 @@ final class MedicineDetailViewModel: ObservableObject {
     /// Removes the medicine from the catalog and records the deletion in the history.
     func delete() async {
         error = nil
+        isLoading = true
+        defer { isLoading = false }
         do {
+            try await verifyNetworkReachable()
             try await medicineStore.delete(medicine)
             try await historyStore.recordDeletion(of: medicine)
         } catch let medicineError as MedicineError {
@@ -112,18 +126,22 @@ final class MedicineDetailViewModel: ObservableObject {
         }
     }
 
-    /// Applies `mutate` to a copy of the current medicine, persists it, and on success records the
-    /// change in the history. The single save path for every use case above, so each of them only
-    /// has to describe *what* changed, not how to persist/log it.
+    /// Applies `mutate` to a copy of the current medicine, persists it.
+    /// On success, records the change in the history.
+    /// The single save path for every use case above.
+    /// So each of them only has to describe *what* changed, not how to persist/log it.
     /// - Parameters:
     ///   - mutate: Applied to a copy of the current `medicine` before it's persisted.
-    ///   - recordHistory: Records the change once persistence succeeded (so it reflects the actual
-    ///     saved state, e.g. the assigned `id`).
+    ///   - recordHistory: Records the change once persistence succeeded.
+    ///     So it reflects the actual saved state, e.g. the assigned `id`.
     private func save(mutate: (inout Medicine) -> Void, recordHistory: (Medicine) async throws -> Void) async {
         error = nil
+        isLoading = true
+        defer { isLoading = false }
         var updated = medicine
         mutate(&updated)
         do {
+            try await verifyNetworkReachable()
             medicine = try await medicineStore.save(updated)
         } catch let medicineError as MedicineError {
             error = medicineError
@@ -138,6 +156,16 @@ final class MedicineDetailViewModel: ObservableObject {
             error = medicineError
         } catch {
             self.error = .unknown
+        }
+    }
+
+    /// Called before every write, so a lack of connectivity surfaces immediately as a typed error.
+    /// - Throws: `MedicineError.network`, wrapping whatever `NetworkError` `networkMonitor` reports.
+    private func verifyNetworkReachable() async throws {
+        do {
+            try await networkMonitor.verifyReachable()
+        } catch let networkError as NetworkError {
+            throw MedicineError.network(networkError)
         }
     }
 

@@ -41,7 +41,9 @@ struct AddMedicineView: View {
                             stock: Int(stockText) ?? 0,
                             aisle: cleanedAisle
                         )
-                        dismiss()
+                        if catalogViewModel.error == nil {
+                            dismiss()
+                        }
                     }
                 }
             )
@@ -52,5 +54,6 @@ struct AddMedicineView: View {
 #Preview {
     AddMedicineView()
         .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                            historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
+                                            historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
+                                            networkMonitor: NetworkMonitor()))
 }

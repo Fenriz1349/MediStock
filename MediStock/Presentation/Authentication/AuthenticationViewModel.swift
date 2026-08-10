@@ -11,18 +11,31 @@ import Foundation
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
     @Published private(set) var session: AppUser?
-    /// Reset to `nil` at the start of every action, then set again on failure — the View observes
-    /// this to trigger a toast, resolving the localized message itself (this ViewModel never
-    /// touches the display language).
+    /// Reset to `nil` at the start of every action, then set again on failure.
+    /// The View observes this to trigger a toast, resolving the localized message itself.
+    /// This ViewModel never touches the display language.
     @Published private(set) var error: AuthenticationError?
+    /// `true` for the duration of an action, so the View can show a loading indicator.
+    @Published private(set) var isLoading = false
+    /// Live mirror of `networkMonitor.observeConnectivity()`.
+    /// There's no session/cache yet to fall back on before sign-in.
+    /// So the View needs to know upfront whether attempting one is even worth it.
+    /// And switch away the moment that changes, in either direction.
+    @Published private(set) var isConnected: Bool
 
     private let authenticationService: AuthenticationServicing
+    private let networkMonitor: NetworkMonitoring
     private var observationTask: Task<Void, Never>?
+    private var connectivityTask: Task<Void, Never>?
 
-    /// - Parameter authenticationService: Domain-level auth abstraction, kept behind a protocol so
-    ///   this ViewModel never depends on Firebase directly.
-    init(authenticationService: AuthenticationServicing) {
+    /// - Parameters:
+    ///   - authenticationService: Domain-level auth abstraction, kept behind a protocol so this
+    ///     ViewModel never depends on Firebase directly.
+    ///   - networkMonitor: Checked before every write. See `verifyNetworkReachable()`.
+    init(authenticationService: AuthenticationServicing, networkMonitor: NetworkMonitoring) {
         self.authenticationService = authenticationService
+        self.networkMonitor = networkMonitor
+        self.isConnected = networkMonitor.isConnected
     }
 
     /// Starts observing the current authentication session. Call once when the app appears.
@@ -36,13 +49,27 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
+    /// Starts observing live connectivity. Call once when the app appears.
+    func listenConnectivity() {
+        connectivityTask?.cancel()
+        connectivityTask = Task { [weak self] in
+            guard let stream = self?.networkMonitor.observeConnectivity() else { return }
+            for await connected in stream {
+                self?.isConnected = connected
+            }
+        }
+    }
+
     /// Signs in with an existing account and updates `session` on success.
     /// - Parameters:
     ///   - email: The account's email address.
     ///   - password: The account's password.
     func signIn(email: String, password: String) async {
         error = nil
+        isLoading = true
+        defer { isLoading = false }
         do {
+            try await verifyNetworkReachable()
             session = try await authenticationService.signIn(email: email, password: password)
         } catch let authError as AuthenticationError {
             error = authError
@@ -57,7 +84,10 @@ final class AuthenticationViewModel: ObservableObject {
     ///   - password: The password to set for the new account.
     func signUp(email: String, password: String) async {
         error = nil
+        isLoading = true
+        defer { isLoading = false }
         do {
+            try await verifyNetworkReachable()
             session = try await authenticationService.signUp(email: email, password: password)
         } catch let authError as AuthenticationError {
             error = authError
@@ -66,8 +96,8 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
-    /// Signs out the current session locally. Does not touch the account itself — use
-    /// `deleteAccount()` to remove it (App Store guideline 5.1.1(v)).
+    /// Signs out the current session locally. Does not touch the account itself.
+    /// Use `deleteAccount()` to remove it (App Store guideline 5.1.1(v)).
     func signOut() {
         error = nil
         do {
@@ -80,11 +110,14 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
-    /// Permanently deletes the account and clears the session. Irreversible — the View is
-    /// responsible for confirming with the user before calling this.
+    /// Permanently deletes the account and clears the session. Irreversible.
+    /// The View is responsible for confirming with the user before calling this.
     func deleteAccount() async {
         error = nil
+        isLoading = true
+        defer { isLoading = false }
         do {
+            try await verifyNetworkReachable()
             try await authenticationService.deleteAccount()
             session = nil
         } catch let authError as AuthenticationError {
@@ -94,7 +127,18 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
+    /// Called before every write, so a lack of connectivity surfaces immediately as a typed error.
+    /// - Throws: `AuthenticationError.network`, wrapping whatever `NetworkError` `networkMonitor` reports.
+    private func verifyNetworkReachable() async throws {
+        do {
+            try await networkMonitor.verifyReachable()
+        } catch let networkError as NetworkError {
+            throw AuthenticationError.network(networkError)
+        }
+    }
+
     deinit {
         observationTask?.cancel()
+        connectivityTask?.cancel()
     }
 }

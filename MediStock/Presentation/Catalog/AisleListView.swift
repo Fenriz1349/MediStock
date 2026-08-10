@@ -9,16 +9,40 @@ import SwiftUI
 import Toasty
 
 struct AisleListView: View {
-    @EnvironmentObject var viewModel: CatalogViewModel
+    @EnvironmentObject var catalogViewModel: CatalogViewModel
+    @StateObject private var viewModel = DIContainer().makeAisleListViewModel()
     @Environment(\.diContainer) private var container
     @State private var isPresentingAddMedicine = false
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(viewModel.aisles, id: \.self) { aisle in
-                    NavigationLink(value: aisle) {
-                        Text(AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized))
+            VStack {
+                HStack {
+                    TextField("aisleList.filterField", text: $viewModel.filterText)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding(.leading, 10)
+
+                    Spacer()
+
+                    Button(action: {
+                        viewModel.sortAscending.toggle()
+                    }, label: {
+                        Image(systemName: viewModel.sortAscending ? "arrow.up" : "arrow.down")
+                    })
+                    .padding(.trailing, 10)
+                }
+                .padding(.top, 10)
+
+                List {
+                    if viewModel.aisles.isEmpty {
+                        Text("aisleList.noResults")
+                            .foregroundColor(.secondary)
+                    } else {
+                        ForEach(viewModel.aisles, id: \.self) { aisle in
+                            NavigationLink(value: aisle) {
+                                Text(AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized))
+                            }
+                        }
                     }
                 }
             }
@@ -30,13 +54,16 @@ struct AisleListView: View {
             }))
             .sheet(isPresented: $isPresentingAddMedicine) {
                 AddMedicineView()
-                    .environmentObject(viewModel)
+                    .environmentObject(catalogViewModel)
             }
             .navigationDestination(for: String.self) { aisle in
-                AisleMedicinesView(aisle: aisle)
+                AisleMedicinesView(viewModel: container.makeAisleMedicinesViewModel(aisle: aisle))
             }
             .navigationDestination(for: Medicine.self) { medicine in
                 MedicineDetailView(viewModel: container.makeMedicineDetailViewModel(medicine: medicine))
+            }
+            .onAppear {
+                viewModel.listen()
             }
         }
     }
@@ -47,7 +74,8 @@ struct AisleListView_Previews: PreviewProvider {
         let medicineStore = FirestoreMedicineStore()
         AisleListView()
             .environmentObject(CatalogViewModel(medicineStore: medicineStore,
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
+                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
+                                                networkMonitor: NetworkMonitor()))
             .environmentObject(ToastyManager())
     }
 }

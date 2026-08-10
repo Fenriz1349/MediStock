@@ -10,92 +10,7 @@ import XCTest
 
 final class CatalogViewModelTest: XCTestCase {
     @MainActor
-    func testListenPopulatesMedicines() async {
-        let medicineStore = MockMedicineStoring()
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
-        let medicine = TestHelper.makeMedicine()
-
-        viewModel.listen()
-        medicineStore.emit([medicine])
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-
-        XCTAssertEqual(viewModel.medicines, [medicine])
-    }
-
-    @MainActor
-    func testAislesAreDistinctAndSortedNumerically() async {
-        let medicineStore = MockMedicineStoring()
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
-        let medicines = [
-            TestHelper.makeMedicine(id: "1", aisle: "AD10"),
-            TestHelper.makeMedicine(id: "2", aisle: "AD2"),
-            TestHelper.makeMedicine(id: "3", aisle: "AD2")
-        ]
-
-        viewModel.listen()
-        medicineStore.emit(medicines)
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-
-        // A plain string sort would put "AD10" before "AD2"; natural sort must not.
-        XCTAssertEqual(viewModel.aisles, ["AD2", "AD10"])
-    }
-
-    @MainActor
-    func testMedicinesInAisleFiltersCorrectly() async {
-        let medicineStore = MockMedicineStoring()
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
-        let medicines = [
-            TestHelper.makeMedicine(id: "1", aisle: "Rayon A"),
-            TestHelper.makeMedicine(id: "2", aisle: "Rayon B")
-        ]
-
-        viewModel.listen()
-        medicineStore.emit(medicines)
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-
-        XCTAssertEqual(viewModel.medicines(inAisle: "Rayon A").map(\.id), ["1"])
-    }
-
-    @MainActor
-    func testMedicinesMatchingFiltersByName() async {
-        let medicineStore = MockMedicineStoring()
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
-        let medicines = [
-            TestHelper.makeMedicine(id: "1", name: "Doliprane"),
-            TestHelper.makeMedicine(id: "2", name: "Advil"),
-            TestHelper.makeMedicine(id: "3", name: "Dafalgan")
-        ]
-
-        viewModel.listen()
-        medicineStore.emit(medicines)
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-
-        let result = viewModel.medicines(matching: "dol", sortedBy: .none)
-
-        XCTAssertEqual(result.map(\.id), ["1"])
-    }
-
-    @MainActor
-    func testMedicinesMatchingSortsByStock() async {
-        let medicineStore = MockMedicineStoring()
-        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore)
-        let medicines = [
-            TestHelper.makeMedicine(id: "1", stock: 20),
-            TestHelper.makeMedicine(id: "2", stock: 5),
-            TestHelper.makeMedicine(id: "3", stock: 10)
-        ]
-
-        viewModel.listen()
-        medicineStore.emit(medicines)
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-
-        let result = viewModel.medicines(matching: "", sortedBy: .stock)
-
-        XCTAssertEqual(result.map(\.id), ["2", "3", "1"])
-    }
-
-    @MainActor
-    func testAddMedicineSavesAndRecordsHistory() async {
+    func testAddMedicine_success_savesAndRecordsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
@@ -112,20 +27,67 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testAddMedicineSaveFailureSetsTypedErrorAndSkipsHistory() async {
+    func testAddMedicine_inFlight_togglesIsLoading() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
-        medicineStore.saveError = MedicineError.networkUnavailable
+        let networkMonitor = MockNetworkMonitoring()
+        networkMonitor.verifyReachableDelayNanoseconds = 50_000_000
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore,
+                                                         historyStore: historyStore,
+                                                         networkMonitor: networkMonitor)
+        XCTAssertFalse(viewModel.isLoading)
+
+        let task = Task { await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56") }
+        await TestHelper.waitUntil { viewModel.isLoading }
+        XCTAssertTrue(viewModel.isLoading)
+
+        await task.value
+
+        XCTAssertFalse(viewModel.isLoading)
+    }
+
+    @MainActor
+    func testAddMedicine_name_normalizesCapitalization() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
+
+        await viewModel.addMedicine(name: "dOLIPRANE", stock: 10, aisle: "AD56")
+
+        XCTAssertEqual(medicineStore.savedMedicines.first?.name, "Doliprane")
+    }
+
+    @MainActor
+    func testAddMedicine_saveFailure_setsTypedErrorAndSkipsHistory() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        medicineStore.saveError = MedicineError.network(.serverUnreachable)
         let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
 
         await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56")
 
-        XCTAssertEqual(viewModel.error, .networkUnavailable)
+        XCTAssertEqual(viewModel.error, .network(.serverUnreachable))
         XCTAssertTrue(historyStore.addedMedicines.isEmpty)
     }
 
     @MainActor
-    func testAddMedicineHistoryFailureSetsTypedError() async {
+    func testAddMedicine_networkUnreachable_skipsStore() async {
+        let medicineStore = MockMedicineStoring()
+        let historyStore = MockHistoryStoring()
+        let networkMonitor = MockNetworkMonitoring()
+        networkMonitor.verifyReachableError = .notConnected
+        let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore,
+                                                         historyStore: historyStore,
+                                                         networkMonitor: networkMonitor)
+
+        await viewModel.addMedicine(name: "Doliprane", stock: 10, aisle: "AD56")
+
+        XCTAssertEqual(viewModel.error, .network(.notConnected))
+        XCTAssertTrue(medicineStore.savedMedicines.isEmpty)
+    }
+
+    @MainActor
+    func testAddMedicine_historyFailure_setsTypedError() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         historyStore.recordError = MedicineError.unknown
@@ -137,7 +99,7 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testDeleteCallsStoreAndRecordsHistory() async {
+    func testDelete_success_callsStoreAndRecordsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         let viewModel = TestHelper.makeCatalogViewModel(medicineStore: medicineStore, historyStore: historyStore)
@@ -151,7 +113,7 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testDeleteFailureSetsTypedErrorAndSkipsHistory() async {
+    func testDelete_failure_setsTypedErrorAndSkipsHistory() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         medicineStore.deleteError = MedicineError.permissionDenied
@@ -164,7 +126,7 @@ final class CatalogViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testDeleteHistoryFailureSetsTypedError() async {
+    func testDelete_historyFailure_setsTypedError() async {
         let medicineStore = MockMedicineStoring()
         let historyStore = MockHistoryStoring()
         historyStore.recordError = MedicineError.unknown
@@ -180,24 +142,55 @@ final class CatalogViewModelTest: XCTestCase {
 final class MockMedicineStoring: MedicineStoring {
     private(set) var savedMedicines: [Medicine] = []
     private(set) var deletedMedicines: [Medicine] = []
+    private(set) var requestedSortOptions: [SortOption] = []
+    private(set) var requestedAscending: [Bool] = []
+    private(set) var requestedAisles: [String] = []
+    private(set) var requestedNamePrefixes: [String] = []
     var saveError: Error?
     var deleteError: Error?
 
     private let medicinesStream: AsyncStream<[Medicine]>
     private let medicinesContinuation: AsyncStream<[Medicine]>.Continuation
+    /// Separate from `medicinesStream` so a test can re-subscribe (e.g. `sortOption` then `filterText`).
+    /// No racing a stale subscription on the same shared stream that way.
+    private let nameSearchStream: AsyncStream<[Medicine]>
+    private let nameSearchContinuation: AsyncStream<[Medicine]>.Continuation
 
     init() {
         var continuation: AsyncStream<[Medicine]>.Continuation!
         medicinesStream = AsyncStream { continuation = $0 }
         medicinesContinuation = continuation
+        var searchContinuation: AsyncStream<[Medicine]>.Continuation!
+        nameSearchStream = AsyncStream { searchContinuation = $0 }
+        nameSearchContinuation = searchContinuation
     }
 
     func observeMedicines() -> AsyncStream<[Medicine]> {
         medicinesStream
     }
 
+    func observeMedicines(sortedBy sortOption: SortOption, ascending: Bool) -> AsyncStream<[Medicine]> {
+        requestedSortOptions.append(sortOption)
+        requestedAscending.append(ascending)
+        return medicinesStream
+    }
+
+    func observeMedicines(inAisle aisle: String) -> AsyncStream<[Medicine]> {
+        requestedAisles.append(aisle)
+        return medicinesStream
+    }
+
+    func observeMedicines(nameStartingWith prefix: String) -> AsyncStream<[Medicine]> {
+        requestedNamePrefixes.append(prefix)
+        return nameSearchStream
+    }
+
     func emit(_ medicines: [Medicine]) {
         medicinesContinuation.yield(medicines)
+    }
+
+    func emitSearchResults(_ medicines: [Medicine]) {
+        nameSearchContinuation.yield(medicines)
     }
 
     func save(_ medicine: Medicine) async throws -> Medicine {
@@ -214,8 +207,8 @@ final class MockMedicineStoring: MedicineStoring {
     }
 }
 
-/// In-memory fake of `HistoryStoring` for testing, with a controllable history stream. Tracks each
-/// kind of recorded change separately, matching the protocol's one-method-per-action shape.
+/// In-memory fake of `HistoryStoring` for testing, with a controllable history stream.
+/// Tracks each kind of recorded change separately, matching the protocol's one-method-per-action shape.
 final class MockHistoryStoring: HistoryStoring {
     private(set) var addedMedicines: [Medicine] = []
     private(set) var updatedMedicines: [Medicine] = []
@@ -258,5 +251,41 @@ final class MockHistoryStoring: HistoryStoring {
     func recordDeletion(of medicine: Medicine) async throws {
         if let recordError { throw recordError }
         deletedMedicines.append(medicine)
+    }
+}
+
+/// In-memory fake of `NetworkMonitoring` for testing, with a controllable connectivity stream.
+final class MockNetworkMonitoring: NetworkMonitoring {
+    var isConnected: Bool
+    var verifyReachableError: NetworkError?
+    /// A real suspension point for `verifyReachable()`, off by default.
+    /// Without it, a VM action can race to completion before a test ever gets to observe `isLoading == true`
+    /// — set this in tests that need a reliably observable in-flight window.
+    var verifyReachableDelayNanoseconds: UInt64 = 0
+
+    private let connectivityStream: AsyncStream<Bool>
+    private let connectivityContinuation: AsyncStream<Bool>.Continuation
+
+    init(isConnected: Bool = true) {
+        self.isConnected = isConnected
+        var continuation: AsyncStream<Bool>.Continuation!
+        connectivityStream = AsyncStream { continuation = $0 }
+        connectivityContinuation = continuation
+    }
+
+    func observeConnectivity() -> AsyncStream<Bool> {
+        connectivityStream
+    }
+
+    func emit(_ connected: Bool) {
+        isConnected = connected
+        connectivityContinuation.yield(connected)
+    }
+
+    func verifyReachable() async throws {
+        if verifyReachableDelayNanoseconds > 0 {
+            try? await Task.sleep(nanoseconds: verifyReachableDelayNanoseconds)
+        }
+        if let verifyReachableError { throw verifyReachableError }
     }
 }

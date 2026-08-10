@@ -52,6 +52,40 @@
         }
       }
     },
+    "aisleList.filterField" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter by aisle"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filtrer par rayon"
+          }
+        }
+      }
+    },
+    "aisleList.noResults" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No aisle found"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun rayon trouvé"
+          }
+        }
+      }
+    },
     "allMedicines.filterField" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -69,6 +103,23 @@
         }
       }
     },
+    "allMedicines.filterField.hint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Matches the start of the name only"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ne recherche que le début du nom"
+          }
+        }
+      }
+    },
     "allMedicines.medicineStock" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -82,6 +133,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stock : %lld"
+          }
+        }
+      }
+    },
+    "allMedicines.noResults" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No medicine found"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun médicament trouvé"
           }
         }
       }
@@ -184,23 +252,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Un compte existe déjà avec cette adresse e-mail."
-          }
-        }
-      }
-    },
-    "auth.error.networkUnavailable" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No internet connection. Please try again."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pas de connexion internet. Réessayez."
           }
         }
       }
@@ -409,23 +460,6 @@
         }
       }
     },
-    "medicine.error.networkUnavailable" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No internet connection. Please try again."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pas de connexion internet. Réessayez."
-          }
-        }
-      }
-    },
     "medicine.error.permissionDenied" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -592,6 +626,77 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stock"
+          }
+        }
+      }
+    },
+    "MediStock" : {
+
+    },
+    "network.error.notConnected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No internet connection. Please try again."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas de connexion internet. Réessayez."
+          }
+        }
+      }
+    },
+    "network.error.serverUnreachable" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The server could not be reached. Please try again shortly."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le serveur est injoignable. Réessayez dans un instant."
+          }
+        }
+      }
+    },
+    "offline.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No internet connection.\nSigning in requires an active connection."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas de connexion internet.\nUne connexion active est nécessaire pour se connecter."
+          }
+        }
+      }
+    },
+    "offline.retryButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retry"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réessayer"
           }
         }
       }

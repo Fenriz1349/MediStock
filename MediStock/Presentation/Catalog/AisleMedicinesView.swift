@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct AisleMedicinesView: View {
-    @EnvironmentObject var viewModel: CatalogViewModel
-    var aisle: String
+    @EnvironmentObject var catalogViewModel: CatalogViewModel
+    @StateObject var viewModel: AisleMedicinesViewModel
 
     var body: some View {
         List {
-            ForEach(viewModel.medicines(inAisle: aisle), id: \.id) { medicine in
+            ForEach(viewModel.medicines, id: \.id) { medicine in
                 NavigationLink(value: medicine) {
                     VStack(alignment: .leading) {
                         Text(medicine.name)
@@ -24,22 +24,26 @@ struct AisleMedicinesView: View {
                 }
             }
             .onDelete { offsets in
-                let medicines = viewModel.medicines(inAisle: aisle)
+                let medicines = viewModel.medicines
                 Task {
                     for index in offsets {
-                        await viewModel.delete(medicines[index])
+                        await catalogViewModel.delete(medicines[index])
                     }
                 }
             }
         }
-        .navigationBarTitle(AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized))
+        .navigationBarTitle(AisleCode.format(code: viewModel.aisle, aisleLabel: AisleLabel.localized))
+        .onAppear {
+            viewModel.listen()
+        }
     }
 }
 
 struct AisleMedicinesView_Previews: PreviewProvider {
     static var previews: some View {
-        AisleMedicinesView(aisle: "Aisle 1")
+        AisleMedicinesView(viewModel: DIContainer().makeAisleMedicinesViewModel(aisle: "Aisle 1"))
             .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
+                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
+                                                networkMonitor: NetworkMonitor()))
     }
 }

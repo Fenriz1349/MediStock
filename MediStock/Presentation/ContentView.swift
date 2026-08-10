@@ -10,21 +10,20 @@ struct ContentView: View {
         Group {
             if authenticationViewModel.session != nil {
                 MainTabView()
+            } else if !authenticationViewModel.isConnected {
+                OfflineView()
             } else {
                 AuthenticationView()
             }
         }
+        .overlay {
+            if authenticationViewModel.isLoading || catalogViewModel.isLoading {
+                LoadingOverlay()
+            }
+        }
         .onAppear {
             authenticationViewModel.listen()
-        }
-        .onChange(of: authenticationViewModel.session) { _, session in
-            // Only start listening once a session actually exists: Firestore's security rules
-            // require `request.auth != null`, and attaching this listener before the session is
-            // confirmed gets a permanent "permission-denied" that doesn't self-recover once the
-            // session does arrive.
-            if session != nil {
-                catalogViewModel.listen()
-            }
+            authenticationViewModel.listenConnectivity()
         }
         .onChange(of: catalogViewModel.error) { _, error in
             if let error {
@@ -37,9 +36,11 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService(),
+                                                       networkMonitor: NetworkMonitor()))
             .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService())))
+                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
+                                                networkMonitor: NetworkMonitor()))
             .environmentObject(ToastyManager())
     }
 }

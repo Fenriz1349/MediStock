@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-/// Displays a medicine's stock and the +/- controls to change it. Pure display, no business logic:
-/// the caller owns the current stock value and what happens on increase/decrease.
+/// Displays a medicine's stock and the +/- controls to change it. Pure display, no business logic.
+/// The caller owns the current stock value and what happens on increase/decrease.
 struct MedicineDetailStockSection: View {
     let stock: Int
     let onIncrease: () -> Void

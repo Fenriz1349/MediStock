@@ -7,12 +7,12 @@
 
 import Foundation
 
-/// Localized text for each `MedicineError` case, kept out of the Domain/ViewModel layers since it
-/// touches the display language.
+/// Localized text for each `MedicineError` case.
+/// Kept out of the Domain/ViewModel layers since it touches the display language.
 extension MedicineError {
     var localizedMessage: String {
         switch self {
-        case .networkUnavailable: String(localized: "medicine.error.networkUnavailable")
+        case .network(let networkError): networkError.localizedMessage
         case .permissionDenied: String(localized: "medicine.error.permissionDenied")
         case .unknown: String(localized: "medicine.error.unknown")
         }

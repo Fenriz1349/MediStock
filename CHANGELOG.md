@@ -1,5 +1,37 @@
 # Changelog
 
+## [1.14.0](https://github.com/Fenriz1349/MediStock/compare/v1.13.0...v1.14.0) (2026-08-10)
+
+
+### Features
+
+* add isLoading in every VM / Views handling async ([d7b248a](https://github.com/Fenriz1349/MediStock/commit/d7b248a4ac80429bef3bf8e073a27abb1b266b73))
+* add NetworkMonitor and NetworkMonitoring ([63009ee](https://github.com/Fenriz1349/MediStock/commit/63009ee42b7bc89206cc22db3e8590e03b7f4336))
+* add OfflineView, rework ContentView and offlinemode ([eeae362](https://github.com/Fenriz1349/MediStock/commit/eeae362e0c43bd99ce1640a06e809fc79b8f2086))
+* rework verifyReachable to throw error, implement networkMonitor ([19eccb7](https://github.com/Fenriz1349/MediStock/commit/19eccb7799976d03f79bd712f43c56e7dfa5b0b4))
+
+## [1.13.0](https://github.com/Fenriz1349/MediStock/compare/v1.12.0...v1.13.0) (2026-08-10)
+
+
+### Features
+
+* add ascendent / descendent sorting in AisleListView ([8f5d708](https://github.com/Fenriz1349/MediStock/commit/8f5d708b171b71a1bfc4dd90d65dd086f4d565ae))
+* add MedicineNameFormat and MedicineNameFormatTest ([9462ca7](https://github.com/Fenriz1349/MediStock/commit/9462ca77c4cc57da24f1181a674ebcbdbd0bc77b))
+* add observeMedicines, AllMedicinesView use it for text search ([6372185](https://github.com/Fenriz1349/MediStock/commit/63721858b64e9ec85c821f023b553bbdd3e857d1))
+* add search bar in AisleListView ([ae49a1e](https://github.com/Fenriz1349/MediStock/commit/ae49a1e474bd1890c50df50626cfb9ddcd9dbd94))
+* addMedicine use new rule ([bd81755](https://github.com/Fenriz1349/MediStock/commit/bd81755afc16f811e71ffefd1bc23dd22ea837f8))
+* update observeMedicines to add ascending, add ascending / descending button in AllMedicineView ([de1b2b4](https://github.com/Fenriz1349/MediStock/commit/de1b2b4a6eeafe5c2a477a3d1162a93121c4ca2c))
+
+## [1.12.0](https://github.com/Fenriz1349/MediStock/compare/v1.11.0...v1.12.0) (2026-08-10)
+
+
+### Features
+
+* add AisleListViewModel ([5e942f6](https://github.com/Fenriz1349/MediStock/commit/5e942f6267d4c216be38297b00ec80c3dd8a0156))
+* add AisleMedicinesViewModel to handle specifically AisleMedicinesView ([578c2db](https://github.com/Fenriz1349/MediStock/commit/578c2db0f899fdfa0f159b1292977045732687e9))
+* add AllMedicinesViewModel ([bca6e97](https://github.com/Fenriz1349/MediStock/commit/bca6e9762b5b4063dffaa148df6710860ab345b9))
+* add public listner functions and refactor observe in a private concrete listener creator ([57bf18a](https://github.com/Fenriz1349/MediStock/commit/57bf18ac3fc4fac9034a8872961e40f7f751a0f8))
+
 ## [1.11.0](https://github.com/Fenriz1349/MediStock/compare/v1.10.0...v1.11.0) (2026-08-07)
 
 

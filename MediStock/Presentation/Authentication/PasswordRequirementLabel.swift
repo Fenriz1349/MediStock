@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// Localized text for each password requirement, kept out of `PasswordPolicy` (Domain) since it
-/// touches the display language.
+/// Localized text for each password requirement.
+/// Kept out of `PasswordPolicy` (Domain) since it touches the display language.
 extension PasswordRequirement {
     var localizedDescription: String {
         switch self {

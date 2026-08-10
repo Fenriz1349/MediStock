@@ -8,9 +8,10 @@
 import SwiftUI
 import Toasty
 
-/// Account screen: shows the connected user's email, lets them sign out or permanently delete
-/// their account. Uses `AuthenticationViewModel` directly (same VM as `AuthenticationView`) since
-/// every action here is an authentication concern — no dedicated ViewModel needed.
+/// Account screen: shows the connected user's email, lets them sign out or permanently delete their account.
+/// Uses `AuthenticationViewModel` directly, same VM as `AuthenticationView`.
+/// Every action here is an authentication concern.
+/// No dedicated ViewModel needed.
 struct UserView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
     @EnvironmentObject var toasty: ToastyManager
@@ -61,6 +62,7 @@ struct UserView: View {
 
 #Preview {
     UserView()
-        .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService()))
+        .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService(),
+                                                    networkMonitor: NetworkMonitor()))
         .environmentObject(ToastyManager())
 }
