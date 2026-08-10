@@ -141,8 +141,8 @@ final class MockMedicineStoring: MedicineStoring {
     }
 }
 
-/// In-memory fake of `HistoryStoring` for testing, with a controllable history stream. Tracks each
-/// kind of recorded change separately, matching the protocol's one-method-per-action shape.
+/// In-memory fake of `HistoryStoring` for testing, with a controllable history stream.
+/// Tracks each kind of recorded change separately, matching the protocol's one-method-per-action shape.
 final class MockHistoryStoring: HistoryStoring {
     private(set) var addedMedicines: [Medicine] = []
     private(set) var updatedMedicines: [Medicine] = []

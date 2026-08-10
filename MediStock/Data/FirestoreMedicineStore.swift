@@ -17,7 +17,7 @@ final class FirestoreMedicineStore: MedicineStoring {
         observe(collection)
     }
 
-    /// - Parameter sortOption: How to order the results — translates directly to `.order(by:)`,
+    /// - Parameter sortOption: How to order the results — translates directly to `.order(by:)`.
     ///   `.none` leaves the query unordered.
     func observeMedicines(sortedBy sortOption: SortOption) -> AsyncStream<[Medicine]> {
         switch sortOption {
@@ -35,8 +35,8 @@ final class FirestoreMedicineStore: MedicineStoring {
         observe(collection.whereField("aisle", isEqualTo: aisle))
     }
 
-    /// Shared listener setup for every `observeMedicines...` variant above — only the `query`
-    /// itself differs between them.
+    /// Shared listener setup for every `observeMedicines...` variant above.
+    /// Only the `query` itself differs between them.
     private func observe(_ query: Query) -> AsyncStream<[Medicine]> {
         AsyncStream { continuation in
             let listener = query.addSnapshotListener { snapshot, error in
@@ -78,11 +78,11 @@ final class FirestoreMedicineStore: MedicineStoring {
         }
     }
 
-    /// Maps a raw error from the Firestore SDK to a Domain-level `MedicineError`, so callers never
-    /// see a Firestore type.
+    /// Maps a raw error from the Firestore SDK to a Domain-level `MedicineError`.
+    /// So callers never see a Firestore type.
     /// - Parameter error: The error thrown by a Firestore SDK call.
-    /// - Returns: The corresponding `MedicineError`, or `.unknown` if it isn't one of the specific
-    ///   cases this app handles.
+    /// - Returns: The corresponding `MedicineError`.
+    ///   Or `.unknown` if it isn't one of the specific cases this app handles.
     private static func mapError(_ error: Error) -> MedicineError {
         guard let code = FirestoreErrorCode.Code(rawValue: (error as NSError).code) else { return .unknown }
         switch code {
@@ -103,9 +103,9 @@ private struct MedicineDTO: Codable {
     var stock: Int
     var aisle: String
 
-    /// `id` is intentionally left `nil` here — `@DocumentID` is only ever meant to be populated by
-    /// Firestore on read. Setting it manually before a write (even to an existing medicine's own
-    /// id) triggers a Firestore SDK warning, since the document's id is never actually a field.
+    /// `id` is intentionally left `nil` here — `@DocumentID` is only ever meant to be populated by Firestore on read.
+    /// Setting it manually before a write (even to an existing medicine's own id) triggers a Firestore SDK warning.
+    /// Since the document's id is never actually a field.
     init(medicine: Medicine) {
         self.name = medicine.name
         self.stock = medicine.stock

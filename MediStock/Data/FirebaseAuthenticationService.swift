@@ -14,8 +14,8 @@ final class FirebaseAuthenticationService: AuthenticationServicing {
         Auth.auth().currentUser.map { AppUser(uid: $0.uid, email: $0.email) }
     }
 
-    /// - Returns: A stream that yields the current session on subscription and again every time
-    ///   Firebase Auth's sign-in state changes, `nil` when signed out.
+    /// - Returns: A stream that yields the current session on subscription and again every time Firebase
+    ///   Auth's sign-in state changes, `nil` when signed out.
     func observeSession() -> AsyncStream<AppUser?> {
         AsyncStream { continuation in
             let handle = Auth.auth().addStateDidChangeListener { _, user in
@@ -63,12 +63,13 @@ final class FirebaseAuthenticationService: AuthenticationServicing {
         }
     }
 
-    /// Permanently deletes the currently signed-in Firebase user. A no-op if there is no signed-in
-    /// user (shouldn't normally happen — this is only reachable while a session exists).
-    /// - Throws: `AuthenticationError.requiresRecentLogin` if the session is too old — Firebase
-    ///   requires a fresh sign-in before allowing account deletion, as a safety measure against a
-    ///   stale/stolen session deleting the account. Otherwise `AuthenticationError`, mapped from
-    ///   whatever Firebase reports.
+    /// Permanently deletes the currently signed-in Firebase user.
+    /// A no-op if there is no signed-in user.
+    /// Shouldn't normally happen here — this is only reachable while a session exists.
+    /// - Throws: `AuthenticationError.requiresRecentLogin` if the session is too old.
+    ///   Firebase requires a fresh sign-in before allowing account deletion.
+    ///   This is a safety measure against a stale/stolen session deleting the account.
+    ///   Otherwise `AuthenticationError`, mapped from whatever Firebase reports.
     func deleteAccount() async throws {
         do {
             try await Auth.auth().currentUser?.delete()
@@ -77,11 +78,11 @@ final class FirebaseAuthenticationService: AuthenticationServicing {
         }
     }
 
-    /// Maps a raw error from the Firebase Auth SDK to a Domain-level `AuthenticationError`, so
-    /// callers never see a Firebase type.
+    /// Maps a raw error from the Firebase Auth SDK to a Domain-level `AuthenticationError`.
+    /// So callers never see a Firebase type.
     /// - Parameter error: The error thrown by a Firebase Auth SDK call.
-    /// - Returns: The corresponding `AuthenticationError`, or `.unknown` if it isn't one of the
-    ///   specific cases this app handles.
+    /// - Returns: The corresponding `AuthenticationError`.
+    ///   Or `.unknown` if it isn't one of the specific cases this app handles.
     private static func mapError(_ error: Error) -> AuthenticationError {
         guard let code = AuthErrorCode.Code(rawValue: (error as NSError).code) else { return .unknown }
         switch code {

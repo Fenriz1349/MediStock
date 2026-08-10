@@ -7,10 +7,11 @@
 
 import Foundation
 
-/// Presentation-layer state for the full-catalog screen. Sorting happens server-side (re-queries
-/// Firestore whenever `sortOption` changes); name search stays local, applied on top of the
-/// already-loaded, already-sorted list — Firestore has no "contains" query, and re-querying on
-/// every keystroke would waste reads for no benefit since the data is already in memory.
+/// Presentation-layer state for the full-catalog screen.
+/// Sorting happens server-side (re-queries Firestore whenever `sortOption` changes).
+/// Name search stays local, applied on top of the already-loaded, already-sorted list.
+/// Firestore has no "contains" query.
+/// Re-querying on every keystroke would also waste reads for no benefit, since the data is already loaded.
 @MainActor
 final class AllMedicinesViewModel: ObservableObject {
     @Published private(set) var medicines: [Medicine] = []
@@ -26,8 +27,8 @@ final class AllMedicinesViewModel: ObservableObject {
         self.medicineStore = medicineStore
     }
 
-    /// Starts observing the medicine catalog, sorted per the current `sortOption`. Call once when
-    /// the screen appears; automatically re-called whenever `sortOption` changes.
+    /// Starts observing the medicine catalog, sorted per the current `sortOption`.
+    /// Call once when the screen appears; automatically re-called whenever `sortOption` changes.
     func listen() {
         observationTask?.cancel()
         observationTask = Task { [weak self] in
@@ -38,11 +39,12 @@ final class AllMedicinesViewModel: ObservableObject {
         }
     }
 
-    /// Medicines whose name contains `filterText`, applied locally over the current (already
-    /// server-sorted) list — kept local specifically so it can match anywhere in the name, not
-    /// just a prefix (a Firestore-side query could only do "starts with").
-    /// - Parameter filterText: Case-insensitive substring to match against each medicine's name;
-    ///   an empty string matches everything.
+    /// Medicines whose name contains `filterText`.
+    /// Applied locally over the current (already server-sorted) list.
+    /// Kept local specifically so it can match anywhere in the name, not just a prefix.
+    /// A Firestore-side query could only do "starts with".
+    /// - Parameter filterText: Case-insensitive substring to match against each medicine's name.
+    ///   An empty string matches everything.
     /// - Returns: The filtered medicines, in their current server-sorted order.
     func medicines(matching filterText: String) -> [Medicine] {
         guard !filterText.isEmpty else { return medicines }

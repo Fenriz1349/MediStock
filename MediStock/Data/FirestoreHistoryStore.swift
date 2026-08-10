@@ -10,14 +10,14 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 /// Firestore-backed implementation of `HistoryStoring`, mapping documents to/from `HistoryEntry`.
-/// Resolves the acting user itself (via `AuthenticationServicing`) and builds each entry's wording,
-/// so callers only ever say *what* happened, never *who* did it or how to phrase it.
+/// Resolves the acting user itself (via `AuthenticationServicing`) and builds each entry's wording.
+/// So callers only ever say *what* happened, never *who* did it or how to phrase it.
 final class FirestoreHistoryStore: HistoryStoring {
     private let collection = Firestore.firestore().collection("history")
     private let authenticationService: AuthenticationServicing
 
-    /// - Parameter authenticationService: Domain-level auth abstraction, used only to read the
-    ///   currently signed-in user to attribute each entry to.
+    /// - Parameter authenticationService: Domain-level auth abstraction.
+    ///   Used only to read the currently signed-in user to attribute each entry to.
     init(authenticationService: AuthenticationServicing) {
         self.authenticationService = authenticationService
     }
@@ -36,9 +36,9 @@ final class FirestoreHistoryStore: HistoryStoring {
                         do {
                             return try document.data(as: HistoryEntryDTO.self).toDomain()
                         } catch {
-                            // A decode failure used to disappear silently here (try?), which is
-                            // exactly how a malformed document could make an entry vanish from the
-                            // list with zero trace of why.
+                            // A decode failure used to disappear silently here (try?).
+                            // That's exactly how a malformed document could make an entry vanish from the list.
+                            // With zero trace of why.
                             print("Error decoding history entry \(document.documentID): \(error)")
                             return nil
                         }
@@ -105,11 +105,11 @@ final class FirestoreHistoryStore: HistoryStoring {
         }
     }
 
-    /// Maps a raw error from the Firestore SDK to a Domain-level `MedicineError`, so callers never
-    /// see a Firestore type.
+    /// Maps a raw error from the Firestore SDK to a Domain-level `MedicineError`, so callers never see a
+    /// Firestore type.
     /// - Parameter error: The error thrown by a Firestore SDK call.
-    /// - Returns: The corresponding `MedicineError`, or `.unknown` if it isn't one of the specific
-    ///   cases this app handles.
+    /// - Returns: The corresponding `MedicineError`.
+    ///   Or `.unknown` if it isn't one of the specific cases this app handles.
     private static func mapError(_ error: Error) -> MedicineError {
         guard let code = FirestoreErrorCode.Code(rawValue: (error as NSError).code) else { return .unknown }
         switch code {

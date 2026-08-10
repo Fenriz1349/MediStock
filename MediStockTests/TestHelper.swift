@@ -8,8 +8,8 @@
 import Foundation
 @testable import MediStock
 
-/// Factory helpers for building test fixtures. Pure functions only, no shared mutable state,
-/// so tests stay independent and safe to run in any order.
+/// Factory helpers for building test fixtures. Pure functions only, no shared mutable state.
+/// So tests stay independent and safe to run in any order.
 enum TestHelper {
     static func makeAppUser(
         uid: String = "user-1",
@@ -38,9 +38,10 @@ enum TestHelper {
         HistoryEntry(id: id, medicineId: medicineId, user: user, action: action, details: details, timestamp: timestamp)
     }
 
-    /// Polls `condition` until it's true or `timeout` elapses. Use instead of a fixed `Task.sleep`
-    /// to await an async side effect (e.g. an `AsyncStream` emission reaching a `@Published` property)
-    /// without guessing a delay that may be too short under load.
+    /// Polls `condition` until it's true or `timeout` elapses.
+    /// Use instead of a fixed `Task.sleep` to await an async side effect.
+    /// E.g. an `AsyncStream` emission reaching a `@Published` property.
+    /// Avoids guessing a delay that may be too short under load.
     static func waitUntil(timeout: TimeInterval = 1, _ condition: () -> Bool) async {
         let deadline = Date().addingTimeInterval(timeout)
         while !condition() && Date() < deadline {
@@ -48,8 +49,8 @@ enum TestHelper {
         }
     }
 
-    /// Builds an `AuthenticationViewModel` wired to fresh mocks by default, so tests only need to
-    /// pass what they actually care about configuring/inspecting.
+    /// Builds an `AuthenticationViewModel` wired to fresh mocks by default.
+    /// So tests only need to pass what they actually care about configuring/inspecting.
     @MainActor
     static func makeAuthenticationViewModel(
         authenticationService: AuthenticationServicing = MockAuthenticationServicing()

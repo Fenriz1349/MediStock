@@ -7,23 +7,23 @@
 
 import Foundation
 
-/// Presentation-layer write access to the medicine catalog (add/delete), shared app-wide. Reading
-/// the catalog is each screen's own concern now (`AllMedicinesViewModel`, `AisleListViewModel`,
-/// `AisleMedicinesViewModel`), each with its own server-side query — this ViewModel only covers
-/// what's genuinely identical regardless of which screen triggers it.
+/// Presentation-layer write access to the medicine catalog (add/delete), shared app-wide.
+/// Reading the catalog is each screen's own concern now (`AllMedicinesViewModel`, `AisleListViewModel`,
+/// `AisleMedicinesViewModel`), each with its own server-side query.
+/// This ViewModel only covers what's genuinely identical regardless of which screen triggers it.
 @MainActor
 final class CatalogViewModel: ObservableObject {
-    /// Reset to `nil` at the start of every action, then set again on failure — the View observes
-    /// this to trigger a toast, resolving the localized message itself (this ViewModel never
-    /// touches the display language).
+    /// Reset to `nil` at the start of every action, then set again on failure.
+    /// The View observes this to trigger a toast, resolving the localized message itself.
+    /// This ViewModel never touches the display language.
     @Published private(set) var error: MedicineError?
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
 
     /// - Parameters:
-    ///   - medicineStore: Domain-level abstraction over medicine persistence, kept behind a
-    ///     protocol so this ViewModel never depends on Firebase directly.
+    ///   - medicineStore: Domain-level abstraction over medicine persistence, kept behind a protocol.
+    ///     This ViewModel never depends on Firebase directly.
     ///   - historyStore: Domain-level abstraction over history persistence.
     init(medicineStore: MedicineStoring, historyStore: HistoryStoring) {
         self.medicineStore = medicineStore

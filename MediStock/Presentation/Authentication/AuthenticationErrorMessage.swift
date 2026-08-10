@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// Localized text for each `AuthenticationError` case, kept out of the Domain/ViewModel layers
-/// since it touches the display language.
+/// Localized text for each `AuthenticationError` case.
+/// Kept out of the Domain/ViewModel layers since it touches the display language.
 extension AuthenticationError {
     var localizedMessage: String {
         switch self {

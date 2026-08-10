@@ -7,9 +7,9 @@
 
 import Foundation
 
-/// Presentation-layer state for the medicines-in-one-aisle screen. Read-only — writes (add/delete)
-/// stay on the shared `CatalogViewModel`, which the View still uses for that. Instantiated per
-/// screen (scoped to one aisle), unlike the app-wide shared ViewModels.
+/// Presentation-layer state for the medicines-in-one-aisle screen.
+/// Read-only — writes (add/delete) stay on the shared `CatalogViewModel`, which the View still uses for that.
+/// Instantiated per screen (scoped to one aisle), unlike the app-wide shared ViewModels.
 @MainActor
 final class AisleMedicinesViewModel: ObservableObject {
     @Published private(set) var medicines: [Medicine] = []
