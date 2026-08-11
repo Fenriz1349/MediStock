@@ -114,8 +114,8 @@ struct MedicineDetailView: View {
 
 struct MedicineDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        let sampleMedicine = Medicine(name: "Sample", stock: 10, aisle: "Aisle 1")
-        MedicineDetailView(viewModel: DIContainer().makeMedicineDetailViewModel(medicine: sampleMedicine))
+        let viewModel = PreviewHelper.container.makeMedicineDetailViewModel(medicine: PreviewHelper.sampleMedicine)
+        MedicineDetailView(viewModel: viewModel)
             .environmentObject(ToastyManager())
     }
 }

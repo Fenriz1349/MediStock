@@ -81,8 +81,7 @@ struct AuthenticationView: View {
 struct AuthenticationView_Previews: PreviewProvider {
     static var previews: some View {
         AuthenticationView()
-            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService(),
-                                                        networkMonitor: NetworkMonitor()))
+            .environmentObject(PreviewHelper.container.makeAuthenticationViewModel())
             .environmentObject(ToastyManager())
     }
 }

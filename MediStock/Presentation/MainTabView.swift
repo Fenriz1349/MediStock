@@ -6,17 +6,20 @@
 //
 
 import SwiftUI
+import Toasty
 
 struct MainTabView: View {
+    @Environment(\.diContainer) private var container
+
     var body: some View {
         TabView {
-            AisleListView()
+            AisleListView(viewModel: container.makeAisleListViewModel())
                 .tabItem {
                     Image(systemName: "list.dash")
                     Text("tab.aisles.title")
                 }
 
-            AllMedicinesView()
+            AllMedicinesView(viewModel: container.makeAllMedicinesViewModel())
                 .tabItem {
                     Image(systemName: "square.grid.2x2")
                     Text("tab.allMedicines.title")
@@ -34,5 +37,9 @@ struct MainTabView: View {
 struct MainTabView_Previews: PreviewProvider {
     static var previews: some View {
         MainTabView()
+            .environmentObject(PreviewHelper.container.makeAuthenticationViewModel())
+            .environmentObject(PreviewHelper.container.makeCatalogViewModel())
+            .environmentObject(ToastyManager())
+            .environment(\.diContainer, PreviewHelper.container)
     }
 }

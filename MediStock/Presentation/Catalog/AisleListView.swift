@@ -9,7 +9,7 @@ import SwiftUI
 import Toasty
 
 struct AisleListView: View {
-    @StateObject private var viewModel = DIContainer().makeAisleListViewModel()
+    @StateObject var viewModel: AisleListViewModel
     @Environment(\.diContainer) private var container
     @State private var isPresentingAddMedicine = false
 
@@ -69,11 +69,9 @@ struct AisleListView: View {
 
 struct AisleListView_Previews: PreviewProvider {
     static var previews: some View {
-        let medicineStore = FirestoreMedicineStore()
-        AisleListView()
-            .environmentObject(CatalogViewModel(medicineStore: medicineStore,
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
-                                                networkMonitor: NetworkMonitor()))
+        AisleListView(viewModel: PreviewHelper.container.makeAisleListViewModel())
+            .environmentObject(PreviewHelper.container.makeCatalogViewModel())
             .environmentObject(ToastyManager())
+            .environment(\.diContainer, PreviewHelper.container)
     }
 }

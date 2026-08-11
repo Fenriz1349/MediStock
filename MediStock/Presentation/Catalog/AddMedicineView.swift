@@ -72,5 +72,5 @@ struct AddMedicineView: View {
 }
 
 #Preview {
-    AddMedicineView(viewModel: DIContainer().makeAddMedicineViewModel())
+    AddMedicineView(viewModel: PreviewHelper.container.makeAddMedicineViewModel())
 }

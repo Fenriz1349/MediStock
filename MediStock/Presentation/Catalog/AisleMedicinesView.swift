@@ -41,9 +41,8 @@ struct AisleMedicinesView: View {
 
 struct AisleMedicinesView_Previews: PreviewProvider {
     static var previews: some View {
-        AisleMedicinesView(viewModel: DIContainer().makeAisleMedicinesViewModel(aisle: "Aisle 1"))
-            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
-                                                networkMonitor: NetworkMonitor()))
+        let aisle = PreviewHelper.sampleMedicine.aisle
+        AisleMedicinesView(viewModel: PreviewHelper.container.makeAisleMedicinesViewModel(aisle: aisle))
+            .environmentObject(PreviewHelper.container.makeCatalogViewModel())
     }
 }
