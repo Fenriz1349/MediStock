@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.15.0](https://github.com/Fenriz1349/MediStock/compare/v1.14.0...v1.15.0) (2026-08-11)
+
+
+### Features
+
+* add AddMedicineViewModel, Implement CustomTextFields in MedicineFormContent and AddMedicineView ([022e616](https://github.com/Fenriz1349/MediStock/commit/022e61675c2c249efd2b1bdae19406076780e682))
+* add EmailPolicy and CustomTextfield package ([541462a](https://github.com/Fenriz1349/MediStock/commit/541462a7d4f8ddfd79ba15eee47c1b685e0910ac))
+* add KeyboardToolBar to display close and validate buttons on every keyboard ([31b0db3](https://github.com/Fenriz1349/MediStock/commit/31b0db3d67d40434b321402b4f50cb52e026f203))
+* add MedicinePolicy and MedicinePolicyTests ([5aead23](https://github.com/Fenriz1349/MediStock/commit/5aead23ce87ecccffb4aa49ceaa3249e57ee18ec))
+* implement CustomTextFields and EmailPolicy in AuthenticationView ([b5a9350](https://github.com/Fenriz1349/MediStock/commit/b5a935060a04da735c61f02d692dca260dde7cc0))
+* Rework MedicineDetailView with update button, rework MedicineFormContent to receive argument instead of viewmodel ([65e2091](https://github.com/Fenriz1349/MediStock/commit/65e209151de898a8748c5f37ce24225e15f6b3ce))
+
+
+### Bug Fixes
+
+* fix NetworkMonitor ([001b491](https://github.com/Fenriz1349/MediStock/commit/001b491e0ade06cf4e074419dce3a980436a21d3))
+* fix validation rules in AddMedicineViewModel ([f25e41e](https://github.com/Fenriz1349/MediStock/commit/f25e41e04cdd5cd049fa4db7c866d92be58edbf6))
+
 ## [1.14.0](https://github.com/Fenriz1349/MediStock/compare/v1.13.0...v1.14.0) (2026-08-10)
 
 
