@@ -87,8 +87,7 @@ struct AllMedicinesView: View {
                     Image(systemName: "plus")
                 }))
                 .sheet(isPresented: $isPresentingAddMedicine) {
-                    AddMedicineView()
-                        .environmentObject(catalogViewModel)
+                    AddMedicineView(viewModel: container.makeAddMedicineViewModel())
                 }
                 .onAppear {
                     viewModel.listen()

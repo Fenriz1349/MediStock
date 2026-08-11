@@ -9,7 +9,6 @@ import SwiftUI
 import Toasty
 
 struct AisleListView: View {
-    @EnvironmentObject var catalogViewModel: CatalogViewModel
     @StateObject private var viewModel = DIContainer().makeAisleListViewModel()
     @Environment(\.diContainer) private var container
     @State private var isPresentingAddMedicine = false
@@ -53,8 +52,7 @@ struct AisleListView: View {
                 Image(systemName: "plus")
             }))
             .sheet(isPresented: $isPresentingAddMedicine) {
-                AddMedicineView()
-                    .environmentObject(catalogViewModel)
+                AddMedicineView(viewModel: container.makeAddMedicineViewModel())
             }
             .navigationDestination(for: String.self) { aisle in
                 AisleMedicinesView(viewModel: container.makeAisleMedicinesViewModel(aisle: aisle))

@@ -528,6 +528,23 @@
         }
       }
     },
+    "medicineDetail.aisle.invalidFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter an aisle code."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez un code de rayon."
+          }
+        }
+      }
+    },
     "medicineDetail.aisle.label" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -613,6 +630,40 @@
         }
       }
     },
+    "medicineDetail.name.capitalizationHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The name will be capitalized automatically"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le nom sera automatiquement mis en majuscule"
+          }
+        }
+      }
+    },
+    "medicineDetail.name.invalidFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter at least 2 characters."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez au moins 2 caractères."
+          }
+        }
+      }
+    },
     "medicineDetail.name.label" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -643,6 +694,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Détails du médicament"
+          }
+        }
+      }
+    },
+    "medicineDetail.stock.invalidFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a stock of 0 or more."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisissez un stock de 0 ou plus."
           }
         }
       }
