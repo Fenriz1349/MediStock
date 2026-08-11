@@ -6,54 +6,71 @@
 //
 
 import SwiftUI
+import CustomTextFields
 
 /// Screen to create a new medicine, reached from the Catalog screens' "+" button.
 struct AddMedicineView: View {
-    @EnvironmentObject var catalogViewModel: CatalogViewModel
+    @StateObject var viewModel: AddMedicineViewModel
     @Environment(\.dismiss) private var dismiss
-
-    @State private var name = ""
-    @State private var aisle = ""
-    @State private var stockText = ""
 
     var body: some View {
         NavigationView {
             Form {
-                MedicineFormContent(name: $name, aisle: $aisle)
+                MedicineFormContent(name: $viewModel.name,
+                                     aisle: $viewModel.aisle,
+                                     nameState: $viewModel.nameState,
+                                     aisleState: $viewModel.aisleState)
 
                 VStack(alignment: .leading) {
                     Text("medicineDetail.stock.label")
                         .font(.headline)
-                    TextField("medicineDetail.stock.label", text: $stockText)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .keyboardType(.numberPad)
+                    CustomTextField.triggered(
+                        placeholder: String(localized: "medicineDetail.stock.label"),
+                        text: $viewModel.stockText,
+                        type: .number,
+                        validator: MedicinePolicy.isValidStock,
+                        errorMessage: String(localized: "medicineDetail.stock.invalidFormat"),
+                        validationState: $viewModel.stockState
+                    )
                 }
                 .padding(.horizontal)
             }
             .navigationBarTitle("addMedicine.navigationTitle", displayMode: .inline)
-            .navigationBarItems(
-                leading: Button("addMedicine.cancelButton") { dismiss() },
-                trailing: Button("addMedicine.saveButton") {
-                    let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: aisle)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("addMedicine.cancelButton") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("addMedicine.saveButton") {
+                        let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle)
+                        Task {
+                            await viewModel.save(cleanedAisle: cleanedAisle)
+                            if viewModel.error == nil {
+                                dismiss()
+                            }
+                        }
+                    }
+                    .disabled(!viewModel.isFormValid)
+                }
+                KeyboardToolBar(isValidateEnabled: viewModel.isFormValid) {
+                    let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle)
                     Task {
-                        await catalogViewModel.addMedicine(
-                            name: name,
-                            stock: Int(stockText) ?? 0,
-                            aisle: cleanedAisle
-                        )
-                        if catalogViewModel.error == nil {
+                        await viewModel.save(cleanedAisle: cleanedAisle)
+                        if viewModel.error == nil {
                             dismiss()
                         }
                     }
                 }
-            )
+            }
+        }
+        .overlay {
+            if viewModel.isLoading {
+                LoadingOverlay()
+            }
         }
     }
 }
 
 #Preview {
-    AddMedicineView()
-        .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                            historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
-                                            networkMonitor: NetworkMonitor()))
+    AddMedicineView(viewModel: DIContainer().makeAddMedicineViewModel())
 }

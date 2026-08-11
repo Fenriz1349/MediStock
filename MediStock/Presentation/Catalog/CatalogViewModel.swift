@@ -7,9 +7,10 @@
 
 import Foundation
 
-/// Presentation-layer write access to the medicine catalog (add/delete), shared app-wide.
+/// Presentation-layer write access to the medicine catalog (delete only, shared app-wide).
 /// Reading the catalog is each screen's own concern now (`AllMedicinesViewModel`, `AisleListViewModel`,
 /// `AisleMedicinesViewModel`), each with its own server-side query.
+/// Creating a medicine is `AddMedicineViewModel`'s own concern, not shared across screens the way delete is.
 /// This ViewModel only covers what's genuinely identical regardless of which screen triggers it.
 @MainActor
 final class CatalogViewModel: ObservableObject {
@@ -33,27 +34,6 @@ final class CatalogViewModel: ObservableObject {
         self.medicineStore = medicineStore
         self.historyStore = historyStore
         self.networkMonitor = networkMonitor
-    }
-
-    /// Creates a new medicine and records its addition in the history.
-    /// - Parameters:
-    ///   - name: The medicine's display name.
-    ///   - stock: The initial quantity in stock.
-    ///   - aisle: The aisle code, already cleaned of any redundant localized label by the caller.
-    func addMedicine(name: String, stock: Int, aisle: String) async {
-        error = nil
-        isLoading = true
-        defer { isLoading = false }
-        let medicine = Medicine(name: MedicineNameFormat.capitalized(name), stock: stock, aisle: aisle)
-        do {
-            try await verifyNetworkReachable()
-            let saved = try await medicineStore.save(medicine)
-            try await historyStore.recordAddition(of: saved)
-        } catch let medicineError as MedicineError {
-            error = medicineError
-        } catch {
-            self.error = .unknown
-        }
     }
 
     /// Removes a medicine from the catalog and records the deletion in the history.
