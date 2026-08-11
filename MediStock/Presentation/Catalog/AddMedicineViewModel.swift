@@ -12,8 +12,13 @@ import CustomTextFields
 /// Owns its own write, unlike `CatalogViewModel`.
 /// That one only covers what's genuinely shared across multiple simultaneously-mounted screens.
 /// Creating a medicine is this screen's own concern.
-/// `nameState`/`aisleState`/`stockState` are written directly by `CustomTextField` as the user types.
-/// `isFormValid` just reads what they settled on, the actual rules live in `MedicinePolicy`.
+/// `nameState`/`aisleState`/`stockState` are written directly by `CustomTextField`.
+/// They only drive that field's own border/error display.
+/// `isFormValid` does not read them.
+/// `CustomTextField`'s "triggered" mode only updates a field's state on losing focus.
+/// That never happens for the last field in the form if there's no way to dismiss the keyboard.
+/// So `isFormValid` re-checks `MedicinePolicy` directly on the raw text instead.
+/// That way the button reflects real validity regardless of which field currently has focus.
 @MainActor
 final class AddMedicineViewModel: ObservableObject {
     @Published var name = ""
@@ -30,7 +35,7 @@ final class AddMedicineViewModel: ObservableObject {
     @Published private(set) var isLoading = false
 
     var isFormValid: Bool {
-        nameState == .valid && aisleState == .valid && stockState == .valid
+        MedicinePolicy.isValidName(name) && MedicinePolicy.isValidAisle(aisle) && MedicinePolicy.isValidStock(stockText)
     }
 
     private let medicineStore: MedicineStoring
