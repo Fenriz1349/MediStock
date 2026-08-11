@@ -37,6 +37,7 @@
 		6836B20B3024922E003E756D /* AisleCodeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6836B20A3024922E003E756D /* AisleCodeTest.swift */; };
 		68418A0D302AE6A100A5439D /* CustomTextFields in Frameworks */ = {isa = PBXBuildFile; productRef = 68418A0C302AE6A100A5439D /* CustomTextFields */; };
 		68418A0F302AE80E00A5439D /* EmailPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A0E302AE80E00A5439D /* EmailPolicy.swift */; };
+		68418A11302AE98D00A5439D /* EmailPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A10302AE98D00A5439D /* EmailPolicyTests.swift */; };
 		68574366302A51B200839E49 /* NetworkMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574365302A51B200839E49 /* NetworkMonitoring.swift */; };
 		68574368302A51C500839E49 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574367302A51C500839E49 /* NetworkMonitor.swift */; };
 		6857436A302A52A900839E49 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574369302A52A900839E49 /* NetworkError.swift */; };
@@ -127,6 +128,7 @@
 		6836B20730248295003E756D /* AisleCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleCode.swift; sourceTree = "<group>"; };
 		6836B20A3024922E003E756D /* AisleCodeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleCodeTest.swift; sourceTree = "<group>"; };
 		68418A0E302AE80E00A5439D /* EmailPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailPolicy.swift; sourceTree = "<group>"; };
+		68418A10302AE98D00A5439D /* EmailPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailPolicyTests.swift; sourceTree = "<group>"; };
 		6852BE9030235A580078D739 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
 		68574365302A51B200839E49 /* NetworkMonitoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitoring.swift; sourceTree = "<group>"; };
 		68574367302A51C500839E49 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
@@ -312,6 +314,7 @@
 			children = (
 				6836B20A3024922E003E756D /* AisleCodeTest.swift */,
 				686916853025FB0200E86CFE /* PasswordPolicyTests.swift */,
+				68418A10302AE98D00A5439D /* EmailPolicyTests.swift */,
 				68951E4E3029F74100E2767B /* MedicineNameFormatTests.swift */,
 			);
 			path = BusinessRules;
@@ -664,6 +667,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68418A11302AE98D00A5439D /* EmailPolicyTests.swift in Sources */,
 				68951E4B3029D3D700E2767B /* AllMedicinesViewModelTests.swift in Sources */,
 				682D9FF33021EEAC00DBC11E /* MedicineDetailViewModelTest.swift in Sources */,
 				68951E473029D28E00E2767B /* AisleListViewModelTests.swift in Sources */,
