@@ -35,6 +35,8 @@
 		682D9FF930220D4C00DBC11E /* MedistockUI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */; };
 		6836B20830248295003E756D /* AisleCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6836B20730248295003E756D /* AisleCode.swift */; };
 		6836B20B3024922E003E756D /* AisleCodeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6836B20A3024922E003E756D /* AisleCodeTest.swift */; };
+		68418A0D302AE6A100A5439D /* CustomTextFields in Frameworks */ = {isa = PBXBuildFile; productRef = 68418A0C302AE6A100A5439D /* CustomTextFields */; };
+		68418A0F302AE80E00A5439D /* EmailPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A0E302AE80E00A5439D /* EmailPolicy.swift */; };
 		68574366302A51B200839E49 /* NetworkMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574365302A51B200839E49 /* NetworkMonitoring.swift */; };
 		68574368302A51C500839E49 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574367302A51C500839E49 /* NetworkMonitor.swift */; };
 		6857436A302A52A900839E49 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574369302A52A900839E49 /* NetworkError.swift */; };
@@ -124,6 +126,7 @@
 		682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = MedistockUI.xctestplan; path = MediStockUITests/MedistockUI.xctestplan; sourceTree = "<group>"; };
 		6836B20730248295003E756D /* AisleCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleCode.swift; sourceTree = "<group>"; };
 		6836B20A3024922E003E756D /* AisleCodeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleCodeTest.swift; sourceTree = "<group>"; };
+		68418A0E302AE80E00A5439D /* EmailPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailPolicy.swift; sourceTree = "<group>"; };
 		6852BE9030235A580078D739 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
 		68574365302A51B200839E49 /* NetworkMonitoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitoring.swift; sourceTree = "<group>"; };
 		68574367302A51C500839E49 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
@@ -173,6 +176,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68418A0D302AE6A100A5439D /* CustomTextFields in Frameworks */,
 				53E0D8D62C06092E00DE1134 /* FirebaseFirestoreSwift in Frameworks */,
 				53E0D8D22C06092E00DE1134 /* FirebaseFirestore in Frameworks */,
 				6869167D3025F0AC00E86CFE /* Toasty in Frameworks */,
@@ -297,6 +301,7 @@
 				682D9FF4302204A600DBC11E /* SortOption.swift */,
 				6836B20730248295003E756D /* AisleCode.swift */,
 				686916813025F70600E86CFE /* PasswordPolicy.swift */,
+				68418A0E302AE80E00A5439D /* EmailPolicy.swift */,
 				68951E4C3029F72E00E2767B /* MedicineNameFormat.swift */,
 			);
 			path = BusinessRules;
@@ -476,6 +481,7 @@
 				53E0D8D12C06092E00DE1134 /* FirebaseFirestore */,
 				53E0D8D52C06092E00DE1134 /* FirebaseFirestoreSwift */,
 				6869167C3025F0AC00E86CFE /* Toasty */,
+				68418A0C302AE6A100A5439D /* CustomTextFields */,
 			);
 			productName = MediStock;
 			productReference = 53E0D8932C06084700DE1134 /* MediStock.app */;
@@ -553,6 +559,7 @@
 			packageReferences = (
 				53E0D8C02C06092E00DE1134 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				6869167B3025F0AC00E86CFE /* XCRemoteSwiftPackageReference "Toasty" */,
+				68418A0B302AE6A100A5439D /* XCRemoteSwiftPackageReference "CustomTextFields" */,
 			);
 			productRefGroup = 53E0D8942C06084700DE1134 /* Products */;
 			projectDirPath = "";
@@ -640,6 +647,7 @@
 				6857436A302A52A900839E49 /* NetworkError.swift in Sources */,
 				53E0D8972C06084700DE1134 /* MediStockApp.swift in Sources */,
 				68951E493029D3CA00E2767B /* AllMedicinesViewModel.swift in Sources */,
+				68418A0F302AE80E00A5439D /* EmailPolicy.swift in Sources */,
 				53E0D8E82C066F6500DE1134 /* MedicineDetailView.swift in Sources */,
 				68574371302A62ED00839E49 /* OfflineView.swift in Sources */,
 				686916843025FA5100E86CFE /* PasswordRequirementLabel.swift in Sources */,
@@ -999,6 +1007,14 @@
 				minimumVersion = 10.26.0;
 			};
 		};
+		68418A0B302AE6A100A5439D /* XCRemoteSwiftPackageReference "CustomTextFields" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Fenriz1349/CustomTextFields";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		6869167B3025F0AC00E86CFE /* XCRemoteSwiftPackageReference "Toasty" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Fenriz1349/Toasty";
@@ -1024,6 +1040,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 53E0D8C02C06092E00DE1134 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		68418A0C302AE6A100A5439D /* CustomTextFields */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 68418A0B302AE6A100A5439D /* XCRemoteSwiftPackageReference "CustomTextFields" */;
+			productName = CustomTextFields;
 		};
 		6869167C3025F0AC00E86CFE /* Toasty */ = {
 			isa = XCSwiftPackageProductDependency;
