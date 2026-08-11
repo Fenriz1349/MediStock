@@ -36,9 +36,23 @@ struct AddMedicineView: View {
                 .padding(.horizontal)
             }
             .navigationBarTitle("addMedicine.navigationTitle", displayMode: .inline)
-            .navigationBarItems(
-                leading: Button("addMedicine.cancelButton") { dismiss() },
-                trailing: Button("addMedicine.saveButton") {
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("addMedicine.cancelButton") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("addMedicine.saveButton") {
+                        let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle)
+                        Task {
+                            await viewModel.save(cleanedAisle: cleanedAisle)
+                            if viewModel.error == nil {
+                                dismiss()
+                            }
+                        }
+                    }
+                    .disabled(!viewModel.isFormValid)
+                }
+                KeyboardToolBar(isValidateEnabled: viewModel.isFormValid) {
                     let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle)
                     Task {
                         await viewModel.save(cleanedAisle: cleanedAisle)
@@ -47,8 +61,7 @@ struct AddMedicineView: View {
                         }
                     }
                 }
-                .disabled(!viewModel.isFormValid)
-            )
+            }
         }
         .overlay {
             if viewModel.isLoading {

@@ -71,6 +71,15 @@ struct MedicineDetailView: View {
                     }
                     .disabled(!viewModel.isFormValid)
                 }
+                KeyboardToolBar(isValidateEnabled: viewModel.isFormValid) {
+                    Task {
+                        let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle)
+                        await viewModel.updateLabel(name: viewModel.name, aisle: cleanedAisle)
+                        if viewModel.error == nil {
+                            isEditing = false
+                        }
+                    }
+                }
             } else {
                 ToolbarItem(placement: .primaryAction) {
                     Button("medicineDetail.editButton") {

@@ -65,6 +65,11 @@ struct AuthenticationView: View {
             .disabled(!unmetPasswordRequirements.isEmpty || emailState != .valid)
         }
         .padding()
+        .toolbar {
+            KeyboardToolBar(isValidateEnabled: true) {
+                Task { await viewModel.signIn(email: email, password: password) }
+            }
+        }
         .onChange(of: viewModel.error) { _, error in
             if let error {
                 toasty.showError(error.localizedMessage)
