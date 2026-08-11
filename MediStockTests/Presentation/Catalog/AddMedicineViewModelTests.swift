@@ -6,7 +6,6 @@
 //
 
 import XCTest
-import CustomTextFields
 @testable import MediStock
 
 final class AddMedicineViewModelTests: XCTestCase {
@@ -108,9 +107,9 @@ final class AddMedicineViewModelTests: XCTestCase {
     @MainActor
     func testIsFormValid_allFieldsValid_returnsTrue() {
         let viewModel = TestHelper.makeAddMedicineViewModel()
-        viewModel.nameState = .valid
-        viewModel.aisleState = .valid
-        viewModel.stockState = .valid
+        viewModel.name = "Doliprane"
+        viewModel.aisle = "AD56"
+        viewModel.stockText = "10"
 
         XCTAssertTrue(viewModel.isFormValid)
     }
@@ -118,9 +117,9 @@ final class AddMedicineViewModelTests: XCTestCase {
     @MainActor
     func testIsFormValid_oneFieldInvalid_returnsFalse() {
         let viewModel = TestHelper.makeAddMedicineViewModel()
-        viewModel.nameState = .valid
-        viewModel.aisleState = .invalid
-        viewModel.stockState = .valid
+        viewModel.name = "Doliprane"
+        viewModel.aisle = ""
+        viewModel.stockText = "10"
 
         XCTAssertFalse(viewModel.isFormValid)
     }
