@@ -43,6 +43,7 @@
 		68418A17302AF0EE00A5439D /* AddMedicineViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A16302AF0EE00A5439D /* AddMedicineViewModel.swift */; };
 		68418A19302AF17300A5439D /* AddMedicineViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A18302AF17300A5439D /* AddMedicineViewModelTests.swift */; };
 		68418A1B302B3A4200A5439D /* KeyboardToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A1A302B3A4200A5439D /* KeyboardToolBar.swift */; };
+		68418A1D302B418000A5439D /* PreviewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A1C302B418000A5439D /* PreviewHelper.swift */; };
 		68574366302A51B200839E49 /* NetworkMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574365302A51B200839E49 /* NetworkMonitoring.swift */; };
 		68574368302A51C500839E49 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574367302A51C500839E49 /* NetworkMonitor.swift */; };
 		6857436A302A52A900839E49 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574369302A52A900839E49 /* NetworkError.swift */; };
@@ -139,6 +140,7 @@
 		68418A16302AF0EE00A5439D /* AddMedicineViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineViewModel.swift; sourceTree = "<group>"; };
 		68418A18302AF17300A5439D /* AddMedicineViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineViewModelTests.swift; sourceTree = "<group>"; };
 		68418A1A302B3A4200A5439D /* KeyboardToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardToolBar.swift; sourceTree = "<group>"; };
+		68418A1C302B418000A5439D /* PreviewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewHelper.swift; sourceTree = "<group>"; };
 		6852BE9030235A580078D739 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
 		68574365302A51B200839E49 /* NetworkMonitoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitoring.swift; sourceTree = "<group>"; };
 		68574367302A51C500839E49 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
@@ -402,6 +404,7 @@
 			children = (
 				53E0D89A2C06084900DE1134 /* Assets.xcassets */,
 				68D144FC30139D5200696204 /* Localizable.xcstrings */,
+				68418A1C302B418000A5439D /* PreviewHelper.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -667,6 +670,7 @@
 				686916723025BC3000E86CFE /* MedicineDetailStockSection.swift in Sources */,
 				6857436A302A52A900839E49 /* NetworkError.swift in Sources */,
 				53E0D8972C06084700DE1134 /* MediStockApp.swift in Sources */,
+				68418A1D302B418000A5439D /* PreviewHelper.swift in Sources */,
 				68951E493029D3CA00E2767B /* AllMedicinesViewModel.swift in Sources */,
 				68418A0F302AE80E00A5439D /* EmailPolicy.swift in Sources */,
 				53E0D8E82C066F6500DE1134 /* MedicineDetailView.swift in Sources */,
