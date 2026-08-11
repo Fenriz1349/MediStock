@@ -7,10 +7,13 @@
 
 import SwiftUI
 import Toasty
+import CustomTextFields
 
 struct AuthenticationView: View {
     @State private var email = ""
     @State private var password = ""
+    @State private var emailState: ValidationState = .neutral
+    @State private var passwordState: ValidationState = .neutral
     @EnvironmentObject var viewModel: AuthenticationViewModel
     @EnvironmentObject var toasty: ToastyManager
 
@@ -18,12 +21,25 @@ struct AuthenticationView: View {
         let unmetPasswordRequirements = PasswordPolicy.unmetRequirements(for: password)
 
         VStack {
-            TextField("auth.email.placeholder", text: $email)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-            SecureField("auth.password.placeholder", text: $password)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
+            CustomTextField.triggered(
+                placeholder: String(localized: "auth.email.placeholder"),
+                text: $email,
+                type: .email,
+                validator: EmailPolicy.isValid,
+                errorMessage: String(localized: "auth.email.invalidFormat"),
+                validationState: $emailState
+            )
+            .padding()
+
+            CustomTextField.triggered(
+                placeholder: String(localized: "auth.password.placeholder"),
+                text: $password,
+                type: .password,
+                validator: PasswordPolicy.isValid,
+                errorMessage: String(localized: "auth.password.invalidFormat"),
+                validationState: $passwordState
+            )
+            .padding()
 
             VStack(alignment: .leading, spacing: 4) {
                 ForEach(PasswordRequirement.allCases, id: \.self) { requirement in
@@ -46,7 +62,7 @@ struct AuthenticationView: View {
             }, label: {
                 Text("auth.signUp.button")
             })
-            .disabled(!unmetPasswordRequirements.isEmpty)
+            .disabled(!unmetPasswordRequirements.isEmpty || emailState != .valid)
         }
         .padding()
         .onChange(of: viewModel.error) { _, error in
