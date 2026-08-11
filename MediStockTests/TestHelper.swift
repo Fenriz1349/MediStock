@@ -69,6 +69,16 @@ enum TestHelper {
         CatalogViewModel(medicineStore: medicineStore, historyStore: historyStore, networkMonitor: networkMonitor)
     }
 
+    /// Builds an `AddMedicineViewModel` wired to fresh mocks by default.
+    @MainActor
+    static func makeAddMedicineViewModel(
+        medicineStore: MedicineStoring = MockMedicineStoring(),
+        historyStore: HistoryStoring = MockHistoryStoring(),
+        networkMonitor: NetworkMonitoring = MockNetworkMonitoring()
+    ) -> AddMedicineViewModel {
+        AddMedicineViewModel(medicineStore: medicineStore, historyStore: historyStore, networkMonitor: networkMonitor)
+    }
+
     /// Builds a `MedicineDetailViewModel` wired to fresh mocks by default.
     @MainActor
     static func makeMedicineDetailViewModel(
