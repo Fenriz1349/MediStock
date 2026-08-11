@@ -562,6 +562,23 @@
         }
       }
     },
+    "medicineDetail.editButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier"
+          }
+        }
+      }
+    },
     "medicineDetail.history.date" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -694,6 +711,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Détails du médicament"
+          }
+        }
+      }
+    },
+    "medicineDetail.saveButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer"
           }
         }
       }

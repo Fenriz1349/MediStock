@@ -16,7 +16,10 @@ struct AddMedicineView: View {
     var body: some View {
         NavigationView {
             Form {
-                MedicineFormContent(viewModel: viewModel)
+                MedicineFormContent(name: $viewModel.name,
+                                     aisle: $viewModel.aisle,
+                                     nameState: $viewModel.nameState,
+                                     aisleState: $viewModel.aisleState)
 
                 VStack(alignment: .leading) {
                     Text("medicineDetail.stock.label")

@@ -10,20 +10,26 @@ import CustomTextFields
 
 /// Shared name/aisle fields, embedded in both the add-medicine and medicine-detail screens.
 /// Not a standalone navigable screen — just the common form content.
-/// Reads/writes `name`/`aisle`/`nameState`/`aisleState` directly on `viewModel` — no state of its own.
+/// Takes bindings instead of a specific ViewModel type.
+/// So it stays reusable between screens backed by different ViewModels (`AddMedicineViewModel`,
+/// `MedicineDetailViewModel`).
+/// The source of truth is still always whichever ViewModel owns the bindings passed in.
 /// This view only renders the fields, it never triggers a save itself.
 struct MedicineFormContent: View {
-    @ObservedObject var viewModel: AddMedicineViewModel
+    @Binding var name: String
+    @Binding var aisle: String
+    @Binding var nameState: ValidationState
+    @Binding var aisleState: ValidationState
 
     var body: some View {
         VStack(alignment: .leading) {
             CustomTextField.triggered(
                 placeholder: String(localized: "medicineDetail.name.label"),
-                text: $viewModel.name,
+                text: $name,
                 type: .alphaNumber,
                 validator: MedicinePolicy.isValidName,
                 errorMessage: String(localized: "medicineDetail.name.invalidFormat"),
-                validationState: $viewModel.nameState
+                validationState: $nameState
             )
             Text("medicineDetail.name.capitalizationHint")
                 .font(.caption)
@@ -32,11 +38,11 @@ struct MedicineFormContent: View {
 
             CustomTextField.triggered(
                 placeholder: String(localized: "medicineDetail.aisle.label"),
-                text: $viewModel.aisle,
+                text: $aisle,
                 type: .alphaNumber,
                 validator: MedicinePolicy.isValidAisle,
                 errorMessage: String(localized: "medicineDetail.aisle.invalidFormat"),
-                validationState: $viewModel.aisleState
+                validationState: $aisleState
             )
             .padding(.bottom, 10)
         }
@@ -46,6 +52,9 @@ struct MedicineFormContent: View {
 
 #Preview {
     Form {
-        MedicineFormContent(viewModel: DIContainer().makeAddMedicineViewModel())
+        MedicineFormContent(name: .constant("Doliprane"),
+                             aisle: .constant("AD56"),
+                             nameState: .constant(.valid),
+                             aisleState: .constant(.valid))
     }
 }

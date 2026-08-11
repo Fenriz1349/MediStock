@@ -6,18 +6,24 @@
 //
 
 import Foundation
+import CustomTextFields
 
 /// Presentation-layer state and actions for viewing/editing a single medicine and its history.
 /// Owns the medicine being viewed and depends only on Domain protocols (no other ViewModel).
 /// So the screen that hosts it needs nothing but this ViewModel.
 /// Instantiated per detail screen (scoped to one medicine), unlike the app-wide shared ViewModels.
 /// Never knows who the current user is — `HistoryStoring` resolves that itself when it records an entry.
+/// `name`/`aisle` back the edit-mode form, fed to `MedicineFormContent`.
+/// They start out empty and are only populated by `beginEditing()`, not by `init`.
+/// So the read-only display always reads `medicine` directly, never these.
 @MainActor
 final class MedicineDetailViewModel: ObservableObject {
     @Published private(set) var medicine: Medicine
     @Published private(set) var history: [HistoryEntry] = []
-    @Published var name: String
-    @Published var aisle: String
+    @Published var name = ""
+    @Published var aisle = ""
+    @Published var nameState: ValidationState = .neutral
+    @Published var aisleState: ValidationState = .neutral
     /// Reset to `nil` at the start of every action, then set again on failure.
     /// The View observes this to trigger a toast, resolving the localized message itself.
     /// This ViewModel never touches the display language.
@@ -25,11 +31,16 @@ final class MedicineDetailViewModel: ObservableObject {
     /// `true` for the duration of an action, so the View can show a loading indicator.
     @Published private(set) var isLoading = false
 
+    /// `isFormValid` re-checks `MedicinePolicy` directly on the raw text, same reasoning as
+    /// `AddMedicineViewModel.isFormValid`: `nameState`/`aisleState` only update on losing focus.
+    var isFormValid: Bool {
+        MedicinePolicy.isValidName(name) && MedicinePolicy.isValidAisle(aisle)
+    }
+
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
     private let networkMonitor: NetworkMonitoring
     private var historyTask: Task<Void, Never>?
-    private var saveLabelTask: Task<Void, Never>?
 
     /// - Parameters:
     ///   - medicine: The medicine to view/edit, injected by the navigation that created this screen.
@@ -43,8 +54,6 @@ final class MedicineDetailViewModel: ObservableObject {
         networkMonitor: NetworkMonitoring
     ) {
         self.medicine = medicine
-        self.name = medicine.name
-        self.aisle = medicine.aisle
         self.medicineStore = medicineStore
         self.historyStore = historyStore
         self.networkMonitor = networkMonitor
@@ -62,25 +71,13 @@ final class MedicineDetailViewModel: ObservableObject {
         }
     }
 
-    /// Called by the View whenever `name`/`aisle` change.
-    /// `cleanedAisle` is `aisle` already stripped of any redundant label the user may have typed.
-    /// That's a display/localization concern the View resolves before calling this.
-    /// This ViewModel doesn't know about it.
-    /// Cancels any save still in flight from a previous keystroke before starting this one.
-    /// So rapid typing can't fire overlapping saves that race and land out of order.
-    /// - Parameter cleanedAisle: `aisle` already stripped of any redundant localized label.
-    func scheduleLabelSave(cleanedAisle: String) {
-        saveLabelTask?.cancel()
-        saveLabelTask = Task { [weak self] in
-            await self?.saveLabelIfNeeded(cleanedAisle: cleanedAisle)
-        }
-    }
-
-    /// Skips the save if nothing actually changed vs. the persisted `medicine`.
-    /// Avoids re-saving on the initial assignment of `name`/`aisle` from `medicine` in `init`.
-    private func saveLabelIfNeeded(cleanedAisle: String) async {
-        guard name != medicine.name || cleanedAisle != medicine.aisle else { return }
-        await updateLabel(name: name, aisle: cleanedAisle)
+    /// Resets `name`/`aisle` to the persisted `medicine`, discarding any unsaved edit.
+    /// Called by the View when entering edit mode.
+    func beginEditing() {
+        name = medicine.name
+        aisle = medicine.aisle
+        nameState = .neutral
+        aisleState = .neutral
     }
 
     /// Updates the medicine's name and aisle.
@@ -171,6 +168,5 @@ final class MedicineDetailViewModel: ObservableObject {
 
     deinit {
         historyTask?.cancel()
-        saveLabelTask?.cancel()
     }
 }

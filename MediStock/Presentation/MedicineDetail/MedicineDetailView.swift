@@ -10,6 +10,7 @@ import Toasty
 
 struct MedicineDetailView: View {
     @StateObject var viewModel: MedicineDetailViewModel
+    @State private var isEditing = false
     @EnvironmentObject var toasty: ToastyManager
     @Environment(\.dismiss) private var dismiss
 
@@ -17,12 +18,21 @@ struct MedicineDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 // Title
-                Text(viewModel.name)
+                Text(viewModel.medicine.name)
                     .font(.largeTitle)
                     .padding(.top, 20)
 
                 // Medicine Name & Aisle
-                MedicineFormContent(name: $viewModel.name, aisle: $viewModel.aisle)
+                if isEditing {
+                    MedicineFormContent(name: $viewModel.name,
+                                        aisle: $viewModel.aisle,
+                                        nameState: $viewModel.nameState,
+                                        aisleState: $viewModel.aisleState)
+                } else {
+                    Text(AisleCode.format(code: viewModel.medicine.aisle, aisleLabel: AisleLabel.localized))
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal)
+                }
 
                 // Medicine Stock
                 MedicineDetailStockSection(
@@ -42,25 +52,48 @@ struct MedicineDetailView: View {
             }
         }
         .navigationBarTitle("medicineDetail.navigationTitle", displayMode: .inline)
-        .navigationBarItems(trailing: Button(action: {
-            Task {
-                await viewModel.delete()
-                if viewModel.error == nil {
-                    dismiss()
+        .toolbar {
+            if isEditing {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("addMedicine.cancelButton") {
+                        isEditing = false
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("medicineDetail.saveButton") {
+                        Task {
+                            let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle)
+                            await viewModel.updateLabel(name: viewModel.name, aisle: cleanedAisle)
+                            if viewModel.error == nil {
+                                isEditing = false
+                            }
+                        }
+                    }
+                    .disabled(!viewModel.isFormValid)
+                }
+            } else {
+                ToolbarItem(placement: .primaryAction) {
+                    Button("medicineDetail.editButton") {
+                        viewModel.beginEditing()
+                        isEditing = true
+                    }
+                }
+                ToolbarItem(placement: .destructiveAction) {
+                    Button(role: .destructive) {
+                        Task {
+                            await viewModel.delete()
+                            if viewModel.error == nil {
+                                dismiss()
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "trash")
+                    }
                 }
             }
-        }, label: {
-            Image(systemName: "trash")
-                .foregroundColor(.red)
-        }))
+        }
         .onAppear {
             viewModel.listen()
-        }
-        .onChange(of: viewModel.name) { _, _ in
-            viewModel.scheduleLabelSave(cleanedAisle: AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle))
-        }
-        .onChange(of: viewModel.aisle) { _, newValue in
-            viewModel.scheduleLabelSave(cleanedAisle: AisleCode.stripLabel(AisleLabel.localized, from: newValue))
         }
         .onChange(of: viewModel.error) { _, error in
             if let error {
