@@ -30,7 +30,6 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
             .environmentObject(PreviewHelper.container.makeAuthenticationViewModel())
-            .environmentObject(PreviewHelper.container.makeCatalogViewModel())
             .environmentObject(ToastyManager())
             .environment(\.diContainer, PreviewHelper.container)
     }

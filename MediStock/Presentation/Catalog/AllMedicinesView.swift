@@ -10,7 +10,7 @@ import Toasty
 
 /// Full-catalog screen: lists every medicine, with server-side name search and sort.
 struct AllMedicinesView: View {
-    @StateObject private var viewModel = DIContainer().makeAllMedicinesViewModel()
+    @StateObject var viewModel: AllMedicinesViewModel
     @Environment(\.diContainer) private var container
     @State private var isPresentingAddMedicine = false
 
@@ -91,7 +91,6 @@ struct AllMedicinesView: View {
 struct AllMedicinesView_Previews: PreviewProvider {
     static var previews: some View {
         AllMedicinesView(viewModel: PreviewHelper.container.makeAllMedicinesViewModel())
-            .environmentObject(PreviewHelper.container.makeCatalogViewModel())
             .environmentObject(ToastyManager())
             .environment(\.diContainer, PreviewHelper.container)
     }

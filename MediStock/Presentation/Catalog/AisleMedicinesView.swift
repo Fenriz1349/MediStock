@@ -34,6 +34,5 @@ struct AisleMedicinesView_Previews: PreviewProvider {
     static var previews: some View {
         let aisle = PreviewHelper.sampleMedicine.aisle
         AisleMedicinesView(viewModel: PreviewHelper.container.makeAisleMedicinesViewModel(aisle: aisle))
-            .environmentObject(PreviewHelper.container.makeCatalogViewModel())
     }
 }

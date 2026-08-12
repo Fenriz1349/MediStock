@@ -70,7 +70,6 @@ struct AisleListView: View {
 struct AisleListView_Previews: PreviewProvider {
     static var previews: some View {
         AisleListView(viewModel: PreviewHelper.container.makeAisleListViewModel())
-            .environmentObject(PreviewHelper.container.makeCatalogViewModel())
             .environmentObject(ToastyManager())
             .environment(\.diContainer, PreviewHelper.container)
     }

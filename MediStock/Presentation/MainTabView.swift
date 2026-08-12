@@ -38,7 +38,6 @@ struct MainTabView_Previews: PreviewProvider {
     static var previews: some View {
         MainTabView()
             .environmentObject(PreviewHelper.container.makeAuthenticationViewModel())
-            .environmentObject(PreviewHelper.container.makeCatalogViewModel())
             .environmentObject(ToastyManager())
             .environment(\.diContainer, PreviewHelper.container)
     }
