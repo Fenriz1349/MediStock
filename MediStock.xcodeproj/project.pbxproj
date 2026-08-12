@@ -33,6 +33,7 @@
 		6811FFD7302CAA1300FBE793 /* NetworkMonitoringDouble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6811FFD6302CAA1300FBE793 /* NetworkMonitoringDouble.swift */; };
 		6811FFD9302CB64000FBE793 /* AccentListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6811FFD8302CB64000FBE793 /* AccentListRow.swift */; };
 		6811FFDB302CDFC400FBE793 /* SortingMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6811FFDA302CDFC400FBE793 /* SortingMenu.swift */; };
+		6811FFDD302CEB6400FBE793 /* HistoryEntryLocalized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6811FFDC302CEB6400FBE793 /* HistoryEntryLocalized.swift */; };
 		682D9FED3021EE6500DBC11E /* MedicineDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D9FEC3021EE6500DBC11E /* MedicineDetailViewModel.swift */; };
 		682D9FF33021EEAC00DBC11E /* MedicineDetailViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D9FF23021EEAC00DBC11E /* MedicineDetailViewModelTest.swift */; };
 		682D9FF5302204AB00DBC11E /* SortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D9FF4302204A600DBC11E /* SortOption.swift */; };
@@ -139,6 +140,7 @@
 		6811FFD6302CAA1300FBE793 /* NetworkMonitoringDouble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitoringDouble.swift; sourceTree = "<group>"; };
 		6811FFD8302CB64000FBE793 /* AccentListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentListRow.swift; sourceTree = "<group>"; };
 		6811FFDA302CDFC400FBE793 /* SortingMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingMenu.swift; sourceTree = "<group>"; };
+		6811FFDC302CEB6400FBE793 /* HistoryEntryLocalized.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryEntryLocalized.swift; sourceTree = "<group>"; };
 		682D9FEC3021EE6500DBC11E /* MedicineDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailViewModel.swift; sourceTree = "<group>"; };
 		682D9FF23021EEAC00DBC11E /* MedicineDetailViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailViewModelTest.swift; sourceTree = "<group>"; };
 		682D9FF4302204A600DBC11E /* SortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOption.swift; sourceTree = "<group>"; };
@@ -317,6 +319,7 @@
 			children = (
 				682D9FEC3021EE6500DBC11E /* MedicineDetailViewModel.swift */,
 				53E0D8E72C066F6500DE1134 /* MedicineDetailView.swift */,
+				6811FFDC302CEB6400FBE793 /* HistoryEntryLocalized.swift */,
 				686916713025BC3000E86CFE /* MedicineDetailStockSection.swift */,
 				686916733025BC5800E86CFE /* MedicineDetailHistorySection.swift */,
 			);
@@ -700,6 +703,7 @@
 				68D144F03013998100696204 /* MedicineStoring.swift in Sources */,
 				686916803025F47300E86CFE /* AuthenticationError.swift in Sources */,
 				53E0D8E62C066F4100DE1134 /* AisleListView.swift in Sources */,
+				6811FFDD302CEB6400FBE793 /* HistoryEntryLocalized.swift in Sources */,
 				68574366302A51B200839E49 /* NetworkMonitoring.swift in Sources */,
 				686916723025BC3000E86CFE /* MedicineDetailStockSection.swift in Sources */,
 				6857436A302A52A900839E49 /* NetworkError.swift in Sources */,

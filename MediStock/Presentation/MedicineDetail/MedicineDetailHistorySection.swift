@@ -17,21 +17,24 @@ struct MedicineDetailHistorySection: View {
                 .font(.headline)
                 .padding(.top, 20)
             ForEach(history, id: \.id) { entry in
+                let localized = HistoryEntryLocalized(entry)
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(entry.action)
-                        .font(.headline)
+                    Text(localized.action)
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
                     Text(String(localized: "medicineDetail.history.user",
-                                defaultValue: "Utilisateur : \(entry.user)"))
+                                defaultValue: "Utilisateur : \(localized.user)"))
                         .font(.subheadline)
                     Text(String(localized: "medicineDetail.history.date",
-                                defaultValue: "Date : \(entry.timestamp.formatted())"))
+                                defaultValue: "Date : \(localized.date)"))
                         .font(.subheadline)
                     Text(String(localized: "medicineDetail.history.details",
-                                defaultValue: "Détails : \(entry.details)"))
+                                defaultValue: "Détails : \(localized.details)"))
                         .font(.subheadline)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color(.secondarySystemBackground))
                 .cornerRadius(10)
                 .padding(.bottom, 5)
             }

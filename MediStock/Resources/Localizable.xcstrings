@@ -667,6 +667,74 @@
         }
       }
     },
+    "medicineDetail.history.action.added" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Added %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajout de %@"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.action.stockDecreased" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock decreased for %@ by %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diminution du stock de %@ de %lld"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.action.stockIncreased" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock increased for %@ by %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Augmentation du stock de %@ de %lld"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.action.updated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updated %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modification de %@"
+          }
+        }
+      }
+    },
     "medicineDetail.history.date" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -697,6 +765,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Détails : %@"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.details.added" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initial stock of %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock initial de %lld"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.details.stockChanged" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock changed from %lld to %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock passé de %lld à %lld"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.details.updated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details updated"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détails mis à jour"
           }
         }
       }
