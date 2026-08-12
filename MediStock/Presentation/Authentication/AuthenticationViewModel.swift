@@ -6,22 +6,32 @@
 //
 
 import Foundation
+import CustomTextFields
 
 /// Presentation-layer state and actions for the authentication screen and app-wide session.
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
     @Published private(set) var session: AppUser?
-    /// Reset to `nil` at the start of every action, then set again on failure.
-    /// The View observes this to trigger a toast, resolving the localized message itself.
-    /// This ViewModel never touches the display language.
+    /// Reset to `nil` at the start of every action, set again on failure. The View turns it into a toast.
     @Published private(set) var error: AuthenticationError?
-    /// `true` for the duration of an action, so the View can show a loading indicator.
     @Published private(set) var isLoading = false
-    /// Live mirror of `networkMonitor.observeConnectivity()`.
-    /// There's no session/cache yet to fall back on before sign-in.
-    /// So the View needs to know upfront whether attempting one is even worth it.
-    /// And switch away the moment that changes, in either direction.
+    /// Live mirror of `networkMonitor.observeConnectivity()`, checked before a session/cache exists.
     @Published private(set) var isConnected: Bool
+
+    @Published var email = ""
+    @Published var password = ""
+    @Published var emailState: ValidationState = .neutral
+    @Published var passwordState: ValidationState = .neutral
+
+    var unmetPasswordRequirements: Set<PasswordRequirement> {
+        PasswordPolicy.unmetRequirements(for: password)
+    }
+
+    /// Re-checks the raw `email`/`password` directly, not `emailState`/`passwordState`.
+    /// Those only update on focus loss, which the last field in the form may never trigger.
+    var isFormValid: Bool {
+        EmailPolicy.isValid(email) && unmetPasswordRequirements.isEmpty
+    }
 
     private let authenticationService: AuthenticationServicing
     private let networkMonitor: NetworkMonitoring
@@ -29,8 +39,7 @@ final class AuthenticationViewModel: ObservableObject {
     private var connectivityTask: Task<Void, Never>?
 
     /// - Parameters:
-    ///   - authenticationService: Domain-level auth abstraction, kept behind a protocol so this
-    ///     ViewModel never depends on Firebase directly.
+    ///   - authenticationService: Domain-level auth abstraction, kept behind a protocol.
     ///   - networkMonitor: Checked before every write. See `verifyNetworkReachable()`.
     init(authenticationService: AuthenticationServicing, networkMonitor: NetworkMonitoring) {
         self.authenticationService = authenticationService
@@ -60,11 +69,8 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
-    /// Signs in with an existing account and updates `session` on success.
-    /// - Parameters:
-    ///   - email: The account's email address.
-    ///   - password: The account's password.
-    func signIn(email: String, password: String) async {
+    /// Signs in with `email`/`password` and updates `session` on success.
+    func signIn() async {
         error = nil
         isLoading = true
         defer { isLoading = false }
@@ -78,11 +84,8 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
-    /// Creates a new account and updates `session` on success.
-    /// - Parameters:
-    ///   - email: The email address to register the new account with.
-    ///   - password: The password to set for the new account.
-    func signUp(email: String, password: String) async {
+    /// Creates a new account with `email`/`password` and updates `session` on success.
+    func signUp() async {
         error = nil
         isLoading = true
         defer { isLoading = false }
@@ -96,8 +99,7 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
-    /// Signs out the current session locally. Does not touch the account itself.
-    /// Use `deleteAccount()` to remove it (App Store guideline 5.1.1(v)).
+    /// Signs out locally. Use `deleteAccount()` to remove the account itself (App Store 5.1.1(v)).
     func signOut() {
         error = nil
         do {
@@ -111,7 +113,7 @@ final class AuthenticationViewModel: ObservableObject {
     }
 
     /// Permanently deletes the account and clears the session. Irreversible.
-    /// The View is responsible for confirming with the user before calling this.
+    /// The View confirms with the user before calling this.
     func deleteAccount() async {
         error = nil
         isLoading = true
@@ -127,7 +129,6 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
-    /// Called before every write, so a lack of connectivity surfaces immediately as a typed error.
     /// - Throws: `AuthenticationError.network`, wrapping whatever `NetworkError` `networkMonitor` reports.
     private func verifyNetworkReachable() async throws {
         do {
