@@ -32,4 +32,12 @@ enum MedicinePolicy {
         guard let stock = Int(stockText) else { return false }
         return stock >= 0
     }
+
+    /// Strips everything but digits — no separator, stock is always a whole number.
+    /// Applied live as the user types, so a pasted or hardware-keyboard letter can't sneak in.
+    /// Even though the field's own numeric keyboard already discourages it.
+    /// - Parameter stockText: The raw stock field text, as typed by the user.
+    static func sanitizedStock(_ stockText: String) -> String {
+        stockText.filter(\.isNumber)
+    }
 }

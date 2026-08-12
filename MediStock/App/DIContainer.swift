@@ -34,9 +34,15 @@ struct DIContainer {
         AuthenticationViewModel(authenticationService: authenticationService, networkMonitor: networkMonitor)
     }
 
+    /// - Parameter existingMedicine: `nil` to create a new medicine, or the medicine being edited.
     @MainActor
-    func makeAddMedicineViewModel() -> MedicineFormViewModel {
-        MedicineFormViewModel(medicineStore: medicineStore, historyStore: historyStore, networkMonitor: networkMonitor)
+    func makeMedicineFormViewModel(existingMedicine: Medicine? = nil) -> MedicineFormViewModel {
+        MedicineFormViewModel(
+            existingMedicine: existingMedicine,
+            medicineStore: medicineStore,
+            historyStore: historyStore,
+            networkMonitor: networkMonitor
+        )
     }
 
     @MainActor
