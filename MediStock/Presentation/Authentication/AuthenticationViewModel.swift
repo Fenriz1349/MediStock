@@ -12,6 +12,10 @@ import CustomTextFields
 @MainActor
 final class AuthenticationViewModel: ObservableObject {
     @Published private(set) var session: AppUser?
+    /// `true` once `observeSession()` has emitted at least once.
+    /// Lets `ContentView` tell "no session yet" apart from "still checking".
+    /// So it can show `LoadingView` instead of flashing `AuthenticationView` too early.
+    @Published private(set) var hasResolvedSession = false
     /// Reset to `nil` at the start of every action, set again on failure. The View turns it into a toast.
     @Published private(set) var error: AuthenticationError?
     @Published private(set) var isLoading = false
@@ -54,6 +58,7 @@ final class AuthenticationViewModel: ObservableObject {
             guard let stream = self?.authenticationService.observeSession() else { return }
             for await user in stream {
                 self?.session = user
+                self?.hasResolvedSession = true
             }
         }
     }

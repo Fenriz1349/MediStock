@@ -205,6 +205,25 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
+    func testHasResolvedSession_beforeListen_isFalse() {
+        let viewModel = TestHelper.makeAuthenticationViewModel()
+
+        XCTAssertFalse(viewModel.hasResolvedSession)
+    }
+
+    @MainActor
+    func testListen_sessionStreamEmits_setsHasResolvedSession() async {
+        let service = AuthenticationServicingDouble()
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
+
+        viewModel.listen()
+        service.emit(nil)
+        await TestHelper.waitUntil { viewModel.hasResolvedSession }
+
+        XCTAssertTrue(viewModel.hasResolvedSession)
+    }
+
+    @MainActor
     func testIsConnected_afterInit_reflectsNetworkMonitor() {
         let networkMonitor = NetworkMonitoringDouble()
         networkMonitor.isConnected = false
