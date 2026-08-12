@@ -24,7 +24,4 @@ protocol HistoryStoring {
     /// `medicine` reflects the stock *after* the change; `previousStock` is the value before it.
     /// So the wording can say whether it was an increase or a decrease and by how much (not assumed to always be 1).
     func recordStockChange(of medicine: Medicine, from previousStock: Int) async throws
-
-    /// Records that `medicine` was just deleted.
-    func recordDeletion(of medicine: Medicine) async throws
 }

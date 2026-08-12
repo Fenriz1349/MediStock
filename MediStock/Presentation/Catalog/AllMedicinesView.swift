@@ -10,7 +10,6 @@ import Toasty
 
 /// Full-catalog screen: lists every medicine, with server-side name search and sort.
 struct AllMedicinesView: View {
-    @EnvironmentObject var catalogViewModel: CatalogViewModel
     @StateObject private var viewModel = DIContainer().makeAllMedicinesViewModel()
     @Environment(\.diContainer) private var container
     @State private var isPresentingAddMedicine = false
@@ -67,14 +66,6 @@ struct AllMedicinesView: View {
                                 }
                             }
                         }
-                        .onDelete { offsets in
-                            let medicines = viewModel.medicines
-                            Task {
-                                for index in offsets {
-                                    await catalogViewModel.delete(medicines[index])
-                                }
-                            }
-                        }
                     }
                 }
                 .navigationBarTitle("tab.allMedicines.title")
@@ -97,12 +88,10 @@ struct AllMedicinesView: View {
     }
 }
 
-struct AllMedicinesView_Previews: PreviewProvider {
-    static var previews: some View {
-        AllMedicinesView()
-            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
-                                                networkMonitor: NetworkMonitor()))
-            .environmentObject(ToastyManager())
-    }
-}
+// TODO: rebuild with PreviewHelper once it lands on this branch.
+//struct AllMedicinesView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AllMedicinesView()
+//            .environmentObject(ToastyManager())
+//    }
+//}

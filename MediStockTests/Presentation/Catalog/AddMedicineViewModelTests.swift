@@ -11,8 +11,8 @@ import XCTest
 final class AddMedicineViewModelTests: XCTestCase {
     @MainActor
     func testSave_success_savesAndRecordsHistory() async {
-        let medicineStore = MockMedicineStoring()
-        let historyStore = MockHistoryStoring()
+        let medicineStore = MedicineStoringDouble()
+        let historyStore = HistoryStoringDouble()
         let viewModel = TestHelper.makeAddMedicineViewModel(medicineStore: medicineStore, historyStore: historyStore)
         viewModel.name = "Doliprane"
         viewModel.stockText = "10"
@@ -29,7 +29,7 @@ final class AddMedicineViewModelTests: XCTestCase {
 
     @MainActor
     func testSave_name_normalizesCapitalization() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAddMedicineViewModel(medicineStore: medicineStore)
         viewModel.name = "dOLIPRANE"
         viewModel.stockText = "10"
@@ -41,7 +41,7 @@ final class AddMedicineViewModelTests: XCTestCase {
 
     @MainActor
     func testSave_invalidStockText_defaultsToZero() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAddMedicineViewModel(medicineStore: medicineStore)
         viewModel.name = "Doliprane"
         viewModel.stockText = "not-a-number"
@@ -53,8 +53,8 @@ final class AddMedicineViewModelTests: XCTestCase {
 
     @MainActor
     func testSave_saveFailure_setsTypedErrorAndSkipsHistory() async {
-        let medicineStore = MockMedicineStoring()
-        let historyStore = MockHistoryStoring()
+        let medicineStore = MedicineStoringDouble()
+        let historyStore = HistoryStoringDouble()
         medicineStore.saveError = MedicineError.network(.serverUnreachable)
         let viewModel = TestHelper.makeAddMedicineViewModel(medicineStore: medicineStore, historyStore: historyStore)
 
@@ -66,7 +66,7 @@ final class AddMedicineViewModelTests: XCTestCase {
 
     @MainActor
     func testSave_historyFailure_setsTypedError() async {
-        let historyStore = MockHistoryStoring()
+        let historyStore = HistoryStoringDouble()
         historyStore.recordError = MedicineError.unknown
         let viewModel = TestHelper.makeAddMedicineViewModel(historyStore: historyStore)
 
@@ -77,8 +77,8 @@ final class AddMedicineViewModelTests: XCTestCase {
 
     @MainActor
     func testSave_networkUnreachable_skipsStore() async {
-        let medicineStore = MockMedicineStoring()
-        let networkMonitor = MockNetworkMonitoring()
+        let medicineStore = MedicineStoringDouble()
+        let networkMonitor = NetworkMonitoringDouble()
         networkMonitor.verifyReachableError = .notConnected
         let viewModel = TestHelper.makeAddMedicineViewModel(medicineStore: medicineStore, networkMonitor: networkMonitor)
 
@@ -90,7 +90,7 @@ final class AddMedicineViewModelTests: XCTestCase {
 
     @MainActor
     func testSave_inFlight_togglesIsLoading() async {
-        let networkMonitor = MockNetworkMonitoring()
+        let networkMonitor = NetworkMonitoringDouble()
         networkMonitor.verifyReachableDelayNanoseconds = 50_000_000
         let viewModel = TestHelper.makeAddMedicineViewModel(networkMonitor: networkMonitor)
         XCTAssertFalse(viewModel.isLoading)

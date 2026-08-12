@@ -11,7 +11,7 @@ import XCTest
 final class AllMedicinesViewModelTests: XCTestCase {
     @MainActor
     func testListen_medicinesEmitted_populatesMedicines() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         let medicine = TestHelper.makeMedicine()
 
@@ -24,7 +24,7 @@ final class AllMedicinesViewModelTests: XCTestCase {
 
     @MainActor
     func testSortOption_changed_requeriesWithNewOption() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         viewModel.listen()
         await TestHelper.waitUntil { medicineStore.requestedSortOptions == [.none] }
@@ -37,7 +37,7 @@ final class AllMedicinesViewModelTests: XCTestCase {
 
     @MainActor
     func testSortAscending_changed_requeriesWithNewDirection() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         viewModel.listen()
         await TestHelper.waitUntil { medicineStore.requestedAscending == [true] }
@@ -50,7 +50,7 @@ final class AllMedicinesViewModelTests: XCTestCase {
 
     @MainActor
     func testFilterText_set_switchesToNamePrefixQuery() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         viewModel.listen()
         await TestHelper.waitUntil { medicineStore.requestedSortOptions == [.none] }
@@ -65,7 +65,7 @@ final class AllMedicinesViewModelTests: XCTestCase {
 
     @MainActor
     func testFilterText_cleared_switchesBackToSortedQuery() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         viewModel.listen()
         await TestHelper.waitUntil { medicineStore.requestedSortOptions == [.none] }
@@ -80,7 +80,7 @@ final class AllMedicinesViewModelTests: XCTestCase {
 
     @MainActor
     func testSearchResults_sortOptionSet_sortsLocally() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         viewModel.sortOption = .stock
         let doliprane = TestHelper.makeMedicine(id: "1", name: "Doliprane", stock: 20)

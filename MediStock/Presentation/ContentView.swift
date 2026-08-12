@@ -3,8 +3,6 @@ import Toasty
 
 struct ContentView: View {
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
-    @EnvironmentObject var catalogViewModel: CatalogViewModel
-    @EnvironmentObject var toasty: ToastyManager
 
     var body: some View {
         Group {
@@ -17,7 +15,7 @@ struct ContentView: View {
             }
         }
         .overlay {
-            if authenticationViewModel.isLoading || catalogViewModel.isLoading {
+            if authenticationViewModel.isLoading {
                 LoadingOverlay()
             }
         }
@@ -25,22 +23,15 @@ struct ContentView: View {
             authenticationViewModel.listen()
             authenticationViewModel.listenConnectivity()
         }
-        .onChange(of: catalogViewModel.error) { _, error in
-            if let error {
-                toasty.showError(error.localizedMessage)
-            }
-        }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService(),
-                                                       networkMonitor: NetworkMonitor()))
-            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
-                                                networkMonitor: NetworkMonitor()))
-            .environmentObject(ToastyManager())
-    }
-}
+// TODO: rebuild with PreviewHelper once it lands on this branch.
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService(),
+//                                                       networkMonitor: NetworkMonitor()))
+//            .environmentObject(ToastyManager())
+//    }
+//}

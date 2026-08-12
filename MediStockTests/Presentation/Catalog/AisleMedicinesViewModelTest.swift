@@ -18,7 +18,7 @@ final class AisleMedicinesViewModelTest: XCTestCase {
 
     @MainActor
     func testListen_medicinesEmitted_populatesMedicines() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAisleMedicinesViewModel(medicineStore: medicineStore)
         let medicine = TestHelper.makeMedicine()
 
@@ -31,7 +31,7 @@ final class AisleMedicinesViewModelTest: XCTestCase {
 
     @MainActor
     func testListen_subsequentEmission_updatesMedicines() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAisleMedicinesViewModel(medicineStore: medicineStore)
         let first = TestHelper.makeMedicine(id: "1")
         let second = TestHelper.makeMedicine(id: "2")
