@@ -18,6 +18,8 @@ final class AuthenticationViewModel: ObservableObject {
     @Published private(set) var hasResolvedSession = false
     /// Reset to `nil` at the start of every action, set again on failure. The View turns it into a toast.
     @Published private(set) var error: AuthenticationError?
+    /// Toggled on every successful `sendPasswordReset()`. The View watches it to trigger a success toast.
+    @Published private(set) var didSendPasswordReset = false
     @Published private(set) var isLoading = false
     /// Live mirror of `networkMonitor.observeConnectivity()`, checked before a session/cache exists.
     @Published private(set) var isConnected: Bool
@@ -110,6 +112,23 @@ final class AuthenticationViewModel: ObservableObject {
         do {
             try authenticationService.signOut()
             session = nil
+        } catch let authError as AuthenticationError {
+            error = authError
+        } catch {
+            self.error = .unknown
+        }
+    }
+
+    /// Sends a password-reset email to the signed-in user. A no-op if there is no session.
+    func sendPasswordReset() async {
+        guard let email = session?.email else { return }
+        error = nil
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            try await verifyNetworkReachable()
+            try await authenticationService.sendPasswordReset(email: email)
+            didSendPasswordReset.toggle()
         } catch let authError as AuthenticationError {
             error = authError
         } catch {

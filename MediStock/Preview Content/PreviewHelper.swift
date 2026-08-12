@@ -143,6 +143,7 @@ private struct PreviewAuthenticationService: AuthenticationServicing {
     func signIn(email: String, password: String) async throws -> AppUser { PreviewHelper.sampleUser }
     func signOut() throws {}
     func deleteAccount() async throws {}
+    func sendPasswordReset(email: String) async throws {}
 }
 
 /// Fake `NetworkMonitoring` for Previews, always reachable.

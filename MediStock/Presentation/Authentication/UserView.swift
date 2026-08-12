@@ -32,6 +32,12 @@ struct UserView: View {
                     Text("user.logoutButton")
                 })
 
+                Button(action: {
+                    Task { await viewModel.sendPasswordReset() }
+                }, label: {
+                    Text("user.resetPasswordButton")
+                })
+
                 Button(role: .destructive, action: {
                     isPresentingDeleteConfirmation = true
                 }, label: {
@@ -56,6 +62,9 @@ struct UserView: View {
             if let error {
                 toasty.showError(error.localizedMessage)
             }
+        }
+        .onChange(of: viewModel.didSendPasswordReset) { _, _ in
+            toasty.showSuccess(String(localized: "user.resetPassword.successMessage"))
         }
     }
 }

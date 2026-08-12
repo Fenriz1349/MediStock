@@ -205,6 +205,47 @@ final class AuthenticationViewModelTest: XCTestCase {
     }
 
     @MainActor
+    func testSendPasswordReset_success_togglesDidSendPasswordReset() async {
+        let service = AuthenticationServicingDouble()
+        service.signInResult = .success(TestHelper.makeAppUser(email: "test@example.com"))
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
+        viewModel.email = "test@example.com"
+        viewModel.password = "password"
+        await viewModel.signIn()
+        let before = viewModel.didSendPasswordReset
+
+        await viewModel.sendPasswordReset()
+
+        XCTAssertNotEqual(viewModel.didSendPasswordReset, before)
+        XCTAssertEqual(service.sentPasswordResetEmails, ["test@example.com"])
+    }
+
+    @MainActor
+    func testSendPasswordReset_noSession_doesNothing() async {
+        let service = AuthenticationServicingDouble()
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
+
+        await viewModel.sendPasswordReset()
+
+        XCTAssertTrue(service.sentPasswordResetEmails.isEmpty)
+    }
+
+    @MainActor
+    func testSendPasswordReset_failure_setsTypedError() async {
+        let service = AuthenticationServicingDouble()
+        service.signInResult = .success(TestHelper.makeAppUser(email: "test@example.com"))
+        service.sendPasswordResetError = AuthenticationError.unknown
+        let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
+        viewModel.email = "test@example.com"
+        viewModel.password = "password"
+        await viewModel.signIn()
+
+        await viewModel.sendPasswordReset()
+
+        XCTAssertEqual(viewModel.error, .unknown)
+    }
+
+    @MainActor
     func testHasResolvedSession_beforeListen_isFalse() {
         let viewModel = TestHelper.makeAuthenticationViewModel()
 
