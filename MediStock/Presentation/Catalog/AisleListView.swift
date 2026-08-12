@@ -67,13 +67,10 @@ struct AisleListView: View {
     }
 }
 
-struct AisleListView_Previews: PreviewProvider {
-    static var previews: some View {
-        let medicineStore = FirestoreMedicineStore()
-        AisleListView()
-            .environmentObject(CatalogViewModel(medicineStore: medicineStore,
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
-                                                networkMonitor: NetworkMonitor()))
-            .environmentObject(ToastyManager())
-    }
-}
+// TODO: rebuild with PreviewHelper once it lands on this branch.
+//struct AisleListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AisleListView()
+//            .environmentObject(ToastyManager())
+//    }
+//}

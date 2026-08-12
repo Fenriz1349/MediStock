@@ -26,14 +26,12 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService(),
-                                                       networkMonitor: NetworkMonitor()))
-            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
-                                                networkMonitor: NetworkMonitor()))
-            .environmentObject(ToastyManager())
-    }
-}
+// TODO: rebuild with PreviewHelper once it lands on this branch.
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ContentView()
+//            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService(),
+//                                                       networkMonitor: NetworkMonitor()))
+//            .environmentObject(ToastyManager())
+//    }
+//}

@@ -88,12 +88,10 @@ struct AllMedicinesView: View {
     }
 }
 
-struct AllMedicinesView_Previews: PreviewProvider {
-    static var previews: some View {
-        AllMedicinesView()
-            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
-                                                networkMonitor: NetworkMonitor()))
-            .environmentObject(ToastyManager())
-    }
-}
+// TODO: rebuild with PreviewHelper once it lands on this branch.
+//struct AllMedicinesView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AllMedicinesView()
+//            .environmentObject(ToastyManager())
+//    }
+//}
