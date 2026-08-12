@@ -20,12 +20,6 @@ struct AllMedicinesView: View {
                 // Filter and sort
                 VStack(alignment: .leading, spacing: 2) {
                     HStack {
-                        TextField("allMedicines.filterField", text: $viewModel.filterText)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding(.leading, 10)
-
-                        Spacer()
-
                         Picker("allMedicines.sortPicker", selection: $viewModel.sortOption) {
                             Text("allMedicines.sortOption.none").tag(SortOption.none)
                             Text("allMedicines.sortOption.name").tag(SortOption.name)
@@ -71,6 +65,7 @@ struct AllMedicinesView: View {
                     }
                 }
                 .navigationBarTitle("tab.allMedicines.title")
+                .searchable(text: $viewModel.filterText, prompt: Text("allMedicines.filterField"))
                 .navigationDestination(for: Medicine.self) { medicine in
                     MedicineDetailView(viewModel: container.makeMedicineDetailViewModel(medicine: medicine))
                 }

@@ -17,10 +17,6 @@ struct AisleListView: View {
         NavigationStack {
             VStack {
                 HStack {
-                    TextField("aisleList.filterField", text: $viewModel.filterText)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding(.leading, 10)
-
                     Spacer()
 
                     Button(action: {
@@ -54,6 +50,7 @@ struct AisleListView: View {
                 }
             }
             .navigationBarTitle("tab.aisles.title")
+            .searchable(text: $viewModel.filterText, prompt: Text("aisleList.filterField"))
             .navigationBarItems(trailing: Button(action: {
                 isPresentingAddMedicine = true
             }, label: {
