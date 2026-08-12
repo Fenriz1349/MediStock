@@ -24,81 +24,13 @@ final class MedicineDetailViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testUpdateLabel_success_savesAndRecordsHistory() async {
-        let medicineStore = MedicineStoringDouble()
-        let historyStore = HistoryStoringDouble()
-        let medicine = TestHelper.makeMedicine(name: "Doliprane", aisle: "AD56")
-        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
-                                                               medicineStore: medicineStore,
-                                                               historyStore: historyStore)
+    func testApplyUpdate_calledWithMedicine_replacesMedicine() {
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: TestHelper.makeMedicine(name: "Doliprane"))
+        let updated = TestHelper.makeMedicine(name: "Dafalgan")
 
-        await viewModel.updateLabel(name: "Dafalgan", aisle: "AD10")
+        viewModel.applyUpdate(updated)
 
-        XCTAssertEqual(medicineStore.savedMedicines.first?.name, "Dafalgan")
-        XCTAssertEqual(medicineStore.savedMedicines.first?.aisle, "AD10")
-        XCTAssertEqual(historyStore.updatedMedicines.count, 1)
-        XCTAssertEqual(historyStore.updatedMedicines.first?.name, "Dafalgan")
-        XCTAssertNil(viewModel.error)
-    }
-
-    @MainActor
-    func testUpdateLabel_inFlight_togglesIsLoading() async {
-        let medicineStore = MedicineStoringDouble()
-        let historyStore = HistoryStoringDouble()
-        let networkMonitor = NetworkMonitoringDouble()
-        networkMonitor.verifyReachableDelayNanoseconds = 50_000_000
-        let viewModel = TestHelper.makeMedicineDetailViewModel(medicineStore: medicineStore,
-                                                                historyStore: historyStore,
-                                                                networkMonitor: networkMonitor)
-        XCTAssertFalse(viewModel.isLoading)
-
-        let task = Task { await viewModel.updateLabel(name: "Dafalgan", aisle: "AD10") }
-        await TestHelper.waitUntil { viewModel.isLoading }
-        XCTAssertTrue(viewModel.isLoading)
-
-        await task.value
-
-        XCTAssertFalse(viewModel.isLoading)
-    }
-
-    @MainActor
-    func testUpdateLabel_name_normalizesCapitalization() async {
-        let medicineStore = MedicineStoringDouble()
-        let historyStore = HistoryStoringDouble()
-        let viewModel = TestHelper.makeMedicineDetailViewModel(medicineStore: medicineStore, historyStore: historyStore)
-
-        await viewModel.updateLabel(name: "dAFALGAN", aisle: "AD10")
-
-        XCTAssertEqual(medicineStore.savedMedicines.first?.name, "Dafalgan")
-    }
-
-    @MainActor
-    func testUpdateLabel_saveFailure_setsTypedErrorAndSkipsHistory() async {
-        let medicineStore = MedicineStoringDouble()
-        let historyStore = HistoryStoringDouble()
-        medicineStore.saveError = MedicineError.network(.serverUnreachable)
-        let viewModel = TestHelper.makeMedicineDetailViewModel(medicineStore: medicineStore, historyStore: historyStore)
-
-        await viewModel.updateLabel(name: "Dafalgan", aisle: "AD10")
-
-        XCTAssertEqual(viewModel.error, .network(.serverUnreachable))
-        XCTAssertTrue(historyStore.updatedMedicines.isEmpty)
-    }
-
-    @MainActor
-    func testUpdateLabel_networkUnreachable_skipsStore() async {
-        let medicineStore = MedicineStoringDouble()
-        let historyStore = HistoryStoringDouble()
-        let networkMonitor = NetworkMonitoringDouble()
-        networkMonitor.verifyReachableError = .notConnected
-        let viewModel = TestHelper.makeMedicineDetailViewModel(medicineStore: medicineStore,
-                                                                historyStore: historyStore,
-                                                                networkMonitor: networkMonitor)
-
-        await viewModel.updateLabel(name: "Dafalgan", aisle: "AD10")
-
-        XCTAssertEqual(viewModel.error, .network(.notConnected))
-        XCTAssertTrue(medicineStore.savedMedicines.isEmpty)
+        XCTAssertEqual(viewModel.medicine, updated)
     }
 
     @MainActor
