@@ -20,17 +20,23 @@ struct MedicineDetailStockSection: View {
                 .font(.headline)
             HStack {
                 Button(action: onDecrease, label: {
-                    Image(systemName: "minus.circle")
-                        .font(.title)
-                        .foregroundColor(.red)
+                    Image(systemName: "minus")
+                        .font(.title3)
+                        .padding(14)
+                        .background(Circle().fill(Color(.secondarySystemBackground)))
                 })
+                .disabled(stock == 0)
+                .opacity(stock == 0 ? 0.4 : 1)
+
                 Text(stock, format: .number)
                     .font(.title2)
                     .frame(width: 100)
+
                 Button(action: onIncrease, label: {
-                    Image(systemName: "plus.circle")
-                        .font(.title)
-                        .foregroundColor(.green)
+                    Image(systemName: "plus")
+                        .font(.title3)
+                        .padding(14)
+                        .background(Circle().fill(Color(.secondarySystemBackground)))
                 })
             }
             .padding(.bottom, 10)

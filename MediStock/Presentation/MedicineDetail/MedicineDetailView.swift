@@ -20,6 +20,7 @@ struct MedicineDetailView: View {
                 // Title
                 Text(viewModel.medicine.name)
                     .font(.largeTitle)
+                    .foregroundColor(.accentColor)
                     .padding(.top, 20)
 
                 // Medicine Name & Aisle
