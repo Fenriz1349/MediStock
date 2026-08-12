@@ -32,7 +32,7 @@ final class MedicineDetailViewModel: ObservableObject {
     @Published private(set) var isLoading = false
 
     /// `isFormValid` re-checks `MedicinePolicy` directly on the raw text, same reasoning as
-    /// `AddMedicineViewModel.isFormValid`: `nameState`/`aisleState` only update on losing focus.
+    /// `MedicineFormViewModel.isFormValid`: `nameState`/`aisleState` only update on losing focus.
     var isFormValid: Bool {
         MedicinePolicy.isValidName(name) && MedicinePolicy.isValidAisle(aisle)
     }

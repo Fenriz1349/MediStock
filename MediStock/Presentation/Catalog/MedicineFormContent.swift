@@ -11,7 +11,7 @@ import CustomTextFields
 /// Shared name/aisle fields, embedded in both the add-medicine and medicine-detail screens.
 /// Not a standalone navigable screen — just the common form content.
 /// Takes bindings instead of a specific ViewModel type.
-/// So it stays reusable between screens backed by different ViewModels (`AddMedicineViewModel`,
+/// So it stays reusable between screens backed by different ViewModels (`MedicineFormViewModel`,
 /// `MedicineDetailViewModel`).
 /// The source of truth is still always whichever ViewModel owns the bindings passed in.
 /// This view only renders the fields, it never triggers a save itself.

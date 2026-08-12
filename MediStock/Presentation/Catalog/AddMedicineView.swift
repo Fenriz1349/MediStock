@@ -10,7 +10,7 @@ import CustomTextFields
 
 /// Screen to create a new medicine, reached from the Catalog screens' "+" button.
 struct AddMedicineView: View {
-    @StateObject var viewModel: AddMedicineViewModel
+    @StateObject var viewModel: MedicineFormViewModel
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {

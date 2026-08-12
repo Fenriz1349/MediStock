@@ -35,8 +35,8 @@ struct DIContainer {
     }
 
     @MainActor
-    func makeAddMedicineViewModel() -> AddMedicineViewModel {
-        AddMedicineViewModel(medicineStore: medicineStore, historyStore: historyStore, networkMonitor: networkMonitor)
+    func makeAddMedicineViewModel() -> MedicineFormViewModel {
+        MedicineFormViewModel(medicineStore: medicineStore, historyStore: historyStore, networkMonitor: networkMonitor)
     }
 
     @MainActor

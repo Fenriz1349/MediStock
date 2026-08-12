@@ -59,14 +59,14 @@ enum TestHelper {
         AuthenticationViewModel(authenticationService: authenticationService, networkMonitor: networkMonitor)
     }
 
-    /// Builds an `AddMedicineViewModel` wired to fresh mocks by default.
+    /// Builds an `MedicineFormViewModel` wired to fresh mocks by default.
     @MainActor
     static func makeAddMedicineViewModel(
         medicineStore: MedicineStoring = MedicineStoringDouble(),
         historyStore: HistoryStoring = HistoryStoringDouble(),
         networkMonitor: NetworkMonitoring = NetworkMonitoringDouble()
-    ) -> AddMedicineViewModel {
-        AddMedicineViewModel(medicineStore: medicineStore, historyStore: historyStore, networkMonitor: networkMonitor)
+    ) -> MedicineFormViewModel {
+        MedicineFormViewModel(medicineStore: medicineStore, historyStore: historyStore, networkMonitor: networkMonitor)
     }
 
     /// Builds a `MedicineDetailViewModel` wired to fresh mocks by default.

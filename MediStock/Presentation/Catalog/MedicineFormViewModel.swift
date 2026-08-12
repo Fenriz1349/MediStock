@@ -1,5 +1,5 @@
 //
-//  AddMedicineViewModel.swift
+//  MedicineFormViewModel.swift
 //  MediStock
 //
 //  Created by Julien Cotte on 11/08/2026.
@@ -18,7 +18,7 @@ import CustomTextFields
 /// So `isFormValid` re-checks `MedicinePolicy` directly on the raw text instead.
 /// That way the button reflects real validity regardless of which field currently has focus.
 @MainActor
-final class AddMedicineViewModel: ObservableObject {
+final class MedicineFormViewModel: ObservableObject {
     @Published var name = ""
     @Published var aisle = ""
     @Published var stockText = ""
