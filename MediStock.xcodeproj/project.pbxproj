@@ -31,6 +31,7 @@
 		6811FFD3302CAA0400FBE793 /* AuthenticationServicingDouble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6811FFD2302CAA0400FBE793 /* AuthenticationServicingDouble.swift */; };
 		6811FFD5302CAA0D00FBE793 /* HistoryStoringDouble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6811FFD4302CAA0D00FBE793 /* HistoryStoringDouble.swift */; };
 		6811FFD7302CAA1300FBE793 /* NetworkMonitoringDouble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6811FFD6302CAA1300FBE793 /* NetworkMonitoringDouble.swift */; };
+		6811FFD9302CB64000FBE793 /* AccentListRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6811FFD8302CB64000FBE793 /* AccentListRow.swift */; };
 		682D9FED3021EE6500DBC11E /* MedicineDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D9FEC3021EE6500DBC11E /* MedicineDetailViewModel.swift */; };
 		682D9FF33021EEAC00DBC11E /* MedicineDetailViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D9FF23021EEAC00DBC11E /* MedicineDetailViewModelTest.swift */; };
 		682D9FF5302204AB00DBC11E /* SortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D9FF4302204A600DBC11E /* SortOption.swift */; };
@@ -135,6 +136,7 @@
 		6811FFD2302CAA0400FBE793 /* AuthenticationServicingDouble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationServicingDouble.swift; sourceTree = "<group>"; };
 		6811FFD4302CAA0D00FBE793 /* HistoryStoringDouble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryStoringDouble.swift; sourceTree = "<group>"; };
 		6811FFD6302CAA1300FBE793 /* NetworkMonitoringDouble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitoringDouble.swift; sourceTree = "<group>"; };
+		6811FFD8302CB64000FBE793 /* AccentListRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentListRow.swift; sourceTree = "<group>"; };
 		682D9FEC3021EE6500DBC11E /* MedicineDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailViewModel.swift; sourceTree = "<group>"; };
 		682D9FF23021EEAC00DBC11E /* MedicineDetailViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailViewModelTest.swift; sourceTree = "<group>"; };
 		682D9FF4302204A600DBC11E /* SortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOption.swift; sourceTree = "<group>"; };
@@ -505,6 +507,7 @@
 				68418A16302AF0EE00A5439D /* AddMedicineViewModel.swift */,
 				6887EC1E30246BBB00DAF7E8 /* MedicineFormContent.swift */,
 				6887EC2030246BCC00DAF7E8 /* AddMedicineView.swift */,
+				6811FFD8302CB64000FBE793 /* AccentListRow.swift */,
 			);
 			path = Catalog;
 			sourceTree = "<group>";
@@ -697,6 +700,7 @@
 				68574366302A51B200839E49 /* NetworkMonitoring.swift in Sources */,
 				686916723025BC3000E86CFE /* MedicineDetailStockSection.swift in Sources */,
 				6857436A302A52A900839E49 /* NetworkError.swift in Sources */,
+				6811FFD9302CB64000FBE793 /* AccentListRow.swift in Sources */,
 				6811FFC3302C404600FBE793 /* AppLogo.swift in Sources */,
 				53E0D8972C06084700DE1134 /* MediStockApp.swift in Sources */,
 				68418A1D302B418000A5439D /* PreviewHelper.swift in Sources */,
