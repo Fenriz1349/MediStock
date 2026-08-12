@@ -14,14 +14,17 @@ struct AisleMedicinesView: View {
         List {
             ForEach(viewModel.medicines, id: \.id) { medicine in
                 NavigationLink(value: medicine) {
-                    VStack(alignment: .leading) {
-                        Text(medicine.name)
-                            .font(.headline)
-                        Text(String(localized: "allMedicines.medicineStock", defaultValue: "Stock : \(medicine.stock)"))
-                            .font(.subheadline)
-                    }
+                    AccentListRow(
+                        heading: medicine.name,
+                        caption: String(localized: "allMedicines.medicineStock",
+                                        defaultValue: "Stock : \(medicine.stock)"),
+                        accentColor: medicine.stock == 0 ? .secondary : .accentColor
+                    )
                 }
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
             }
+            .listRowBackground(Color.clear)
         }
         .navigationBarTitle(AisleCode.format(code: viewModel.aisle, aisleLabel: AisleLabel.localized))
         .onAppear {

@@ -39,9 +39,17 @@ struct AisleListView: View {
                     } else {
                         ForEach(viewModel.aisles, id: \.self) { aisle in
                             NavigationLink(value: aisle) {
-                                Text(AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized))
+                                AccentListRow(
+                                    heading: AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized),
+                                    caption: String(localized: "aisleList.medicineCount",
+                                                    defaultValue: "\(viewModel.medicineCount(forAisle: aisle)) médicaments"),
+                                    accentColor: .primary
+                                )
                             }
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                         }
+                        .listRowBackground(Color.clear)
                     }
                 }
             }
