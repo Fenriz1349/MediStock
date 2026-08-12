@@ -16,7 +16,9 @@ final class AuthenticationViewModelTest: XCTestCase {
         service.signInResult = .success(user)
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
 
-        await viewModel.signIn(email: "test@example.com", password: "password")
+        viewModel.email = "test@example.com"
+        viewModel.password = "password"
+        await viewModel.signIn()
 
         XCTAssertEqual(viewModel.session, user)
         XCTAssertNil(viewModel.error)
@@ -32,7 +34,9 @@ final class AuthenticationViewModelTest: XCTestCase {
                                                                 networkMonitor: networkMonitor)
         XCTAssertFalse(viewModel.isLoading)
 
-        let task = Task { await viewModel.signIn(email: "test@example.com", password: "password") }
+        viewModel.email = "test@example.com"
+        viewModel.password = "password"
+        let task = Task { await viewModel.signIn() }
         await TestHelper.waitUntil { viewModel.isLoading }
         XCTAssertTrue(viewModel.isLoading)
 
@@ -47,7 +51,9 @@ final class AuthenticationViewModelTest: XCTestCase {
         service.signInResult = .failure(AuthenticationError.wrongCredentials)
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
 
-        await viewModel.signIn(email: "test@example.com", password: "wrong")
+        viewModel.email = "test@example.com"
+        viewModel.password = "wrong"
+        await viewModel.signIn()
 
         XCTAssertNil(viewModel.session)
         XCTAssertEqual(viewModel.error, .wrongCredentials)
@@ -61,7 +67,9 @@ final class AuthenticationViewModelTest: XCTestCase {
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service,
                                                                 networkMonitor: networkMonitor)
 
-        await viewModel.signIn(email: "test@example.com", password: "password")
+        viewModel.email = "test@example.com"
+        viewModel.password = "password"
+        await viewModel.signIn()
 
         XCTAssertEqual(viewModel.error, .network(.notConnected))
         XCTAssertNil(viewModel.session)
@@ -73,7 +81,9 @@ final class AuthenticationViewModelTest: XCTestCase {
         service.signInResult = .failure(MockAuthenticationServicing.Failure.generic)
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
 
-        await viewModel.signIn(email: "test@example.com", password: "wrong")
+        viewModel.email = "test@example.com"
+        viewModel.password = "wrong"
+        await viewModel.signIn()
 
         XCTAssertEqual(viewModel.error, .unknown)
     }
@@ -85,7 +95,9 @@ final class AuthenticationViewModelTest: XCTestCase {
         service.signUpResult = .success(user)
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
 
-        await viewModel.signUp(email: "new@example.com", password: "password")
+        viewModel.email = "new@example.com"
+        viewModel.password = "password"
+        await viewModel.signUp()
 
         XCTAssertEqual(viewModel.session, user)
         XCTAssertNil(viewModel.error)
@@ -97,7 +109,9 @@ final class AuthenticationViewModelTest: XCTestCase {
         service.signUpResult = .failure(AuthenticationError.emailAlreadyInUse)
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
 
-        await viewModel.signUp(email: "new@example.com", password: "password")
+        viewModel.email = "new@example.com"
+        viewModel.password = "password"
+        await viewModel.signUp()
 
         XCTAssertEqual(viewModel.error, .emailAlreadyInUse)
     }
@@ -107,7 +121,9 @@ final class AuthenticationViewModelTest: XCTestCase {
         let service = MockAuthenticationServicing()
         service.signInResult = .success(TestHelper.makeAppUser())
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
-        await viewModel.signIn(email: "test@example.com", password: "password")
+        viewModel.email = "test@example.com"
+        viewModel.password = "password"
+        await viewModel.signIn()
 
         viewModel.signOut()
 
@@ -130,7 +146,9 @@ final class AuthenticationViewModelTest: XCTestCase {
         let service = MockAuthenticationServicing()
         service.signInResult = .success(TestHelper.makeAppUser())
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
-        await viewModel.signIn(email: "test@example.com", password: "password")
+        viewModel.email = "test@example.com"
+        viewModel.password = "password"
+        await viewModel.signIn()
 
         await viewModel.deleteAccount()
 
@@ -145,7 +163,9 @@ final class AuthenticationViewModelTest: XCTestCase {
         service.signInResult = .success(user)
         service.deleteAccountError = AuthenticationError.requiresRecentLogin
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
-        await viewModel.signIn(email: "test@example.com", password: "password")
+        viewModel.email = "test@example.com"
+        viewModel.password = "password"
+        await viewModel.signIn()
 
         await viewModel.deleteAccount()
 
@@ -158,11 +178,15 @@ final class AuthenticationViewModelTest: XCTestCase {
         let service = MockAuthenticationServicing()
         service.signInResult = .failure(AuthenticationError.wrongCredentials)
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
-        await viewModel.signIn(email: "test@example.com", password: "wrong")
+        viewModel.email = "test@example.com"
+        viewModel.password = "wrong"
+        await viewModel.signIn()
         XCTAssertEqual(viewModel.error, .wrongCredentials)
 
         service.signInResult = .success(TestHelper.makeAppUser())
-        await viewModel.signIn(email: "test@example.com", password: "password")
+        viewModel.email = "test@example.com"
+        viewModel.password = "password"
+        await viewModel.signIn()
 
         XCTAssertNil(viewModel.error)
     }
