@@ -1,5 +1,5 @@
 //
-//  AddMedicineViewModelTests.swift
+//  MedicineFormViewModelTests.swift
 //  MediStockTests
 //
 //  Created by Julien Cotte on 11/08/2026.
@@ -8,7 +8,7 @@
 import XCTest
 @testable import MediStock
 
-final class AddMedicineViewModelTests: XCTestCase {
+final class MedicineFormViewModelTests: XCTestCase {
     @MainActor
     func testSave_success_savesAndRecordsHistory() async {
         let medicineStore = MedicineStoringDouble()

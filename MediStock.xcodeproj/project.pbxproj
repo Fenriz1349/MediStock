@@ -49,7 +49,7 @@
 		68418A13302AEC5100A5439D /* MedicinePolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A12302AEC5100A5439D /* MedicinePolicy.swift */; };
 		68418A15302AEC6100A5439D /* MedicinePolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A14302AEC6100A5439D /* MedicinePolicyTests.swift */; };
 		68418A17302AF0EE00A5439D /* MedicineFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A16302AF0EE00A5439D /* MedicineFormViewModel.swift */; };
-		68418A19302AF17300A5439D /* AddMedicineViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A18302AF17300A5439D /* AddMedicineViewModelTests.swift */; };
+		68418A19302AF17300A5439D /* MedicineFormViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A18302AF17300A5439D /* MedicineFormViewModelTests.swift */; };
 		68418A1B302B3A4200A5439D /* KeyboardToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A1A302B3A4200A5439D /* KeyboardToolBar.swift */; };
 		68418A1D302B418000A5439D /* PreviewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A1C302B418000A5439D /* PreviewHelper.swift */; };
 		68574366302A51B200839E49 /* NetworkMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574365302A51B200839E49 /* NetworkMonitoring.swift */; };
@@ -154,7 +154,7 @@
 		68418A12302AEC5100A5439D /* MedicinePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicinePolicy.swift; sourceTree = "<group>"; };
 		68418A14302AEC6100A5439D /* MedicinePolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicinePolicyTests.swift; sourceTree = "<group>"; };
 		68418A16302AF0EE00A5439D /* MedicineFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineFormViewModel.swift; sourceTree = "<group>"; };
-		68418A18302AF17300A5439D /* AddMedicineViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMedicineViewModelTests.swift; sourceTree = "<group>"; };
+		68418A18302AF17300A5439D /* MedicineFormViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineFormViewModelTests.swift; sourceTree = "<group>"; };
 		68418A1A302B3A4200A5439D /* KeyboardToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardToolBar.swift; sourceTree = "<group>"; };
 		68418A1C302B418000A5439D /* PreviewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewHelper.swift; sourceTree = "<group>"; };
 		6852BE9030235A580078D739 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
@@ -334,7 +334,7 @@
 				68951E423029D1E800E2767B /* AisleMedicinesViewModelTest.swift */,
 				68951E463029D28E00E2767B /* AisleListViewModelTests.swift */,
 				68951E4A3029D3D700E2767B /* AllMedicinesViewModelTests.swift */,
-				68418A18302AF17300A5439D /* AddMedicineViewModelTests.swift */,
+				68418A18302AF17300A5439D /* MedicineFormViewModelTests.swift */,
 			);
 			path = Catalog;
 			sourceTree = "<group>";
@@ -749,7 +749,7 @@
 				68951E433029D1E800E2767B /* AisleMedicinesViewModelTest.swift in Sources */,
 				6811FFD3302CAA0400FBE793 /* AuthenticationServicingDouble.swift in Sources */,
 				686916863025FB0200E86CFE /* PasswordPolicyTests.swift in Sources */,
-				68418A19302AF17300A5439D /* AddMedicineViewModelTests.swift in Sources */,
+				68418A19302AF17300A5439D /* MedicineFormViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
