@@ -10,7 +10,6 @@ import Toasty
 
 /// Full-catalog screen: lists every medicine, with server-side name search and sort.
 struct AllMedicinesView: View {
-    @EnvironmentObject var catalogViewModel: CatalogViewModel
     @StateObject private var viewModel = DIContainer().makeAllMedicinesViewModel()
     @Environment(\.diContainer) private var container
     @State private var isPresentingAddMedicine = false
@@ -64,14 +63,6 @@ struct AllMedicinesView: View {
                                     Text(String(localized: "allMedicines.medicineStock",
                                                 defaultValue: "Stock : \(medicine.stock)"))
                                         .font(.subheadline)
-                                }
-                            }
-                        }
-                        .onDelete { offsets in
-                            let medicines = viewModel.medicines
-                            Task {
-                                for index in offsets {
-                                    await catalogViewModel.delete(medicines[index])
                                 }
                             }
                         }
