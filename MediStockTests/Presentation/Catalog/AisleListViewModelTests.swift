@@ -11,7 +11,7 @@ import XCTest
 final class AisleListViewModelTests: XCTestCase {
     @MainActor
     func testListen_medicinesEmitted_populatesDistinctSortedAisles() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAisleListViewModel(medicineStore: medicineStore)
         let medicines = [
             TestHelper.makeMedicine(id: "1", aisle: "AD10"),
@@ -30,7 +30,7 @@ final class AisleListViewModelTests: XCTestCase {
 
     @MainActor
     func testListen_subsequentEmission_updatesAisles() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAisleListViewModel(medicineStore: medicineStore)
 
         viewModel.listen()
@@ -44,7 +44,7 @@ final class AisleListViewModelTests: XCTestCase {
 
     @MainActor
     func testAisles_sortAscendingFalse_reversesOrder() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAisleListViewModel(medicineStore: medicineStore)
         viewModel.listen()
         medicineStore.emit([TestHelper.makeMedicine(id: "1", aisle: "AD2"), TestHelper.makeMedicine(id: "2", aisle: "AD10")])
@@ -57,7 +57,7 @@ final class AisleListViewModelTests: XCTestCase {
 
     @MainActor
     func testAisles_filterText_matchesSubstringAnywhere() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAisleListViewModel(medicineStore: medicineStore)
         viewModel.listen()
         medicineStore.emit([TestHelper.makeMedicine(id: "1", aisle: "AD2"), TestHelper.makeMedicine(id: "2", aisle: "BD5")])
@@ -70,7 +70,7 @@ final class AisleListViewModelTests: XCTestCase {
 
     @MainActor
     func testAisles_filterTextEmpty_returnsEverything() async {
-        let medicineStore = MockMedicineStoring()
+        let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAisleListViewModel(medicineStore: medicineStore)
         viewModel.listen()
         medicineStore.emit([TestHelper.makeMedicine(id: "1", aisle: "AD2"), TestHelper.makeMedicine(id: "2", aisle: "BD5")])
