@@ -268,6 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				53E0D89D2C06084900DE1134 /* Preview Assets.xcassets */,
+				68418A1C302B418000A5439D /* PreviewHelper.swift */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -438,7 +439,6 @@
 			children = (
 				53E0D89A2C06084900DE1134 /* Assets.xcassets */,
 				68D144FC30139D5200696204 /* Localizable.xcstrings */,
-				68418A1C302B418000A5439D /* PreviewHelper.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
