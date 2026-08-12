@@ -179,6 +179,8 @@ final class MedicineFormViewModelTests: XCTestCase {
         XCTAssertEqual(medicineStore.savedMedicines.first?.stock, 42)
         XCTAssertEqual(historyStore.updatedMedicines.count, 1)
         XCTAssertTrue(historyStore.addedMedicines.isEmpty)
+        XCTAssertEqual(historyStore.updateDetails.first?.previousName, "Doliprane")
+        XCTAssertEqual(historyStore.updateDetails.first?.previousAisle, "AD56")
     }
 
     @MainActor

@@ -42,8 +42,9 @@ struct HistoryEntryLocalized {
         return raw
     }
 
-    /// Matches `"Added new medicine with initial stock of <n>"`, `"Updated medicine details"` and
-    /// `"Stock changed from <a> to <b>"` — the three `details` shapes written alongside the actions above.
+    /// Matches every `details` shape written by `FirestoreHistoryStore`.
+    /// `"Added new medicine with initial stock of <n>"`, `"Updated medicine details"`,
+    /// `"Stock changed from <a> to <b>"`, and a comma-joined list of `"<field> changed from <a> to <b>"`.
     private static func localizedDetails(_ raw: String) -> String {
         if raw == "Updated medicine details" {
             return String(localized: "medicineDetail.history.details.updated", defaultValue: "Détails mis à jour")
@@ -55,7 +56,34 @@ struct HistoryEntryLocalized {
             return String(localized: "medicineDetail.history.details.stockChanged",
                           defaultValue: "Stock passé de \(from) à \(to)")
         }
+        let clauses = raw.components(separatedBy: ", ")
+        let localizedClauses = clauses.compactMap(localizedUpdateClause)
+        if !localizedClauses.isEmpty, localizedClauses.count == clauses.count {
+            return localizedClauses.joined(separator: ", ")
+        }
         return raw
+    }
+
+    /// Matches one clause of an update's details: `"name changed from <a> to <b>"` or
+    /// `"aisle changed from <a> to <b>"`. `nil` if `raw` matches neither.
+    private static func localizedUpdateClause(_ raw: String) -> String? {
+        if let (from, to) = fieldChange(raw, field: "name") {
+            return String(localized: "medicineDetail.history.details.nameChanged",
+                          defaultValue: "Nom passé de \(from) à \(to)")
+        }
+        if let (from, to) = fieldChange(raw, field: "aisle") {
+            return String(localized: "medicineDetail.history.details.aisleChanged",
+                          defaultValue: "Rayon passé de \(from) à \(to)")
+        }
+        return nil
+    }
+
+    /// Parses `"<field> changed from <a> to <b>"`, `nil` if `raw` doesn't match.
+    private static func fieldChange(_ raw: String, field: String) -> (from: String, to: String)? {
+        guard let rest = raw.removingPrefix("\(field) changed from "),
+              let separatorRange = rest.range(of: " to ")
+        else { return nil }
+        return (String(rest[..<separatorRange.lowerBound]), String(rest[separatorRange.upperBound...]))
     }
 
     /// Parses `"<verb> stock of <name> by <delta>"`.

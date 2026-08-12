@@ -63,6 +63,27 @@ final class HistoryEntryLocalizedTests: XCTestCase {
         XCTAssertEqual(HistoryEntryLocalized(entry).details, "Something unexpected")
     }
 
+    func testDetails_nameChangedOnly_localizesToFrench() {
+        let entry = TestHelper.makeHistoryEntry(details: "name changed from Doliprane to Dafalgan")
+
+        XCTAssertEqual(HistoryEntryLocalized(entry).details, "Nom passé de Doliprane à Dafalgan")
+    }
+
+    func testDetails_aisleChangedOnly_localizesToFrench() {
+        let entry = TestHelper.makeHistoryEntry(details: "aisle changed from AD56 to AD10")
+
+        XCTAssertEqual(HistoryEntryLocalized(entry).details, "Rayon passé de AD56 à AD10")
+    }
+
+    func testDetails_nameAndAisleChanged_localizesBothClauses() {
+        let entry = TestHelper.makeHistoryEntry(
+            details: "name changed from Doliprane to Dafalgan, aisle changed from AD56 to AD10"
+        )
+
+        XCTAssertEqual(HistoryEntryLocalized(entry).details,
+                       "Nom passé de Doliprane à Dafalgan, Rayon passé de AD56 à AD10")
+    }
+
     func testUser_anyEntry_passesThroughUnchanged() {
         let entry = TestHelper.makeHistoryEntry(user: "pharmacist@medistock.fr")
 

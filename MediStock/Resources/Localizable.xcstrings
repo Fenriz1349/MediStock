@@ -786,6 +786,40 @@
         }
       }
     },
+    "medicineDetail.history.details.aisleChanged" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aisle changed from %@ to %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rayon passé de %@ à %@"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.details.nameChanged" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name changed from %@ to %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom passé de %@ à %@"
+          }
+        }
+      }
+    },
     "medicineDetail.history.details.stockChanged" : {
       "extractionState" : "manual",
       "localizations" : {

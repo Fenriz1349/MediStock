@@ -13,6 +13,7 @@ import Foundation
 final class HistoryStoringDouble: HistoryStoring {
     private(set) var addedMedicines: [Medicine] = []
     private(set) var updatedMedicines: [Medicine] = []
+    private(set) var updateDetails: [(medicine: Medicine, previousName: String, previousAisle: String)] = []
     private(set) var stockChanges: [(medicine: Medicine, previousStock: Int)] = []
     var recordError: Error?
 
@@ -38,9 +39,10 @@ final class HistoryStoringDouble: HistoryStoring {
         addedMedicines.append(medicine)
     }
 
-    func recordUpdate(of medicine: Medicine) async throws {
+    func recordUpdate(of medicine: Medicine, previousName: String, previousAisle: String) async throws {
         if let recordError { throw recordError }
         updatedMedicines.append(medicine)
+        updateDetails.append((medicine, previousName, previousAisle))
     }
 
     func recordStockChange(of medicine: Medicine, from previousStock: Int) async throws {

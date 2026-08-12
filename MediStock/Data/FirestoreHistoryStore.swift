@@ -57,12 +57,21 @@ final class FirestoreHistoryStore: HistoryStoring {
                          medicineId: medicine.id ?? "")
     }
 
-    /// - Parameter medicine: The medicine after the name/aisle update.
+    /// - Parameters:
+    ///   - medicine: The medicine after the name/aisle update.
+    ///   - previousName: The name before the edit.
+    ///   - previousAisle: The aisle before the edit.
     /// - Throws: `MedicineError`, mapped from whatever Firestore reports.
-    func recordUpdate(of medicine: Medicine) async throws {
-        try await record(action: "Updated \(medicine.name)",
-                         details: "Updated medicine details",
-                         medicineId: medicine.id ?? "")
+    func recordUpdate(of medicine: Medicine, previousName: String, previousAisle: String) async throws {
+        var changes: [String] = []
+        if medicine.name != previousName {
+            changes.append("name changed from \(previousName) to \(medicine.name)")
+        }
+        if medicine.aisle != previousAisle {
+            changes.append("aisle changed from \(previousAisle) to \(medicine.aisle)")
+        }
+        let details = changes.isEmpty ? "Updated medicine details" : changes.joined(separator: ", ")
+        try await record(action: "Updated \(medicine.name)", details: details, medicineId: medicine.id ?? "")
     }
 
     /// - Parameters:

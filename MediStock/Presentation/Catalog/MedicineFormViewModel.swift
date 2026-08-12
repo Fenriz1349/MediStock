@@ -87,10 +87,12 @@ final class MedicineFormViewModel: ObservableObject {
         do {
             try await verifyNetworkReachable()
             let saved = try await medicineStore.save(medicine)
-            if existingMedicine == nil {
-                try await historyStore.recordAddition(of: saved)
+            if let existingMedicine {
+                try await historyStore.recordUpdate(of: saved,
+                                                    previousName: existingMedicine.name,
+                                                    previousAisle: existingMedicine.aisle)
             } else {
-                try await historyStore.recordUpdate(of: saved)
+                try await historyStore.recordAddition(of: saved)
             }
             return saved
         } catch let medicineError as MedicineError {

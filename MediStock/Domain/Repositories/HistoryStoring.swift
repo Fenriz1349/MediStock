@@ -18,7 +18,9 @@ protocol HistoryStoring {
     func recordAddition(of medicine: Medicine) async throws
 
     /// Records that `medicine`'s name/aisle were just updated.
-    func recordUpdate(of medicine: Medicine) async throws
+    /// `previousName`/`previousAisle` are the values before the edit.
+    /// So the wording can say what actually changed instead of a generic "updated".
+    func recordUpdate(of medicine: Medicine, previousName: String, previousAisle: String) async throws
 
     /// Records a stock change.
     /// `medicine` reflects the stock *after* the change; `previousStock` is the value before it.
