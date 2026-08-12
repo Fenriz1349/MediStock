@@ -120,23 +120,6 @@
         }
       }
     },
-    "allMedicines.filterField.hint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Matches the start of the name only"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ne recherche que le début du nom"
-          }
-        }
-      }
-    },
     "allMedicines.medicineStock" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -188,6 +171,40 @@
         }
       }
     },
+    "allMedicines.sortOption.nameAscending" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name (ascending)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom (croissant)"
+          }
+        }
+      }
+    },
+    "allMedicines.sortOption.nameDescending" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name (descending)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom (décroissant)"
+          }
+        }
+      }
+    },
     "allMedicines.sortOption.none" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -222,19 +239,36 @@
         }
       }
     },
-    "allMedicines.sortPicker" : {
+    "allMedicines.sortOption.stockAscending" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sort by"
+            "value" : "Stock (ascending)"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trier par"
+            "value" : "Stock (croissant)"
+          }
+        }
+      }
+    },
+    "allMedicines.sortOption.stockDescending" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock (descending)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock (décroissant)"
           }
         }
       }
