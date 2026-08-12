@@ -57,7 +57,7 @@ struct AisleListView: View {
                 }
             }
             .sheet(isPresented: $isPresentingAddMedicine) {
-                AddMedicineView(viewModel: container.makeAddMedicineViewModel())
+                AddMedicineView(viewModel: container.makeMedicineFormViewModel())
             }
             .navigationDestination(for: String.self) { aisle in
                 AisleMedicinesView(viewModel: container.makeAisleMedicinesViewModel(aisle: aisle))

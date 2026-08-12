@@ -55,7 +55,7 @@ struct AllMedicinesView: View {
                 }
             }
             .sheet(isPresented: $isPresentingAddMedicine) {
-                AddMedicineView(viewModel: container.makeAddMedicineViewModel())
+                AddMedicineView(viewModel: container.makeMedicineFormViewModel())
             }
             .onAppear {
                 viewModel.listen()

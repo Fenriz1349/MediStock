@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import CustomTextFields
 
 /// Screen to create a new medicine, reached from the Catalog screens' "+" button.
 struct AddMedicineView: View {
@@ -16,24 +15,7 @@ struct AddMedicineView: View {
     var body: some View {
         NavigationView {
             Form {
-                MedicineFormContent(name: $viewModel.name,
-                                     aisle: $viewModel.aisle,
-                                     nameState: $viewModel.nameState,
-                                     aisleState: $viewModel.aisleState)
-
-                VStack(alignment: .leading) {
-                    Text("medicineDetail.stock.label")
-                        .font(.headline)
-                    CustomTextField.triggered(
-                        placeholder: String(localized: "medicineDetail.stock.label"),
-                        text: $viewModel.stockText,
-                        type: .number,
-                        validator: MedicinePolicy.isValidStock,
-                        errorMessage: String(localized: "medicineDetail.stock.invalidFormat"),
-                        validationState: $viewModel.stockState
-                    )
-                }
-                .padding(.horizontal)
+                MedicineFormContent(viewModel: viewModel)
             }
             .navigationBarTitle("addMedicine.navigationTitle", displayMode: .inline)
             .toolbar {
@@ -72,5 +54,5 @@ struct AddMedicineView: View {
 }
 
 #Preview {
-    AddMedicineView(viewModel: PreviewHelper.container.makeAddMedicineViewModel())
+    AddMedicineView(viewModel: PreviewHelper.container.makeMedicineFormViewModel())
 }

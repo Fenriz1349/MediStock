@@ -64,6 +64,14 @@ final class MedicineFormViewModel: ObservableObject {
         stockText = String(existingMedicine.stock)
     }
 
+    /// Strips non-digit characters from `stockText`. Call from `.onChange(of: stockText)`.
+    func sanitizeStock() {
+        let sanitized = MedicinePolicy.sanitizedStock(stockText)
+        if sanitized != stockText {
+            stockText = sanitized
+        }
+    }
+
     /// Creates or updates the medicine, depending on `existingMedicine`.
     /// - Parameter cleanedAisle: `aisle` already stripped of any redundant localized label.
     ///   That's a display/localization concern the View resolves before calling this.
