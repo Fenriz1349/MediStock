@@ -23,6 +23,7 @@ struct ContentView: View {
                 AuthenticationView()
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .overlay {
             if authenticationViewModel.isLoading {
                 LoadingOverlay()
