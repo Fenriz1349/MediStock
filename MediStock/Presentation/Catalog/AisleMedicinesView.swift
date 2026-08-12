@@ -26,6 +26,10 @@ struct AisleMedicinesView: View {
             }
             .listRowBackground(Color.clear)
         }
+        .overlay(alignment: .bottomTrailing) {
+            SortingMenu(sortOption: $viewModel.sortOption, sortAscending: $viewModel.sortAscending)
+                .padding()
+        }
         .navigationBarTitle(
             AisleCode.format(code: viewModel.aisle, aisleLabel: AisleLabel.localized),
             displayMode: .inline
