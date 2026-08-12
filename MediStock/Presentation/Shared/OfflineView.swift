@@ -16,9 +16,9 @@ import SwiftUI
 struct OfflineView: View {
     var body: some View {
         VStack(spacing: 24) {
-            ProgressView()
-
             AppLogo()
+
+            ProgressView()
 
             Text("offline.message")
                 .multilineTextAlignment(.center)

@@ -22,7 +22,6 @@ struct AppLogo: View {
         HStack {
             Text("MediSt")
             CapsuleGlyph(pillHeight: size * 0.5)
-                .padding(.horizontal, size * 0.04)
             Text("ck")
         }
         .font(.system(size: size, weight: .heavy, design: .rounded))
@@ -55,7 +54,7 @@ private struct CapsuleGlyph: View {
                 .fill(Color.accentColor)
                 .frame(width: pieceWidth, height: pillHeight)
         }
-        .rotationEffect(.degrees(-40))
+        .rotationEffect(.degrees(-60))
         .frame(width: pillHeight * 2.7, height: pillHeight * 2.7)
     }
 }
