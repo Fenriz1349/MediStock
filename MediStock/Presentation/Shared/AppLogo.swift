@@ -15,10 +15,8 @@ import SwiftUI
 /// The catalog screens show a navigation title instead, they don't need the full wordmark.
 struct AppLogo: View {
     var size: CGFloat = 34
-    /// The text color. Defaults to `.primary` (adapts to light/dark).
     /// Overridable when the background is fixed regardless of theme.
     /// For example, `LoadingOverlay`'s dimming layer is always dark.
-    var textColor: Color = .primary
 
     var body: some View {
         HStack {
