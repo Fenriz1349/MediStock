@@ -15,47 +15,47 @@ struct AisleListView: View {
 
     var body: some View {
         NavigationStack {
-            VStack {
-                HStack {
-                    Spacer()
-
-                    Button(action: {
-                        viewModel.sortAscending.toggle()
-                    }, label: {
-                        Image(systemName: viewModel.sortAscending ? "arrow.up" : "arrow.down")
-                    })
-                    .padding(.trailing, 10)
-                }
-                .padding(.top, 10)
-
-                List {
-                    if viewModel.aisles.isEmpty {
-                        Text("aisleList.noResults")
-                            .foregroundColor(.secondary)
-                    } else {
-                        ForEach(viewModel.aisles, id: \.self) { aisle in
-                            NavigationLink(value: aisle) {
-                                AccentListRow(
-                                    heading: AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized),
-                                    caption: String(localized: "aisleList.medicineCount",
-                                                    defaultValue: "\(viewModel.medicineCount(forAisle: aisle)) médicaments"),
-                                    accentColor: .primary
-                                )
-                            }
-                            .listRowSeparator(.hidden)
-                            .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+            List {
+                if viewModel.aisles.isEmpty {
+                    Text("aisleList.noResults")
+                        .foregroundColor(.secondary)
+                } else {
+                    ForEach(viewModel.aisles, id: \.self) { aisle in
+                        NavigationLink(value: aisle) {
+                            AccentListRow(
+                                heading: AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized),
+                                caption: String(localized: "aisleList.medicineCount",
+                                                defaultValue: "\(viewModel.medicineCount(forAisle: aisle)) médicaments"),
+                                accentColor: .primary
+                            )
                         }
-                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                     }
+                    .listRowBackground(Color.clear)
                 }
+            }
+            .overlay(alignment: .bottomTrailing) {
+                Button(action: {
+                    viewModel.sortAscending.toggle()
+                }, label: {
+                    Image(systemName: viewModel.sortAscending ? "arrow.up" : "arrow.down")
+                        .padding(14)
+                        .background(Circle().fill(Color(.secondarySystemBackground)))
+                })
+                .padding()
             }
             .navigationBarTitle("tab.aisles.title", displayMode: .inline)
             .searchable(text: $viewModel.filterText, prompt: Text("aisleList.filterField"))
-            .navigationBarItems(trailing: Button(action: {
-                isPresentingAddMedicine = true
-            }, label: {
-                Image(systemName: "plus")
-            }))
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: {
+                        isPresentingAddMedicine = true
+                    }, label: {
+                        Image(systemName: "plus")
+                    })
+                }
+            }
             .sheet(isPresented: $isPresentingAddMedicine) {
                 AddMedicineView(viewModel: container.makeAddMedicineViewModel())
             }
