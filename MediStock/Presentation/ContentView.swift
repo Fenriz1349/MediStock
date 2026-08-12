@@ -3,8 +3,6 @@ import Toasty
 
 struct ContentView: View {
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
-    @EnvironmentObject var catalogViewModel: CatalogViewModel
-    @EnvironmentObject var toasty: ToastyManager
 
     var body: some View {
         Group {
@@ -17,18 +15,13 @@ struct ContentView: View {
             }
         }
         .overlay {
-            if authenticationViewModel.isLoading || catalogViewModel.isLoading {
+            if authenticationViewModel.isLoading {
                 LoadingOverlay()
             }
         }
         .onAppear {
             authenticationViewModel.listen()
             authenticationViewModel.listenConnectivity()
-        }
-        .onChange(of: catalogViewModel.error) { _, error in
-            if let error {
-                toasty.showError(error.localizedMessage)
-            }
         }
     }
 }
