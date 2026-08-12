@@ -494,6 +494,9 @@
         }
       }
     },
+    "ck" : {
+
+    },
     "keyboard.closeButton" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -800,7 +803,7 @@
         }
       }
     },
-    "MediStock" : {
+    "MediSt" : {
 
     },
     "network.error.notConnected" : {

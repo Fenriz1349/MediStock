@@ -18,9 +18,7 @@ struct OfflineView: View {
         VStack(spacing: 24) {
             ProgressView()
 
-            Text("MediStock")
-                .font(.largeTitle)
-                .bold()
+            AppLogo()
 
             Text("offline.message")
                 .multilineTextAlignment(.center)

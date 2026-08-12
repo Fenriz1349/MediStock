@@ -15,7 +15,8 @@ struct LoadingOverlay: View {
             Color.black.opacity(0.4)
                 .ignoresSafeArea()
             ProgressView()
-                .tint(.white)
+                .controlSize(.extraLarge)
+                .tint(.accent)
         }
     }
 }

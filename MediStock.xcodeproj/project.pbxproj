@@ -26,6 +26,7 @@
 		53E0D8EA2C066F7A00DE1134 /* HistoryEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E0D8E92C066F7A00DE1134 /* HistoryEntry.swift */; };
 		53E0D8EC2C06717200DE1134 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E0D8EB2C06717200DE1134 /* MainTabView.swift */; };
 		53E0D8EE2C06718100DE1134 /* AllMedicinesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E0D8ED2C06718100DE1134 /* AllMedicinesView.swift */; };
+		6811FFC3302C404600FBE793 /* AppLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6811FFC2302C404600FBE793 /* AppLogo.swift */; };
 		682D9FED3021EE6500DBC11E /* MedicineDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D9FEC3021EE6500DBC11E /* MedicineDetailViewModel.swift */; };
 		682D9FF03021EE9000DBC11E /* CatalogViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D9FEF3021EE9000DBC11E /* CatalogViewModelTest.swift */; };
 		682D9FF33021EEAC00DBC11E /* MedicineDetailViewModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D9FF23021EEAC00DBC11E /* MedicineDetailViewModelTest.swift */; };
@@ -126,6 +127,7 @@
 		53E0D8E92C066F7A00DE1134 /* HistoryEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryEntry.swift; sourceTree = "<group>"; };
 		53E0D8EB2C06717200DE1134 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		53E0D8ED2C06718100DE1134 /* AllMedicinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllMedicinesView.swift; sourceTree = "<group>"; };
+		6811FFC2302C404600FBE793 /* AppLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLogo.swift; sourceTree = "<group>"; };
 		682D9FEC3021EE6500DBC11E /* MedicineDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailViewModel.swift; sourceTree = "<group>"; };
 		682D9FEF3021EE9000DBC11E /* CatalogViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewModelTest.swift; sourceTree = "<group>"; };
 		682D9FF23021EEAC00DBC11E /* MedicineDetailViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailViewModelTest.swift; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 				6857436D302A5B4300839E49 /* LoadingOverlay.swift */,
 				68574370302A62ED00839E49 /* OfflineView.swift */,
 				68418A1A302B3A4200A5439D /* KeyboardToolBar.swift */,
+				6811FFC2302C404600FBE793 /* AppLogo.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -669,6 +672,7 @@
 				68574366302A51B200839E49 /* NetworkMonitoring.swift in Sources */,
 				686916723025BC3000E86CFE /* MedicineDetailStockSection.swift in Sources */,
 				6857436A302A52A900839E49 /* NetworkError.swift in Sources */,
+				6811FFC3302C404600FBE793 /* AppLogo.swift in Sources */,
 				53E0D8972C06084700DE1134 /* MediStockApp.swift in Sources */,
 				68418A1D302B418000A5439D /* PreviewHelper.swift in Sources */,
 				68951E493029D3CA00E2767B /* AllMedicinesViewModel.swift in Sources */,

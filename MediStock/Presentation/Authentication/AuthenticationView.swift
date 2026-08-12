@@ -21,6 +21,9 @@ struct AuthenticationView: View {
         let unmetPasswordRequirements = PasswordPolicy.unmetRequirements(for: password)
 
         VStack {
+            AppLogo()
+                .padding(.bottom, 24)
+
             CustomTextField.triggered(
                 placeholder: String(localized: "auth.email.placeholder"),
                 text: $email,
