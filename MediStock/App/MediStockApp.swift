@@ -14,7 +14,6 @@ struct MediStockApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     private let container: DIContainer
     @StateObject private var authenticationViewModel: AuthenticationViewModel
-    @StateObject private var catalogViewModel: CatalogViewModel
     @StateObject private var toasty = ToastyManager()
 
     init() {
@@ -22,7 +21,6 @@ struct MediStockApp: App {
         let container = DIContainer()
         self.container = container
         _authenticationViewModel = StateObject(wrappedValue: container.makeAuthenticationViewModel())
-        _catalogViewModel = StateObject(wrappedValue: container.makeCatalogViewModel())
     }
 
     var body: some Scene {
@@ -30,7 +28,6 @@ struct MediStockApp: App {
             ToastyContainer(manager: toasty) {
                 ContentView()
                     .environmentObject(authenticationViewModel)
-                    .environmentObject(catalogViewModel)
                     .environment(\.diContainer, container)
                     .environmentObject(toasty)
             }

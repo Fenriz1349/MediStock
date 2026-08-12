@@ -9,9 +9,7 @@ import Foundation
 import CustomTextFields
 
 /// Presentation-layer state and action for creating a new medicine.
-/// Owns its own write, unlike `CatalogViewModel`.
-/// That one only covers what's genuinely shared across multiple simultaneously-mounted screens.
-/// Creating a medicine is this screen's own concern.
+/// Owns its own write — creating a medicine is this screen's own concern, not shared with any other.
 /// `nameState`/`aisleState`/`stockState` are written directly by `CustomTextField`.
 /// They only drive that field's own border/error display.
 /// `isFormValid` does not read them.

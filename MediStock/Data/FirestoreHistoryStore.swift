@@ -77,14 +77,6 @@ final class FirestoreHistoryStore: HistoryStoring {
                          medicineId: medicine.id ?? "")
     }
 
-    /// - Parameter medicine: The medicine that was just removed from the catalog.
-    /// - Throws: `MedicineError`, mapped from whatever Firestore reports.
-    func recordDeletion(of medicine: Medicine) async throws {
-        try await record(action: "Deleted \(medicine.name)",
-                         details: "Removed from catalog with \(medicine.stock) in stock",
-                         medicineId: medicine.id ?? "")
-    }
-
     /// Builds and persists the entry shared by every `record...` method above.
     /// - Parameters:
     ///   - action: Short label for the entry (e.g. "Increased stock of X by 1").

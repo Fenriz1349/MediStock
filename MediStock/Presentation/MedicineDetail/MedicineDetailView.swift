@@ -87,18 +87,6 @@ struct MedicineDetailView: View {
                         isEditing = true
                     }
                 }
-                ToolbarItem(placement: .destructiveAction) {
-                    Button(role: .destructive) {
-                        Task {
-                            await viewModel.delete()
-                            if viewModel.error == nil {
-                                dismiss()
-                            }
-                        }
-                    } label: {
-                        Image(systemName: "trash")
-                    }
-                }
             }
         }
         .onAppear {

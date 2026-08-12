@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct AisleMedicinesView: View {
-    @EnvironmentObject var catalogViewModel: CatalogViewModel
     @StateObject var viewModel: AisleMedicinesViewModel
 
     var body: some View {
@@ -20,14 +19,6 @@ struct AisleMedicinesView: View {
                             .font(.headline)
                         Text(String(localized: "allMedicines.medicineStock", defaultValue: "Stock : \(medicine.stock)"))
                             .font(.subheadline)
-                    }
-                }
-            }
-            .onDelete { offsets in
-                let medicines = viewModel.medicines
-                Task {
-                    for index in offsets {
-                        await catalogViewModel.delete(medicines[index])
                     }
                 }
             }

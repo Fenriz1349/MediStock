@@ -107,22 +107,6 @@ final class MedicineDetailViewModel: ObservableObject {
                   recordHistory: { try await self.historyStore.recordStockChange(of: $0, from: previousStock) })
     }
 
-    /// Removes the medicine from the catalog and records the deletion in the history.
-    func delete() async {
-        error = nil
-        isLoading = true
-        defer { isLoading = false }
-        do {
-            try await verifyNetworkReachable()
-            try await medicineStore.delete(medicine)
-            try await historyStore.recordDeletion(of: medicine)
-        } catch let medicineError as MedicineError {
-            error = medicineError
-        } catch {
-            self.error = .unknown
-        }
-    }
-
     /// Applies `mutate` to a copy of the current medicine, persists it.
     /// On success, records the change in the history.
     /// The single save path for every use case above.
