@@ -39,7 +39,7 @@ struct UserView: View {
                 })
             }
             .padding()
-            .navigationBarTitle("tab.user.title")
+            .navigationBarTitle("tab.user.title", displayMode: .inline)
             .alert(
                 "user.deleteAccount.confirmTitle",
                 isPresented: $isPresentingDeleteConfirmation

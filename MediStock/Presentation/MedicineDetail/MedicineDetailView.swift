@@ -51,7 +51,7 @@ struct MedicineDetailView: View {
                 LoadingOverlay()
             }
         }
-        .navigationBarTitle("medicineDetail.navigationTitle", displayMode: .inline)
+        .navigationBarTitle(viewModel.medicine.name, displayMode: .inline)
         .toolbar {
             if isEditing {
                 ToolbarItem(placement: .cancellationAction) {

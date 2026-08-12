@@ -64,7 +64,7 @@ struct AllMedicinesView: View {
                         .listRowBackground(Color.clear)
                     }
                 }
-                .navigationBarTitle("tab.allMedicines.title")
+                .navigationBarTitle("tab.allMedicines.title", displayMode: .inline)
                 .searchable(text: $viewModel.filterText, prompt: Text("allMedicines.filterField"))
                 .navigationDestination(for: Medicine.self) { medicine in
                     MedicineDetailView(viewModel: container.makeMedicineDetailViewModel(medicine: medicine))

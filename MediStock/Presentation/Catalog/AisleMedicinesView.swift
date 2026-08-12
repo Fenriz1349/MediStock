@@ -26,7 +26,10 @@ struct AisleMedicinesView: View {
             }
             .listRowBackground(Color.clear)
         }
-        .navigationBarTitle(AisleCode.format(code: viewModel.aisle, aisleLabel: AisleLabel.localized))
+        .navigationBarTitle(
+            AisleCode.format(code: viewModel.aisle, aisleLabel: AisleLabel.localized),
+            displayMode: .inline
+        )
         .onAppear {
             viewModel.listen()
         }

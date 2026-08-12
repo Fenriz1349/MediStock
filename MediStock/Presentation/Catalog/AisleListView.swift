@@ -49,7 +49,7 @@ struct AisleListView: View {
                     }
                 }
             }
-            .navigationBarTitle("tab.aisles.title")
+            .navigationBarTitle("tab.aisles.title", displayMode: .inline)
             .searchable(text: $viewModel.filterText, prompt: Text("aisleList.filterField"))
             .navigationBarItems(trailing: Button(action: {
                 isPresentingAddMedicine = true
