@@ -8,8 +8,8 @@
 import SwiftUI
 
 /// Shared button style for every primary action in the app.
-/// Only `color` changes between call sites — `.accentColor` by default, red for destructive actions
-/// (delete, sign out, delete account).
+/// Only `color` changes between call sites.
+/// `.accentColor` by default, red for irreversible/destructive actions (delete medicine, delete account).
 /// Filled with `color` when enabled, so it reads as available/tappable.
 /// Bordered and greyed out when disabled, so it reads as unavailable without disappearing entirely.
 struct AppButtonStyle: ButtonStyle {
