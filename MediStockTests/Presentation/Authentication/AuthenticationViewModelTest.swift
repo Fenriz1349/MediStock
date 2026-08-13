@@ -207,25 +207,21 @@ final class AuthenticationViewModelTest: XCTestCase {
     @MainActor
     func testSendPasswordReset_success_togglesDidSendPasswordReset() async {
         let service = AuthenticationServicingDouble()
-        service.signInResult = .success(TestHelper.makeAppUser(email: "test@example.com"))
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
-        viewModel.email = "test@example.com"
-        viewModel.password = "password"
-        await viewModel.signIn()
         let before = viewModel.didSendPasswordReset
 
-        await viewModel.sendPasswordReset()
+        await viewModel.sendPasswordReset(email: "test@example.com")
 
         XCTAssertNotEqual(viewModel.didSendPasswordReset, before)
         XCTAssertEqual(service.sentPasswordResetEmails, ["test@example.com"])
     }
 
     @MainActor
-    func testSendPasswordReset_noSession_doesNothing() async {
+    func testSendPasswordReset_blankEmail_doesNothing() async {
         let service = AuthenticationServicingDouble()
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
 
-        await viewModel.sendPasswordReset()
+        await viewModel.sendPasswordReset(email: "")
 
         XCTAssertTrue(service.sentPasswordResetEmails.isEmpty)
     }
@@ -233,14 +229,10 @@ final class AuthenticationViewModelTest: XCTestCase {
     @MainActor
     func testSendPasswordReset_failure_setsTypedError() async {
         let service = AuthenticationServicingDouble()
-        service.signInResult = .success(TestHelper.makeAppUser(email: "test@example.com"))
         service.sendPasswordResetError = AuthenticationError.unknown
         let viewModel = TestHelper.makeAuthenticationViewModel(authenticationService: service)
-        viewModel.email = "test@example.com"
-        viewModel.password = "password"
-        await viewModel.signIn()
 
-        await viewModel.sendPasswordReset()
+        await viewModel.sendPasswordReset(email: "test@example.com")
 
         XCTAssertEqual(viewModel.error, .unknown)
     }

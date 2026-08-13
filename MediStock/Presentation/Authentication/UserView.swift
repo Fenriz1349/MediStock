@@ -10,7 +10,6 @@ import Toasty
 
 /// Account screen: shows the connected user's email.
 /// Lets them reset their password, sign out, or permanently delete their account.
-/// Uses `AuthenticationViewModel` directly, same VM as `AuthenticationView`.
 struct UserView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
     @EnvironmentObject var toasty: ToastyManager
@@ -32,7 +31,7 @@ struct UserView: View {
 
                 VStack(spacing: 12) {
                     Button(action: {
-                        Task { await viewModel.sendPasswordReset() }
+                        Task { await viewModel.sendPasswordReset(email: viewModel.session?.email ?? "") }
                     }, label: {
                         Text("user.resetPasswordButton")
                     })

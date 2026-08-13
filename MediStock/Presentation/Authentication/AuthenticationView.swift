@@ -28,6 +28,16 @@ struct AuthenticationView: View {
             )
             .padding()
 
+            Button(action: {
+                Task { await viewModel.sendPasswordReset(email: viewModel.email) }
+            }, label: {
+                Text("auth.forgotPasswordButton")
+                    .font(.footnote)
+            })
+            .disabled(!EmailPolicy.isValid(viewModel.email))
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding(.horizontal)
+
             CustomTextField.triggered(
                 placeholder: String(localized: "auth.password.placeholder"),
                 text: $viewModel.password,
@@ -78,6 +88,9 @@ struct AuthenticationView: View {
             if let error {
                 toasty.showError(error.localizedMessage)
             }
+        }
+        .onChange(of: viewModel.didSendPasswordReset) { _, _ in
+            toasty.showSuccess(String(localized: "user.resetPassword.successMessage"))
         }
     }
 }
