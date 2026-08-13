@@ -11,6 +11,7 @@ import SwiftUI
 /// Wipes `AppLogo` in from the left, reading as the wordmark being written out.
 struct LoadingView: View {
     @State private var revealProgress: CGFloat = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         AppLogo(size: 40)
@@ -21,6 +22,10 @@ struct LoadingView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
+                guard !reduceMotion else {
+                    revealProgress = 1
+                    return
+                }
                 withAnimation(.easeInOut(duration: 1.2)) {
                     revealProgress = 1
                 }

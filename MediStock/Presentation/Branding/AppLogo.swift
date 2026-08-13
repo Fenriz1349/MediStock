@@ -7,12 +7,8 @@
 
 import SwiftUI
 
-/// "MediStock" wordmark, with the "o" replaced by the same split-capsule glyph as the App Icon.
-/// Drawn in code rather than loaded from an image asset, so it scales crisply at any `size`.
-/// Adapts to light/dark mode for free — the text follows `Color.primary`, the capsule follows
-/// `Branding.accentColor`, both already theme-aware.
-/// Used on the Authentication/Offline/Loading screens.
-/// The catalog screens show a navigation title instead, they don't need the full wordmark.
+/// "MediStock" wordmark, with the "o" replaced by a split-capsule glyph matching the App Icon.
+/// Drawn in code (not an image asset), so it scales crisply and follows light/dark mode.
 struct AppLogo: View {
     var size: CGFloat = 34
     /// Overridable when the background is fixed regardless of theme.
@@ -29,12 +25,8 @@ struct AppLogo: View {
     }
 }
 
-/// The split-capsule glyph standing in for the "o".
-/// Matches the App Icon's exact shape: each half keeps the pill's rounding on its outer end.
-/// Flat on the inner end facing the gap.
-/// Not two small independently-rounded pieces, which read as two dots rather than half a capsule.
-/// `UnevenRoundedRectangle` (iOS 16+) rounds only the two corners on the outer side.
-/// Gives that shape directly, no custom `Path`/arc math needed.
+/// The split-capsule glyph standing in for the "o", matching the App Icon's shape.
+/// `UnevenRoundedRectangle` rounds only the outer corners of each half — no custom `Path` needed.
 private struct CapsuleGlyph: View {
     let pillHeight: CGFloat
 

@@ -18,7 +18,7 @@ struct AccentListRow: View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text(heading)
-                    .font(.system(size: 16, weight: .medium))
+                    .font(.subheadline.weight(.medium))
                     .foregroundColor(accentColor)
                 Text(caption)
                     .font(.subheadline)
