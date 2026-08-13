@@ -89,7 +89,8 @@ jobs:
       # Unlike the two "latest" settings above, xcodebuild has no "any available device" keyword,
       # so this device name is the one place that may need adjusting if it isn't on the runner
       # (the failure log lists the actually available simulators).
-      # -parallel-testing-enabled clones that simulator to run tests across multiple workers at once.
+      # -only-testing restricts both building and running to MediStockTests — MediStockUITests
+      # (still just Xcode's default template) would otherwise get built for nothing on every run.
       - name: Test
         run: |
           xcodebuild test \
@@ -97,5 +98,5 @@ jobs:
             -scheme MediStock \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
             -derivedDataPath DerivedData \
-            -parallel-testing-enabled YES \
+            -only-testing:MediStockTests \
             CODE_SIGNING_ALLOWED=NO
