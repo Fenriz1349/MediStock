@@ -78,6 +78,16 @@ final class FirebaseAuthenticationService: AuthenticationServicing {
         }
     }
 
+    /// - Parameter email: The account's email address.
+    /// - Throws: `AuthenticationError`, mapped from whatever Firebase reports.
+    func sendPasswordReset(email: String) async throws {
+        do {
+            try await Auth.auth().sendPasswordReset(withEmail: email)
+        } catch {
+            throw Self.mapError(error)
+        }
+    }
+
     /// Maps a raw error from the Firebase Auth SDK to a Domain-level `AuthenticationError`.
     /// So callers never see a Firebase type.
     /// - Parameter error: The error thrown by a Firebase Auth SDK call.

@@ -10,8 +10,9 @@ import Toasty
 
 struct MedicineDetailView: View {
     @StateObject var viewModel: MedicineDetailViewModel
-    @State private var isEditing = false
+    @State private var formViewModel: MedicineFormViewModel?
     @EnvironmentObject var toasty: ToastyManager
+    @Environment(\.diContainer) private var container
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -20,14 +21,28 @@ struct MedicineDetailView: View {
                 // Title
                 Text(viewModel.medicine.name)
                     .font(.largeTitle)
+                    .foregroundColor(.accentColor)
                     .padding(.top, 20)
+                    .padding(.horizontal)
 
                 // Medicine Name & Aisle
-                if isEditing {
-                    MedicineFormContent(name: $viewModel.name,
-                                        aisle: $viewModel.aisle,
-                                        nameState: $viewModel.nameState,
-                                        aisleState: $viewModel.aisleState)
+                if let formViewModel {
+                    MedicineFormContent(viewModel: formViewModel)
+
+                    Button(action: {
+                        Task {
+                            let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: formViewModel.aisle)
+                            if let saved = await formViewModel.save(cleanedAisle: cleanedAisle) {
+                                viewModel.applyUpdate(saved)
+                                self.formViewModel = nil
+                            }
+                        }
+                    }, label: {
+                        Text("medicineDetail.saveButton")
+                    })
+                    .buttonStyle(AppButtonStyle())
+                    .disabled(!formViewModel.isFormValid)
+                    .padding(.horizontal)
                 } else {
                     Text(AisleCode.format(code: viewModel.medicine.aisle, aisleLabel: AisleLabel.localized))
                         .foregroundColor(.secondary)
@@ -51,40 +66,39 @@ struct MedicineDetailView: View {
                 LoadingOverlay()
             }
         }
-        .navigationBarTitle("medicineDetail.navigationTitle", displayMode: .inline)
+        .navigationBarTitle(viewModel.medicine.name, displayMode: .inline)
         .toolbar {
-            if isEditing {
+            if let formViewModel {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("addMedicine.cancelButton") {
-                        isEditing = false
+                        self.formViewModel = nil
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("medicineDetail.saveButton") {
                         Task {
-                            let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle)
-                            await viewModel.updateLabel(name: viewModel.name, aisle: cleanedAisle)
-                            if viewModel.error == nil {
-                                isEditing = false
+                            let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: formViewModel.aisle)
+                            if let saved = await formViewModel.save(cleanedAisle: cleanedAisle) {
+                                viewModel.applyUpdate(saved)
+                                self.formViewModel = nil
                             }
                         }
                     }
-                    .disabled(!viewModel.isFormValid)
+                    .disabled(!formViewModel.isFormValid)
                 }
-                KeyboardToolBar(isValidateEnabled: viewModel.isFormValid) {
+                KeyboardToolBar(isValidateEnabled: formViewModel.isFormValid) {
                     Task {
-                        let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle)
-                        await viewModel.updateLabel(name: viewModel.name, aisle: cleanedAisle)
-                        if viewModel.error == nil {
-                            isEditing = false
+                        let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: formViewModel.aisle)
+                        if let saved = await formViewModel.save(cleanedAisle: cleanedAisle) {
+                            viewModel.applyUpdate(saved)
+                            self.formViewModel = nil
                         }
                     }
                 }
             } else {
                 ToolbarItem(placement: .primaryAction) {
                     Button("medicineDetail.editButton") {
-                        viewModel.beginEditing()
-                        isEditing = true
+                        formViewModel = container.makeMedicineFormViewModel(existingMedicine: viewModel.medicine)
                     }
                 }
             }
@@ -97,13 +111,19 @@ struct MedicineDetailView: View {
                 toasty.showError(error.localizedMessage)
             }
         }
+        .onChange(of: formViewModel?.error) { _, error in
+            if let error = error ?? nil {
+                toasty.showError(error.localizedMessage)
+            }
+        }
     }
 }
 
 struct MedicineDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        let sampleMedicine = Medicine(name: "Sample", stock: 10, aisle: "Aisle 1")
-        MedicineDetailView(viewModel: DIContainer().makeMedicineDetailViewModel(medicine: sampleMedicine))
+        let viewModel = PreviewHelper.container.makeMedicineDetailViewModel(medicine: PreviewHelper.sampleMedicine)
+        MedicineDetailView(viewModel: viewModel)
             .environmentObject(ToastyManager())
+            .environment(\.diContainer, PreviewHelper.container)
     }
 }

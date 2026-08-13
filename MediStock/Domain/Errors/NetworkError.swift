@@ -8,10 +8,7 @@
 import Foundation
 
 /// Typed connectivity failures, reported by `NetworkMonitoring`.
-/// Wrapped by `MedicineError`/`AuthenticationError` as `.network(NetworkError)`.
-/// Not duplicated as a separate case in each.
-/// `NetworkMonitoring` is the single source of truth for *why* the network isn't available.
-/// The other stores only care that it isn't.
+/// Wrapped by `MedicineError`/`AuthenticationError` as `.network(NetworkError)`, not duplicated in each.
 enum NetworkError: Error, Equatable {
     /// The device has no active network interface.
     case notConnected

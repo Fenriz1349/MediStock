@@ -7,12 +7,12 @@
 
 import Foundation
 
-/// Presentation-layer state for the aisle list screen. Derives the distinct aisle codes from the full medicine stream.
-/// Firestore has no "distinct"/"group by" query.
-/// So this can't be pushed server-side like the other screens' queries (see `AisleMedicinesViewModel`).
+/// Presentation-layer state for the aisle list screen. Derives distinct aisle codes from the medicine stream.
+/// Firestore has no "distinct"/"group by" query, so this can't be pushed server-side.
 @MainActor
 final class AisleListViewModel: ObservableObject {
     @Published private(set) var allAisles: [String] = []
+    private var medicineCounts: [String: Int] = [:]
     /// The sort direction applied to `aisles`.
     @Published var sortAscending = true
     /// Case-insensitive substring to match against each aisle code.
@@ -38,8 +38,14 @@ final class AisleListViewModel: ObservableObject {
             guard let self else { return }
             for await medicines in medicineStore.observeMedicines() {
                 self.allAisles = Array(Set(medicines.map(\.aisle))).sorted(by: AisleCode.areInOrder)
+                self.medicineCounts = Dictionary(grouping: medicines, by: \.aisle).mapValues(\.count)
             }
         }
+    }
+
+    /// The number of medicines in `aisle`, `0` if it isn't currently in `allAisles`.
+    func medicineCount(forAisle aisle: String) -> Int {
+        medicineCounts[aisle] ?? 0
     }
 
     /// `allAisles`, filtered by `filterText` and ordered per `sortAscending`.

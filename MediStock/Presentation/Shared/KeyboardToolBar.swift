@@ -8,11 +8,7 @@
 import SwiftUI
 
 /// "Close"/"Validate" button pair shown above the keyboard on data-entry screens.
-/// Add via `.toolbar { KeyboardToolBar(isValidateEnabled:, onValidate:) }`.
-/// "Close" always just dismisses the keyboard, discarding no data.
-/// Every field's binding already holds the latest typed value regardless of focus.
-/// "Validate" dismisses the keyboard, then runs the screen's own primary action.
-/// Neither button knows what that action does — the screen decides (create, save, etc.).
+/// "Close" just dismisses the keyboard; "Validate" dismisses it, then runs the screen's primary action.
 struct KeyboardToolBar: ToolbarContent {
     let isValidateEnabled: Bool
     let onValidate: () -> Void

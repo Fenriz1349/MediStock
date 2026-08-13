@@ -7,10 +7,8 @@
 
 import Foundation
 
-/// Business rule: an aisle is identified by a free-form code (e.g. "AD56", "3A4", "7").
-/// No assumption on its shape — real warehouses/hospitals use mixed alphanumeric conventions, not just plain numbers.
-/// Stored as-is in `Medicine.aisle`, kept a plain `String`.
-/// No schema change: the Firestore `medicines` collection may be read by other apps/services.
+/// Business rule: an aisle is a free-form code (e.g. "AD56", "3A4", "7"), never assumed numeric.
+/// Stored as-is in `Medicine.aisle`.
 enum AisleCode {
 
     /// Formats a code for display, optionally prefixed with a label (e.g. "Rayon AD56").

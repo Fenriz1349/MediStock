@@ -69,6 +69,23 @@
         }
       }
     },
+    "aisleList.medicineCount" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld medicines"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld médicaments"
+          }
+        }
+      }
+    },
     "aisleList.noResults" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -99,23 +116,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Filtrer par nom"
-          }
-        }
-      }
-    },
-    "allMedicines.filterField.hint" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Matches the start of the name only"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ne recherche que le début du nom"
           }
         }
       }
@@ -171,6 +171,40 @@
         }
       }
     },
+    "allMedicines.sortOption.nameAscending" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name (ascending)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom (croissant)"
+          }
+        }
+      }
+    },
+    "allMedicines.sortOption.nameDescending" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name (descending)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom (décroissant)"
+          }
+        }
+      }
+    },
     "allMedicines.sortOption.none" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -205,19 +239,36 @@
         }
       }
     },
-    "allMedicines.sortPicker" : {
+    "allMedicines.sortOption.stockAscending" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sort by"
+            "value" : "Stock (ascending)"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trier par"
+            "value" : "Stock (croissant)"
+          }
+        }
+      }
+    },
+    "allMedicines.sortOption.stockDescending" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock (descending)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock (décroissant)"
           }
         }
       }
@@ -494,6 +545,9 @@
         }
       }
     },
+    "ck" : {
+
+    },
     "keyboard.closeButton" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -613,6 +667,74 @@
         }
       }
     },
+    "medicineDetail.history.action.added" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Added %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajout de %@"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.action.stockDecreased" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock decreased for %@ by %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diminution du stock de %@ de %lld"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.action.stockIncreased" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock increased for %@ by %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Augmentation du stock de %@ de %lld"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.action.updated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Updated %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modification de %@"
+          }
+        }
+      }
+    },
     "medicineDetail.history.date" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -643,6 +765,91 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Détails : %@"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.details.added" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initial stock of %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock initial de %lld"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.details.aisleChanged" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aisle changed from %@ to %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rayon passé de %@ à %@"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.details.nameChanged" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name changed from %@ to %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom passé de %@ à %@"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.details.stockChanged" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock changed from %lld to %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stock passé de %lld à %lld"
+          }
+        }
+      }
+    },
+    "medicineDetail.history.details.updated" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Details updated"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détails mis à jour"
           }
         }
       }
@@ -800,7 +1007,7 @@
         }
       }
     },
-    "MediStock" : {
+    "MediSt" : {
 
     },
     "network.error.notConnected" : {
@@ -1020,6 +1227,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Se déconnecter"
+          }
+        }
+      }
+    },
+    "user.resetPasswordButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset Password"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réinitialiser le mot de passe"
+          }
+        }
+      }
+    },
+    "user.resetPassword.successMessage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset email sent."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-mail de réinitialisation envoyé."
           }
         }
       }

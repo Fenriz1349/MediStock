@@ -28,4 +28,7 @@ protocol AuthenticationServicing {
     /// Permanently deletes the signed-in user's account.
     /// App Store guideline 5.1.1(v) requires this whenever an app supports in-app account creation.
     func deleteAccount() async throws
+
+    /// Sends a password-reset email to `email`.
+    func sendPasswordReset(email: String) async throws
 }

@@ -19,6 +19,8 @@ final class AuthenticationServicingDouble: AuthenticationServicing {
     var signUpResult: Result<AppUser, Error> = .failure(Failure.generic)
     var signOutError: Error?
     var deleteAccountError: Error?
+    var sendPasswordResetError: Error?
+    private(set) var sentPasswordResetEmails: [String] = []
 
     private let sessionStream: AsyncStream<AppUser?>
     private let sessionContinuation: AsyncStream<AppUser?>.Continuation
@@ -51,5 +53,10 @@ final class AuthenticationServicingDouble: AuthenticationServicing {
 
     func deleteAccount() async throws {
         if let deleteAccountError { throw deleteAccountError }
+    }
+
+    func sendPasswordReset(email: String) async throws {
+        if let sendPasswordResetError { throw sendPasswordResetError }
+        sentPasswordResetEmails.append(email)
     }
 }

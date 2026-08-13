@@ -8,8 +8,7 @@
 import Foundation
 
 /// Business rules for the medicine creation/edit form.
-/// Each check operates on the raw field text, matching what a text field's live validator needs.
-/// Not on the already-parsed `Medicine` fields.
+/// Each check operates on the raw field text, not the already-parsed `Medicine` fields.
 enum MedicinePolicy {
     static let minimumNameLength = 2
 
@@ -31,5 +30,13 @@ enum MedicinePolicy {
     static func isValidStock(_ stockText: String) -> Bool {
         guard let stock = Int(stockText) else { return false }
         return stock >= 0
+    }
+
+    /// Strips everything but digits — no separator, stock is always a whole number.
+    /// Applied live as the user types, so a pasted or hardware-keyboard letter can't sneak in.
+    /// Even though the field's own numeric keyboard already discourages it.
+    /// - Parameter stockText: The raw stock field text, as typed by the user.
+    static func sanitizedStock(_ stockText: String) -> String {
+        stockText.filter(\.isNumber)
     }
 }

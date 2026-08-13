@@ -6,36 +6,19 @@
 //
 
 import Foundation
-import CustomTextFields
 
-/// Presentation-layer state and actions for viewing/editing a single medicine and its history.
-/// Owns the medicine being viewed and depends only on Domain protocols (no other ViewModel).
-/// So the screen that hosts it needs nothing but this ViewModel.
-/// Instantiated per detail screen (scoped to one medicine), unlike the app-wide shared ViewModels.
-/// Never knows who the current user is — `HistoryStoring` resolves that itself when it records an entry.
-/// `name`/`aisle` back the edit-mode form, fed to `MedicineFormContent`.
-/// They start out empty and are only populated by `beginEditing()`, not by `init`.
-/// So the read-only display always reads `medicine` directly, never these.
+/// Presentation-layer state and actions for viewing a medicine and its history, plus its stock steppers.
+/// Name/aisle editing is delegated to `MedicineFormViewModel`, not owned here.
 @MainActor
 final class MedicineDetailViewModel: ObservableObject {
     @Published private(set) var medicine: Medicine
     @Published private(set) var history: [HistoryEntry] = []
-    @Published var name = ""
-    @Published var aisle = ""
-    @Published var nameState: ValidationState = .neutral
-    @Published var aisleState: ValidationState = .neutral
     /// Reset to `nil` at the start of every action, then set again on failure.
     /// The View observes this to trigger a toast, resolving the localized message itself.
     /// This ViewModel never touches the display language.
     @Published private(set) var error: MedicineError?
     /// `true` for the duration of an action, so the View can show a loading indicator.
     @Published private(set) var isLoading = false
-
-    /// `isFormValid` re-checks `MedicinePolicy` directly on the raw text, same reasoning as
-    /// `AddMedicineViewModel.isFormValid`: `nameState`/`aisleState` only update on losing focus.
-    var isFormValid: Bool {
-        MedicinePolicy.isValidName(name) && MedicinePolicy.isValidAisle(aisle)
-    }
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
@@ -71,26 +54,9 @@ final class MedicineDetailViewModel: ObservableObject {
         }
     }
 
-    /// Resets `name`/`aisle` to the persisted `medicine`, discarding any unsaved edit.
-    /// Called by the View when entering edit mode.
-    func beginEditing() {
-        name = medicine.name
-        aisle = medicine.aisle
-        nameState = .neutral
-        aisleState = .neutral
-    }
-
-    /// Updates the medicine's name and aisle.
-    /// `aisle` is expected already cleaned of any redundant label the user may have typed.
-    /// That's a display/localization concern the View resolves — this ViewModel doesn't know about it.
-    /// - Parameters:
-    ///   - name: The new display name.
-    ///   - aisle: The new aisle code, already cleaned of any redundant localized label.
-    func updateLabel(name: String, aisle: String) async {
-        await save(mutate: {
-            $0.name = MedicineNameFormat.capitalized(name)
-            $0.aisle = aisle
-        }, recordHistory: { try await self.historyStore.recordUpdate(of: $0) })
+    /// Replaces `medicine`, e.g. after a successful edit via `MedicineFormViewModel`.
+    func applyUpdate(_ updated: Medicine) {
+        medicine = updated
     }
 
     /// Increments the stock by 1.
@@ -109,8 +75,6 @@ final class MedicineDetailViewModel: ObservableObject {
 
     /// Applies `mutate` to a copy of the current medicine, persists it.
     /// On success, records the change in the history.
-    /// The single save path for every use case above.
-    /// So each of them only has to describe *what* changed, not how to persist/log it.
     /// - Parameters:
     ///   - mutate: Applied to a copy of the current `medicine` before it's persisted.
     ///   - recordHistory: Records the change once persistence succeeded.

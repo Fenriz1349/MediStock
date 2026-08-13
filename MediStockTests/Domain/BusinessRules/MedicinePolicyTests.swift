@@ -56,4 +56,20 @@ final class MedicinePolicyTests: XCTestCase {
     func testIsValidStock_emptyString_returnsFalse() {
         XCTAssertFalse(MedicinePolicy.isValidStock(""))
     }
+
+    func testSanitizedStock_containsLetters_stripsThem() {
+        XCTAssertEqual(MedicinePolicy.sanitizedStock("1a2b3"), "123")
+    }
+
+    func testSanitizedStock_containsSeparator_stripsIt() {
+        XCTAssertEqual(MedicinePolicy.sanitizedStock("1.5"), "15")
+    }
+
+    func testSanitizedStock_alreadyDigitsOnly_returnsUnchanged() {
+        XCTAssertEqual(MedicinePolicy.sanitizedStock("123"), "123")
+    }
+
+    func testSanitizedStock_emptyString_returnsEmpty() {
+        XCTAssertEqual(MedicinePolicy.sanitizedStock(""), "")
+    }
 }
