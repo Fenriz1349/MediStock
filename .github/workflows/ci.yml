@@ -79,8 +79,9 @@ jobs:
       # (the failure log lists the actually available simulators).
       # -only-testing restricts both building and running to MediStockTests — MediStockUITests
       # (still just Xcode's default template) would otherwise get built for nothing on every run.
-      # -skip-testing excludes HistoryEntryLocalizedTests: it asserts localized (French) strings,
-      # and the runner's simulator defaults to English — run it locally instead.
+      # -skip-testing excludes every class that asserts localized (French) strings: the runner's
+      # simulator defaults to English, so these only run locally. HistoryEntryLocalizedTests is
+      # its own case (Presentation/); the rest live together under Presentation/LocalizableTests.
       - name: Test
         run: |
           xcodebuild test \
@@ -90,4 +91,8 @@ jobs:
             -derivedDataPath DerivedData \
             -only-testing:MediStockTests \
             -skip-testing:MediStockTests/HistoryEntryLocalizedTests \
+            -skip-testing:MediStockTests/AisleLabelTests \
+            -skip-testing:MediStockTests/AuthenticationErrorMessageTests \
+            -skip-testing:MediStockTests/MedicineErrorMessageTests \
+            -skip-testing:MediStockTests/PasswordRequirementLabelTests \
             CODE_SIGNING_ALLOWED=NO
