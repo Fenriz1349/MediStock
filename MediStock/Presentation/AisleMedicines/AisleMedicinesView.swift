@@ -13,16 +13,20 @@ struct AisleMedicinesView: View {
     var body: some View {
         List {
             ForEach(viewModel.medicines, id: \.id) { medicine in
-                NavigationLink(value: medicine) {
+                ZStack {
                     AccentListRow(
                         heading: medicine.name,
                         caption: String(localized: "allMedicines.medicineStock",
                                         defaultValue: "Stock : \(medicine.stock)"),
-                        accentColor: medicine.stock == 0 ? .secondary : .accentColor,
-                        accessibilityLabel: AccessibilityHandler.MedicineRow.label(
-                            name: medicine.name, stock: medicine.stock
-                        )
+                        accentColor: medicine.stock == 0 ? .secondary : .accentColor
                     )
+                    .accessibilityHidden(true)
+
+                    NavigationLink(value: medicine) { EmptyView() }
+                        .opacity(0)
+                        .accessibilityLabel(AccessibilityHandler.MedicineRow.label(
+                            name: medicine.name, stock: medicine.stock
+                        ))
                 }
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))

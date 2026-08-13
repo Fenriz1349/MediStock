@@ -21,19 +21,23 @@ struct AisleListView: View {
                         .foregroundColor(.secondary)
                 } else {
                     ForEach(viewModel.aisles, id: \.self) { aisle in
-                        NavigationLink(value: aisle) {
-                            let formattedAisle = AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized)
+                        let formattedAisle = AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized)
+                        ZStack {
                             AccentListRow(
                                 heading: formattedAisle,
                                 caption: String(
                                     localized: "aisleList.medicineCount",
                                     defaultValue: "\(viewModel.medicineCount(forAisle: aisle)) médicaments"
                                 ),
-                                accentColor: .primary,
-                                accessibilityLabel: AccessibilityHandler.AisleRow.label(
-                                    aisle: formattedAisle, medicineCount: viewModel.medicineCount(forAisle: aisle)
-                                )
+                                accentColor: .primary
                             )
+                            .accessibilityHidden(true)
+
+                            NavigationLink(value: aisle) { EmptyView() }
+                                .opacity(0)
+                                .accessibilityLabel(AccessibilityHandler.AisleRow.label(
+                                    aisle: formattedAisle, medicineCount: viewModel.medicineCount(forAisle: aisle)
+                                ))
                         }
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
