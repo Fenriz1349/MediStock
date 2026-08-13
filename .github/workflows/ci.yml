@@ -72,13 +72,24 @@ jobs:
             -derivedDataPath DerivedData \
             CODE_SIGNING_ALLOWED=NO
 
+      # Force the simulator's language to French before testing: some tests assert localized
+      # strings (e.g. HistoryEntryLocalizedTests), and the runner's simulator defaults to English.
+      # xcodebuild's own -testLanguage/-testRegion flags are only reliably honored for XCUITest
+      # (which relaunches the app with those arguments) — MediStockTests is a plain XCTest unit
+      # test bundle hosted in the app, so we set the simulator's own locale defaults directly.
+      - name: Set simulator language to French
+        run: |
+          UDID=$(xcrun simctl list devices available -j | jq -r '.devices[] | .[] | select(.name=="iPhone 17") | .udid' | head -n1)
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl spawn "$UDID" defaults write "Apple Global Domain" AppleLanguages -array fr
+          xcrun simctl spawn "$UDID" defaults write "Apple Global Domain" AppleLocale -string fr_FR
+
       # Run the unit tests (MediStockTests) on an actual simulator instance, since "test" needs
       # a concrete device to run the app on, unlike "build" which only needs a platform.
       # Unlike the two "latest" settings above, xcodebuild has no "any available device" keyword,
       # so this device name is the one place that may need adjusting if it isn't on the runner
       # (the failure log lists the actually available simulators).
-      # Pin the simulator to French via -testLanguage/-testRegion: some tests assert localized
-      # strings (e.g. HistoryEntryLocalizedTests), and the runner's simulator defaults to English.
+      # -parallel-testing-enabled clones that simulator to run tests across multiple workers at once.
       - name: Test
         run: |
           xcodebuild test \
@@ -86,6 +97,5 @@ jobs:
             -scheme MediStock \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
             -derivedDataPath DerivedData \
-            -testLanguage fr \
-            -testRegion FR \
+            -parallel-testing-enabled YES \
             CODE_SIGNING_ALLOWED=NO
