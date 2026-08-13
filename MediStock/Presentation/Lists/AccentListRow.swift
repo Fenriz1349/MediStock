@@ -42,6 +42,7 @@ struct AccentListRow: View {
                 .stroke(Color(.separator), lineWidth: 0.5)
         }
         .clipShape(RoundedRectangle(cornerRadius: 10))
+        .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
     }
 }
 
