@@ -8,11 +8,7 @@
 import Foundation
 
 /// Presentation-layer state for the full-catalog screen.
-/// Sorting and name search both happen server-side.
-/// While `filterText` is non-empty, the query switches to a Firestore prefix match on the name.
-/// `sortOption`/`sortAscending` are then applied locally, on that already filtered (so small) result set.
-/// Firestore requires the first `.order(by:)` to be on the same field as a range filter.
-/// So the name-prefix query and an arbitrary sort field can't both run server-side at once.
+/// While `filterText` is non-empty, search runs server-side and sort is applied locally on that result.
 @MainActor
 final class AllMedicinesViewModel: ObservableObject {
     @Published private(set) var medicines: [Medicine] = []

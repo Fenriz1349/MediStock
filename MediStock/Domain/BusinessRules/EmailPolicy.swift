@@ -8,8 +8,7 @@
 import Foundation
 
 /// Business rule: a plausible-looking email address, checked client-side for immediate feedback.
-/// Firebase Auth remains the actual source of truth.
-/// This only catches obvious typos before a round-trip — it doesn't need to be exhaustive.
+/// Firebase Auth remains the actual source of truth — this only catches obvious typos early.
 enum EmailPolicy {
     private static let regex = try! NSRegularExpression(pattern: "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
 

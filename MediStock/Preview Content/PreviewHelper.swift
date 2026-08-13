@@ -8,10 +8,7 @@
 import Foundation
 
 /// Canned sample data and pre-filled ViewModels for SwiftUI Previews.
-/// The app is small enough that a separate `PreviewData` file isn't warranted.
-/// So the sample data and the fake stores that serve it both live here, in one place.
-/// Every screen's preview should read `PreviewHelper.container.make...ViewModel()` instead of
-/// `DIContainer()`, so previews show a believable list instead of an empty one hitting no backend.
+/// Screens should read `PreviewHelper.container.make...ViewModel()` instead of `DIContainer()`.
 enum PreviewHelper {
     static let sampleUser = AppUser(uid: "preview-user", email: "test@medistock.fr")
 
@@ -61,8 +58,7 @@ enum PreviewHelper {
 }
 
 /// Fake `MedicineStoring` for Previews, serving `PreviewHelper.sampleMedicines` instead of Firestore.
-/// Each stream yields once and finishes.
-/// Previews need a believable static snapshot, not a live subscription.
+/// Each stream yields once and finishes — a static snapshot, not a live subscription.
 private struct PreviewMedicineStore: MedicineStoring {
     func observeMedicines() -> AsyncStream<[Medicine]> {
         AsyncStream { continuation in
@@ -113,8 +109,7 @@ private struct PreviewMedicineStore: MedicineStoring {
 }
 
 /// Fake `HistoryStoring` for Previews, serving `PreviewHelper.sampleHistory` instead of Firestore.
-/// Every medicine ID gets the same sample history.
-/// Previews only ever show one medicine at a time, so there's nothing to tell apart.
+/// Every medicine ID gets the same sample history — previews only ever show one at a time.
 private struct PreviewHistoryStore: HistoryStoring {
     func observeHistory(forMedicineId medicineId: String) -> AsyncStream<[HistoryEntry]> {
         AsyncStream { continuation in

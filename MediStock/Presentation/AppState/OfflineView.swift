@@ -8,11 +8,7 @@
 import SwiftUI
 
 /// Shown instead of `AuthenticationView` when the app starts with no connectivity.
-/// There's no session/cache to fall back on at that point, so nothing else in the app would work anyway.
-/// `AuthenticationViewModel.isConnected` is live.
-/// So this screen already leaves itself automatically the moment connectivity is back.
-/// The button below is purely reassurance, not required to make that happen.
-/// Deliberately minimal — revisited with a real design once `feat/visual-design`/branding lands.
+/// Leaves automatically once `AuthenticationViewModel.isConnected` goes live again.
 struct OfflineView: View {
     var body: some View {
         VStack(spacing: 24) {

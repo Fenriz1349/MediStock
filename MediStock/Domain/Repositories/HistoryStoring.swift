@@ -8,8 +8,7 @@
 import Foundation
 
 /// Read/write access to the medicine change audit trail.
-/// One method per kind of change, so callers never build a `HistoryEntry` themselves, or know who the current user is.
-/// The implementation resolves the acting user and the entry's wording on its own.
+/// One method per kind of change — callers never build a `HistoryEntry` or know the current user.
 protocol HistoryStoring {
     /// An ongoing stream of history entries for a given medicine, most recent changes included.
     func observeHistory(forMedicineId medicineId: String) -> AsyncStream<[HistoryEntry]>

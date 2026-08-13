@@ -9,7 +9,6 @@ import Foundation
 
 /// Read/write access to the medicine catalog, with live updates as the underlying data changes.
 /// One method per real query need — filtering/sorting happens server-side wherever Firestore can express it.
-/// Rather than fetching everything and filtering in memory.
 protocol MedicineStoring {
     /// The full, unfiltered stream of the current medicine list.
     /// Used only where Firestore can't express the need as a query directly.

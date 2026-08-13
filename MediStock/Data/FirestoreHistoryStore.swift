@@ -10,8 +10,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 /// Firestore-backed implementation of `HistoryStoring`, mapping documents to/from `HistoryEntry`.
-/// Resolves the acting user itself (via `AuthenticationServicing`) and builds each entry's wording.
-/// So callers only ever say *what* happened, never *who* did it or how to phrase it.
+/// Resolves the acting user itself and builds each entry's wording — callers only say *what* happened.
 final class FirestoreHistoryStore: HistoryStoring {
     private let collection = Firestore.firestore().collection("history")
     private let authenticationService: AuthenticationServicing

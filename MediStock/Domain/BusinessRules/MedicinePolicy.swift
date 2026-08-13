@@ -8,8 +8,7 @@
 import Foundation
 
 /// Business rules for the medicine creation/edit form.
-/// Each check operates on the raw field text, matching what a text field's live validator needs.
-/// Not on the already-parsed `Medicine` fields.
+/// Each check operates on the raw field text, not the already-parsed `Medicine` fields.
 enum MedicinePolicy {
     static let minimumNameLength = 2
 

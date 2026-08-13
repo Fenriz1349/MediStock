@@ -8,9 +8,7 @@
 import Foundation
 
 /// Single point of resolution for the localized "aisle" word (e.g. "Rayon"/"Aisle").
-/// Used to prefix/strip aisle codes for display.
-/// Presentation-only: `AisleCode` (Domain) never resolves this itself.
-/// So every call site shares this instead of repeating `String(localized:)` inline.
+/// Presentation-only — `AisleCode` (Domain) never resolves this itself.
 enum AisleLabel {
     static var localized: String { String(localized: "medicineDetail.aisle.label") }
 }

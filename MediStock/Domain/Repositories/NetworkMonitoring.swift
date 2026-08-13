@@ -7,11 +7,8 @@
 
 import Foundation
 
-/// Tracks connectivity in two complementary ways.
-/// `isConnected` is the device's interface status, updated live.
-/// Cheap, but reflects the interface only, so it can be `true` with no usable internet
-/// (captive portal, VPN).
-/// `verifyReachable()` is an actual round-trip to the backend, the source of truth before a write.
+/// `isConnected` is the device's live interface status (cheap, but not proof of real internet).
+/// `verifyReachable()` does an actual round-trip to the backend — the source of truth before a write.
 protocol NetworkMonitoring {
     /// Whether the device currently has an active network interface, right now.
     /// Not proof the backend is reachable — see `verifyReachable()` for that.
