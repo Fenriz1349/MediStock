@@ -24,12 +24,11 @@ struct MedicineDetailStockSection: View {
             HStack {
                 Button(action: onDecrease, label: {
                     Image(systemName: "minus")
-                        .font(.title3)
-                        .padding(14)
-                        .background(Circle().fill(Color(.secondarySystemBackground)))
                 })
+                .buttonStyle(CircleIconButtonStyle())
                 .disabled(stock == 0)
                 .opacity(stock == 0 ? 0.4 : 1)
+                .accessibilityLabel(AccessibilityHandler.StockButton.decreaseLabel(stock: stock))
 
                 Text(stock, format: .number)
                     .font(.title2)
@@ -38,10 +37,9 @@ struct MedicineDetailStockSection: View {
 
                 Button(action: onIncrease, label: {
                     Image(systemName: "plus")
-                        .font(.title3)
-                        .padding(14)
-                        .background(Circle().fill(Color(.secondarySystemBackground)))
                 })
+                .buttonStyle(CircleIconButtonStyle())
+                .accessibilityLabel(AccessibilityHandler.StockButton.increaseLabel(stock: stock))
             }
             .padding(.bottom, 10)
         }

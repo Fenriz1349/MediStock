@@ -89,6 +89,74 @@
         }
       }
     },
+    "accessibility.stockButton.decrease" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decrease, stock from %lld to %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diminuer, stock de %lld à %lld"
+          }
+        }
+      }
+    },
+    "accessibility.stockButton.increase" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Increase, stock from %lld to %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Augmenter, stock de %lld à %lld"
+          }
+        }
+      }
+    },
+    "accessibility.sortButton.ascending" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort ascending"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trier par ordre croissant"
+          }
+        }
+      }
+    },
+    "accessibility.sortButton.descending" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort descending"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trier par ordre décroissant"
+          }
+        }
+      }
+    },
     "addMedicine.cancelButton" : {
       "extractionState" : "manual",
       "localizations" : {

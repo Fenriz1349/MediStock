@@ -50,6 +50,7 @@
 		683E4E44302DD0EE00733C22 /* MedicineErrorMessageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683E4E43302DD0EE00733C22 /* MedicineErrorMessageTests.swift */; };
 		683E4E46302DD0F800733C22 /* PasswordRequirementLabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683E4E45302DD0F800733C22 /* PasswordRequirementLabelTests.swift */; };
 		683E4E48302DD10400733C22 /* AisleLabelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683E4E47302DD10400733C22 /* AisleLabelTests.swift */; };
+		683E4E4A302DF6C000733C22 /* CircleIconButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683E4E49302DF6C000733C22 /* CircleIconButtonStyle.swift */; };
 		68418A0D302AE6A100A5439D /* CustomTextFields in Frameworks */ = {isa = PBXBuildFile; productRef = 68418A0C302AE6A100A5439D /* CustomTextFields */; };
 		68418A0F302AE80E00A5439D /* EmailPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A0E302AE80E00A5439D /* EmailPolicy.swift */; };
 		68418A11302AE98D00A5439D /* EmailPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A10302AE98D00A5439D /* EmailPolicyTests.swift */; };
@@ -163,6 +164,7 @@
 		683E4E43302DD0EE00733C22 /* MedicineErrorMessageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineErrorMessageTests.swift; sourceTree = "<group>"; };
 		683E4E45302DD0F800733C22 /* PasswordRequirementLabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordRequirementLabelTests.swift; sourceTree = "<group>"; };
 		683E4E47302DD10400733C22 /* AisleLabelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleLabelTests.swift; sourceTree = "<group>"; };
+		683E4E49302DF6C000733C22 /* CircleIconButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleIconButtonStyle.swift; sourceTree = "<group>"; };
 		68418A0E302AE80E00A5439D /* EmailPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailPolicy.swift; sourceTree = "<group>"; };
 		68418A10302AE98D00A5439D /* EmailPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailPolicyTests.swift; sourceTree = "<group>"; };
 		68418A12302AEC5100A5439D /* MedicinePolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicinePolicy.swift; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 			children = (
 				68418A1A302B3A4200A5439D /* KeyboardToolBar.swift */,
 				686916773025D20200E86CFE /* AisleLabel.swift */,
+				683E4E49302DF6C000733C22 /* CircleIconButtonStyle.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -762,6 +765,7 @@
 				682D9FF5302204AB00DBC11E /* SortOption.swift in Sources */,
 				6887EC1F30246BBB00DAF7E8 /* MedicineFormContent.swift in Sources */,
 				68D144F23013999000696204 /* HistoryStoring.swift in Sources */,
+				683E4E4A302DF6C000733C22 /* CircleIconButtonStyle.swift in Sources */,
 				6811FFC5302C57F800FBE793 /* AppButtonStyle.swift in Sources */,
 				6887EC2130246BCC00DAF7E8 /* AddMedicineView.swift in Sources */,
 				68D145023013A52800696204 /* AuthenticationViewModel.swift in Sources */,

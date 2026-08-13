@@ -33,4 +33,24 @@ enum AccessibilityHandler {
                    defaultValue: "\(name), \(aisle), stock de \(stock)")
         }
     }
+
+    enum StockButton {
+        static func decreaseLabel(stock: Int) -> String {
+            String(localized: "accessibility.stockButton.decrease",
+                   defaultValue: "Diminuer, stock de \(stock) à \(stock - 1)")
+        }
+
+        static func increaseLabel(stock: Int) -> String {
+            String(localized: "accessibility.stockButton.increase",
+                   defaultValue: "Augmenter, stock de \(stock) à \(stock + 1)")
+        }
+    }
+
+    enum SortButton {
+        static func label(ascending: Bool) -> String {
+            ascending
+                ? String(localized: "accessibility.sortButton.ascending", defaultValue: "Trier par ordre croissant")
+                : String(localized: "accessibility.sortButton.descending", defaultValue: "Trier par ordre décroissant")
+        }
+    }
 }

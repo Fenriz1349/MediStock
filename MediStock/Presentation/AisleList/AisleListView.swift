@@ -25,8 +25,10 @@ struct AisleListView: View {
                             let formattedAisle = AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized)
                             AccentListRow(
                                 heading: formattedAisle,
-                                caption: String(localized: "aisleList.medicineCount",
-                                                defaultValue: "\(viewModel.medicineCount(forAisle: aisle)) médicaments"),
+                                caption: String(
+                                    localized: "aisleList.medicineCount",
+                                    defaultValue: "\(viewModel.medicineCount(forAisle: aisle)) médicaments"
+                                ),
                                 accentColor: .primary,
                                 accessibilityLabel: AccessibilityHandler.AisleRow.label(
                                     aisle: formattedAisle, medicineCount: viewModel.medicineCount(forAisle: aisle)
@@ -44,9 +46,9 @@ struct AisleListView: View {
                     viewModel.sortAscending.toggle()
                 }, label: {
                     Image(systemName: viewModel.sortAscending ? "arrow.up" : "arrow.down")
-                        .padding(14)
-                        .background(Circle().fill(Color(.secondarySystemBackground)))
                 })
+                .buttonStyle(CircleIconButtonStyle())
+                .accessibilityLabel(AccessibilityHandler.SortButton.label(ascending: viewModel.sortAscending))
                 .padding()
             }
             .navigationBarTitle("tab.aisles.title", displayMode: .inline)
