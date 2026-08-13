@@ -409,6 +409,23 @@
         }
       }
     },
+    "auth.forgotPasswordButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forgot password?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mot de passe oublié ?"
+          }
+        }
+      }
+    },
     "auth.password.invalidFormat" : {
       "extractionState" : "manual",
       "localizations" : {

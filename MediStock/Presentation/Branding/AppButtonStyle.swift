@@ -8,13 +8,11 @@
 import SwiftUI
 
 /// Shared button style for every primary action in the app.
-/// Only `color` changes between call sites.
 /// `.accentColor` by default, red for irreversible/destructive actions (delete medicine, delete account).
-/// Filled with `color` when enabled, so it reads as available/tappable.
-/// Bordered and greyed out when disabled, so it reads as unavailable without disappearing entirely.
 struct AppButtonStyle: ButtonStyle {
     var color: Color = .accentColor
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
@@ -29,9 +27,9 @@ struct AppButtonStyle: ButtonStyle {
             }
             .clipShape(RoundedRectangle(cornerRadius: 12))
             .shadow(color: isEnabled ? color.opacity(0.35) : .clear, radius: 6, y: 3)
-            .scaleEffect(configuration.isPressed ? 0.97 : 1)
+            .scaleEffect(configuration.isPressed && !reduceMotion ? 0.97 : 1)
             .opacity(configuration.isPressed ? 0.85 : 1)
-            .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.15), value: configuration.isPressed)
     }
 }
 

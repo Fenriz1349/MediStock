@@ -30,7 +30,7 @@ struct MedicineDetailStockSection: View {
 
                 Text(stock, format: .number)
                     .font(.title2)
-                    .frame(width: 100)
+                    .frame(minWidth: 100)
 
                 Button(action: onIncrease, label: {
                     Image(systemName: "plus")

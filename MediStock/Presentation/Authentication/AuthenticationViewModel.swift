@@ -119,9 +119,11 @@ final class AuthenticationViewModel: ObservableObject {
         }
     }
 
-    /// Sends a password-reset email to the signed-in user. A no-op if there is no session.
-    func sendPasswordReset() async {
-        guard let email = session?.email else { return }
+    /// Sends a password-reset email to `email`. A no-op if `email` is blank.
+    /// Takes `email` explicitly rather than reading `session`/`self.email` — reachable both signed out
+    /// (from `AuthenticationView`, the typed email) and signed in (from `UserView`, `session.email`).
+    func sendPasswordReset(email: String) async {
+        guard !email.isEmpty else { return }
         error = nil
         isLoading = true
         defer { isLoading = false }
