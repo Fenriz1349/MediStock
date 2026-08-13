@@ -53,6 +53,7 @@ struct AuthenticationView: View {
                     let isMet = !viewModel.unmetPasswordRequirements.contains(requirement)
                     HStack {
                         Image(systemName: isMet ? "checkmark.circle.fill" : "circle")
+                            .accessibilityHidden(true)
                         Text(requirement.localizedDescription)
                     }
                     .foregroundColor(isMet ? .green : .secondary)

@@ -33,6 +33,7 @@ struct AccentListRow: View {
             Rectangle()
                 .fill(accentColor)
                 .frame(width: 6)
+                .accessibilityHidden(true)
         }
         .overlay {
             RoundedRectangle(cornerRadius: 10)
