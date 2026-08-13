@@ -1,6 +1,94 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+    " " : {
+
+    },
+    "accessibility.aisleRow.labelPlural" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %lld medicines"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %lld médicaments"
+          }
+        }
+      }
+    },
+    "accessibility.aisleRow.labelSingular" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, 1 medicine"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, 1 médicament"
+          }
+        }
+      }
+    },
+    "accessibility.historyEntry.datePrefix" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date: "
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date : "
+          }
+        }
+      }
+    },
+    "accessibility.medicineDetail.summary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@, stock of %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@, stock de %lld"
+          }
+        }
+      }
+    },
+    "accessibility.medicineRow.label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, stock of %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, stock de %lld"
+          }
+        }
+      }
+    },
     "addMedicine.cancelButton" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -392,23 +480,6 @@
         }
       }
     },
-    "auth.login.button" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Login"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se connecter"
-          }
-        }
-      }
-    },
     "auth.forgotPasswordButton" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -422,6 +493,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mot de passe oublié ?"
+          }
+        }
+      }
+    },
+    "auth.login.button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se connecter"
           }
         }
       }
@@ -1248,23 +1336,6 @@
         }
       }
     },
-    "user.resetPasswordButton" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset Password"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Réinitialiser le mot de passe"
-          }
-        }
-      }
-    },
     "user.resetPassword.successMessage" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1278,6 +1349,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "E-mail de réinitialisation envoyé."
+          }
+        }
+      }
+    },
+    "user.resetPasswordButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset Password"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réinitialiser le mot de passe"
           }
         }
       }

@@ -22,11 +22,15 @@ struct AisleListView: View {
                 } else {
                     ForEach(viewModel.aisles, id: \.self) { aisle in
                         NavigationLink(value: aisle) {
+                            let formattedAisle = AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized)
                             AccentListRow(
-                                heading: AisleCode.format(code: aisle, aisleLabel: AisleLabel.localized),
+                                heading: formattedAisle,
                                 caption: String(localized: "aisleList.medicineCount",
                                                 defaultValue: "\(viewModel.medicineCount(forAisle: aisle)) médicaments"),
-                                accentColor: .primary
+                                accentColor: .primary,
+                                accessibilityLabel: AccessibilityHandler.AisleRow.label(
+                                    aisle: formattedAisle, medicineCount: viewModel.medicineCount(forAisle: aisle)
+                                )
                             )
                         }
                         .listRowSeparator(.hidden)

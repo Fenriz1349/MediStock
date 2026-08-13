@@ -27,7 +27,10 @@ struct AllMedicinesView: View {
                                 heading: medicine.name,
                                 caption: String(localized: "allMedicines.medicineStock",
                                                 defaultValue: "Stock : \(medicine.stock)"),
-                                accentColor: medicine.stock == 0 ? .secondary : .accentColor
+                                accentColor: medicine.stock == 0 ? .secondary : .accentColor,
+                                accessibilityLabel: AccessibilityHandler.MedicineRow.label(
+                                    name: medicine.name, stock: medicine.stock
+                                )
                             )
                         }
                         .listRowSeparator(.hidden)

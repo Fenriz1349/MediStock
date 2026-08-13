@@ -24,6 +24,7 @@ struct MedicineDetailView: View {
                     .foregroundColor(.accentColor)
                     .padding(.top, 20)
                     .padding(.horizontal)
+                    .accessibilityHidden(formViewModel == nil)
 
                 // Medicine Name & Aisle
                 if let formViewModel {
@@ -44,16 +45,24 @@ struct MedicineDetailView: View {
                     .disabled(!formViewModel.isFormValid)
                     .padding(.horizontal)
                 } else {
-                    Text(AisleCode.format(code: viewModel.medicine.aisle, aisleLabel: AisleLabel.localized))
+                    let formattedAisle = AisleCode.format(code: viewModel.medicine.aisle,
+                                                           aisleLabel: AisleLabel.localized)
+                    Text(formattedAisle)
                         .foregroundColor(.secondary)
                         .padding(.horizontal)
+                        .accessibilityLabel(
+                            AccessibilityHandler.MedicineDetail.summary(
+                                name: viewModel.medicine.name, aisle: formattedAisle, stock: viewModel.medicine.stock
+                            )
+                        )
                 }
 
                 // Medicine Stock
                 MedicineDetailStockSection(
                     stock: viewModel.medicine.stock,
                     onIncrease: { Task { await viewModel.increase() } },
-                    onDecrease: { Task { await viewModel.decrease() } }
+                    onDecrease: { Task { await viewModel.decrease() } },
+                    stockValueAccessibilityHidden: formViewModel == nil
                 )
 
                 // History Section

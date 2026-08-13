@@ -13,6 +13,9 @@ struct AccentListRow: View {
     let heading: String
     let caption: String
     var accentColor: Color = .accentColor
+    /// A natural-sentence VoiceOver label (e.g. "Doliprane, stock de 42").
+    /// Falls back to reading `heading`/`caption` as separate fragments when `nil`.
+    var accessibilityLabel: String?
 
     var body: some View {
         HStack {
@@ -26,6 +29,8 @@ struct AccentListRow: View {
             }
             Spacer()
         }
+        .accessibilityElement(children: accessibilityLabel == nil ? .combine : .ignore)
+        .modifier(OptionalAccessibilityLabel(label: accessibilityLabel))
         .padding(.vertical, 12)
         .padding(.horizontal, 14)
         .background(Color(.secondarySystemBackground))
@@ -40,6 +45,19 @@ struct AccentListRow: View {
                 .stroke(Color(.separator), lineWidth: 0.5)
         }
         .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+}
+
+/// Applies `.accessibilityLabel` only when `label` is set, leaving the default combined reading untouched otherwise.
+private struct OptionalAccessibilityLabel: ViewModifier {
+    let label: String?
+
+    func body(content: Content) -> some View {
+        if let label {
+            content.accessibilityLabel(label)
+        } else {
+            content
+        }
     }
 }
 
