@@ -1,5 +1,31 @@
 # Changelog
 
+## [1.16.0](https://github.com/Fenriz1349/MediStock/compare/v1.15.0...v1.16.0) (2026-08-13)
+
+
+### Features
+
+* add AccentListRow ([02f776a](https://github.com/Fenriz1349/MediStock/commit/02f776a2d21c5a3521a2d4c1fe6249e49eba24a8))
+* add AppButtonStyle ([ad6f6eb](https://github.com/Fenriz1349/MediStock/commit/ad6f6eb1257dd2e312b04d7810f7dac101866b97))
+* add AppIcon, AccentColor ([49e9e32](https://github.com/Fenriz1349/MediStock/commit/49e9e3251343a66eb7aababf7a286a13813ad85d))
+* add AppLogo and implement it in AuthenticationView, OfflineView ([91b3214](https://github.com/Fenriz1349/MediStock/commit/91b321437efb948512774641d8a3185455b229b3))
+* add HistoryEntryLocalized and implement it in MedicineDetailHistorySection, rework MedicineDetailHistorySection ([d2b9aee](https://github.com/Fenriz1349/MediStock/commit/d2b9aee3e8e826621a2c1226263907573fb4a3c9))
+* add LoadingView and implement it ([aa726d0](https://github.com/Fenriz1349/MediStock/commit/aa726d0b78eaa78e49c85f1deb6916c41525758b))
+* add sanitizedStock ([7e4a8da](https://github.com/Fenriz1349/MediStock/commit/7e4a8da31e7c39273198131d213559188dde186a))
+* add sendPasswordReset ([7c3ac73](https://github.com/Fenriz1349/MediStock/commit/7c3ac738b80d03afce752aff41f957eaa0eb6366))
+* add SortingMenu ([7bfad45](https://github.com/Fenriz1349/MediStock/commit/7bfad45436f030de2e3891542a7f0887e439cbe3))
+* display all NavigationTitle inline ([589f8df](https://github.com/Fenriz1349/MediStock/commit/589f8dfaee3fb6a4578a2d766f59d34bb2513e6c))
+* implement AccentListRow in all lists ([06fc6e1](https://github.com/Fenriz1349/MediStock/commit/06fc6e13eeeaa434e96cb27b0110762f4ded5d77))
+* implement sorting menu in AllMedicinesView, change Layout ([aec8a51](https://github.com/Fenriz1349/MediStock/commit/aec8a5171ca92184c78300b4280aa89d6ac33da2))
+
+
+### Bug Fixes
+
+* add parallel-testing-enabled and set simulator language to french in CI ([0befecc](https://github.com/Fenriz1349/MediStock/commit/0befecc8e7ac65c7efb0d93b4a75c365f50252be))
+* fix AppIcon ([4f18f1a](https://github.com/Fenriz1349/MediStock/commit/4f18f1ab4b71a80813cae9aee5a670e28eabbfea))
+* fix CI by removing localization tests ([07aab9b](https://github.com/Fenriz1349/MediStock/commit/07aab9b4f743a64f8917ef1a3ce3b8ebe079ee90))
+* fix frame for loading overlay ([c59f94a](https://github.com/Fenriz1349/MediStock/commit/c59f94a33fd5aca1121b4b317de90ee096d3a3d8))
+
 ## [1.15.0](https://github.com/Fenriz1349/MediStock/compare/v1.14.0...v1.15.0) (2026-08-11)
 
 
