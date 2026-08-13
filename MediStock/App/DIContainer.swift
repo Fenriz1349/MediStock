@@ -10,7 +10,6 @@ import SwiftUI
 
 /// Composition root: owns the concrete Data-layer implementations and builds ViewModels from them.
 /// Views ask this container for a ViewModel instead of constructing Firestore/Firebase types themselves.
-/// So those concrete types stay out of the View and ViewModel layers.
 struct DIContainer {
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring

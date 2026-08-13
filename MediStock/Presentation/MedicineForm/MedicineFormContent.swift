@@ -9,8 +9,7 @@ import SwiftUI
 import CustomTextFields
 
 /// Shared name/aisle/stock fields, embedded in both the add-medicine and medicine-detail screens.
-/// Not a standalone navigable screen — just the common form content.
-/// This view only renders the fields, it never triggers a save itself.
+/// Not a standalone navigable screen — just renders the fields, never triggers a save itself.
 struct MedicineFormContent: View {
     @ObservedObject var viewModel: MedicineFormViewModel
 

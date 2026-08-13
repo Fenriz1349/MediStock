@@ -7,9 +7,8 @@
 
 import Foundation
 
-/// Presentation-layer state for the aisle list screen. Derives the distinct aisle codes from the full medicine stream.
-/// Firestore has no "distinct"/"group by" query.
-/// So this can't be pushed server-side like the other screens' queries (see `AisleMedicinesViewModel`).
+/// Presentation-layer state for the aisle list screen. Derives distinct aisle codes from the medicine stream.
+/// Firestore has no "distinct"/"group by" query, so this can't be pushed server-side.
 @MainActor
 final class AisleListViewModel: ObservableObject {
     @Published private(set) var allAisles: [String] = []

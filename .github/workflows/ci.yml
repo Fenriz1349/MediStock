@@ -77,6 +77,8 @@ jobs:
       # Unlike the two "latest" settings above, xcodebuild has no "any available device" keyword,
       # so this device name is the one place that may need adjusting if it isn't on the runner
       # (the failure log lists the actually available simulators).
+      # Pin the simulator to French via -testLanguage/-testRegion: some tests assert localized
+      # strings (e.g. HistoryEntryLocalizedTests), and the runner's simulator defaults to English.
       - name: Test
         run: |
           xcodebuild test \
@@ -84,4 +86,6 @@ jobs:
             -scheme MediStock \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
             -derivedDataPath DerivedData \
+            -testLanguage fr \
+            -testRegion FR \
             CODE_SIGNING_ALLOWED=NO

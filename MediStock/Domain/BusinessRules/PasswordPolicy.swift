@@ -17,10 +17,8 @@ enum PasswordRequirement: CaseIterable {
     case specialCharacter
 }
 
-/// Password strength rules, mirroring the policy enforced server-side in the Firebase console
-/// (Authentication > Settings > Password policy).
-/// This is the client-side check so the user gets immediate feedback instead of a round-trip failure.
-/// Not a replacement for the server-side one.
+/// Password strength rules, mirroring the policy enforced server-side in the Firebase console.
+/// Client-side only, for immediate feedback — not a replacement for the server-side check.
 enum PasswordPolicy {
     static let minimumLength = 8
 
