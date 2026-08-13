@@ -11,8 +11,6 @@ import Toasty
 /// Account screen: shows the connected user's email.
 /// Lets them reset their password, sign out, or permanently delete their account.
 /// Uses `AuthenticationViewModel` directly, same VM as `AuthenticationView`.
-/// Every action here is an authentication concern.
-/// No dedicated ViewModel needed.
 struct UserView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
     @EnvironmentObject var toasty: ToastyManager
