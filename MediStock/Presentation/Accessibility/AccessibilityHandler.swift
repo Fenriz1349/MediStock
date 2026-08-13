@@ -53,4 +53,10 @@ enum AccessibilityHandler {
                 : String(localized: "accessibility.sortButton.descending", defaultValue: "Trier par ordre décroissant")
         }
     }
+
+    enum AddMedicineButton {
+        static var label: String {
+            String(localized: "accessibility.addMedicineButton.label", defaultValue: "Ajouter un médicament")
+        }
+    }
 }

@@ -4,6 +4,23 @@
     " " : {
 
     },
+    "accessibility.addMedicineButton.label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a medicine"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un médicament"
+          }
+        }
+      }
+    },
     "accessibility.aisleRow.labelPlural" : {
       "extractionState" : "manual",
       "localizations" : {
