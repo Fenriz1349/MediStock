@@ -24,13 +24,26 @@ final class AllMedicinesViewModel: ObservableObject {
     @Published var filterText = "" {
         didSet { listen() }
     }
+    /// Reset to `nil` at the start of every action, then set again on failure.
+    /// The View observes this to trigger a toast, resolving the localized message itself.
+    /// This ViewModel never touches the display language.
+    @Published private(set) var error: MedicineError?
+    /// `true` for the duration of a delete, so the View can show a loading indicator.
+    @Published private(set) var isLoading = false
 
     private let medicineStore: MedicineStoring
+    private let historyStore: HistoryStoring
+    private let networkMonitor: NetworkMonitoring
     private var observationTask: Task<Void, Never>?
 
-    /// - Parameter medicineStore: Domain-level abstraction over medicine persistence.
-    init(medicineStore: MedicineStoring) {
+    /// - Parameters:
+    ///   - medicineStore: Domain-level abstraction over medicine persistence.
+    ///   - historyStore: Domain-level abstraction over history persistence.
+    ///   - networkMonitor: Checked before every delete. See `verifyNetworkReachable()`.
+    init(medicineStore: MedicineStoring, historyStore: HistoryStoring, networkMonitor: NetworkMonitoring) {
         self.medicineStore = medicineStore
+        self.historyStore = historyStore
+        self.networkMonitor = networkMonitor
     }
 
     /// Starts observing the medicine catalog, filtered/sorted per the current `filterText`,
@@ -53,6 +66,32 @@ final class AllMedicinesViewModel: ObservableObject {
                     self.medicines = Self.sort(medicines, by: sortOption, ascending: sortAscending)
                 }
             }
+        }
+    }
+
+    /// Permanently deletes `medicine`.
+    func delete(_ medicine: Medicine) async {
+        error = nil
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            try await verifyNetworkReachable()
+            try await medicineStore.delete(medicine)
+            try await historyStore.recordDeletion(of: medicine)
+        } catch let medicineError as MedicineError {
+            error = medicineError
+        } catch {
+            self.error = .unknown
+        }
+    }
+
+    /// Called before every delete, so a lack of connectivity surfaces immediately as a typed error.
+    /// - Throws: `MedicineError.network`, wrapping whatever `NetworkError` `networkMonitor` reports.
+    private func verifyNetworkReachable() async throws {
+        do {
+            try await networkMonitor.verifyReachable()
+        } catch let networkError as NetworkError {
+            throw MedicineError.network(networkError)
         }
     }
 

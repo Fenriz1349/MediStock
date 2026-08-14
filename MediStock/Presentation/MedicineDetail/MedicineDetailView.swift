@@ -11,6 +11,7 @@ import Toasty
 struct MedicineDetailView: View {
     @StateObject var viewModel: MedicineDetailViewModel
     @State private var formViewModel: MedicineFormViewModel?
+    @State private var isPresentingDeleteConfirmation = false
     @EnvironmentObject var toasty: ToastyManager
     @Environment(\.diContainer) private var container
     @Environment(\.dismiss) private var dismiss
@@ -110,7 +111,26 @@ struct MedicineDetailView: View {
                         formViewModel = container.makeMedicineFormViewModel(existingMedicine: viewModel.medicine)
                     }
                 }
+                ToolbarItem(placement: .destructiveAction) {
+                    Button(role: .destructive) {
+                        isPresentingDeleteConfirmation = true
+                    } label: {
+                        Image(systemName: "trash")
+                    }
+                    .accessibilityLabel(AccessibilityHandler.DeleteButton.label(name: viewModel.medicine.name))
+                }
             }
+        }
+        .alert(
+            "medicine.delete.confirmTitle",
+            isPresented: $isPresentingDeleteConfirmation
+        ) {
+            Button("medicine.delete.confirmButton", role: .destructive) {
+                Task { await viewModel.delete() }
+            }
+            Button("medicine.delete.cancelButton", role: .cancel) {}
+        } message: {
+            Text("medicine.delete.confirmMessage")
         }
         .onAppear {
             viewModel.listen()
@@ -123,6 +143,11 @@ struct MedicineDetailView: View {
         .onChange(of: formViewModel?.error) { _, error in
             if let error = error ?? nil {
                 toasty.showError(error.localizedMessage)
+            }
+        }
+        .onChange(of: viewModel.isDeleted) { _, isDeleted in
+            if isDeleted {
+                dismiss()
             }
         }
     }

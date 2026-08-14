@@ -106,6 +106,8 @@ private struct PreviewMedicineStore: MedicineStoring {
         }
         return saved
     }
+
+    func delete(_ medicine: Medicine) async throws {}
 }
 
 /// Fake `HistoryStoring` for Previews, serving `PreviewHelper.sampleHistory` instead of Firestore.
@@ -121,6 +123,7 @@ private struct PreviewHistoryStore: HistoryStoring {
     func recordAddition(of medicine: Medicine) async throws {}
     func recordUpdate(of medicine: Medicine, previousName: String, previousAisle: String) async throws {}
     func recordStockChange(of medicine: Medicine, from previousStock: Int) async throws {}
+    func recordDeletion(of medicine: Medicine) async throws {}
 }
 
 /// Fake `AuthenticationServicing` for Previews, always signed in as `PreviewHelper.sampleUser`.
