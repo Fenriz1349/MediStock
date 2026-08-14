@@ -11,9 +11,13 @@ import Foundation
 /// Instantiated per screen (scoped to one aisle), unlike the app-wide shared ViewModels.
 @MainActor
 final class AisleMedicinesViewModel: ObservableObject {
-    @Published private(set) var allMedicines: [Medicine] = []
-    @Published var sortOption: SortOption = .none
-    @Published var sortAscending = true
+    @Published private(set) var medicines: [Medicine] = []
+    @Published var sortOption: SortOption = .none {
+        didSet { listen() }
+    }
+    @Published var sortAscending = true {
+        didSet { listen() }
+    }
     /// Reset to `nil` at the start of every action, then set again on failure.
     /// The View observes this to trigger a toast, resolving the localized message itself.
     /// This ViewModel never touches the display language.
@@ -26,19 +30,6 @@ final class AisleMedicinesViewModel: ObservableObject {
     private let historyStore: HistoryStoring
     private let networkMonitor: NetworkMonitoring
     private var observationTask: Task<Void, Never>?
-
-    /// `allMedicines`, sorted per `sortOption`/`sortAscending`.
-    /// Purely local — the aisle's medicines are already fully loaded, no query to re-issue.
-    var medicines: [Medicine] {
-        switch sortOption {
-        case .none:
-            allMedicines
-        case .name:
-            allMedicines.sorted { sortAscending ? $0.name < $1.name : $0.name > $1.name }
-        case .stock:
-            allMedicines.sorted { sortAscending ? $0.stock < $1.stock : $0.stock > $1.stock }
-        }
-    }
 
     /// - Parameters:
     ///   - aisle: The exact aisle code to observe.
@@ -57,13 +48,17 @@ final class AisleMedicinesViewModel: ObservableObject {
         self.networkMonitor = networkMonitor
     }
 
-    /// Starts observing medicines in this aisle. Call once when the screen appears.
+    /// Starts observing medicines in this aisle, sorted per `sortOption`/`sortAscending`.
+    /// Call once when the screen appears. Automatically re-called whenever either changes.
     func listen() {
         observationTask?.cancel()
+        let sortOption = sortOption
+        let sortAscending = sortAscending
         observationTask = Task { [weak self] in
             guard let self else { return }
-            for await medicines in medicineStore.observeMedicines(inAisle: aisle) {
-                self.allMedicines = medicines
+            let stream = medicineStore.observeMedicines(inAisle: aisle, sortedBy: sortOption, ascending: sortAscending)
+            for await medicines in stream {
+                self.medicines = medicines
             }
         }
     }

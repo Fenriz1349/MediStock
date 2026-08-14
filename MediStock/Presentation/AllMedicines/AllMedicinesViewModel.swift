@@ -8,7 +8,8 @@
 import Foundation
 
 /// Presentation-layer state for the full-catalog screen.
-/// While `filterText` is non-empty, search runs server-side and sort is applied locally on that result.
+/// While `filterText` is non-empty, sorting doesn't apply.
+/// A name-prefix search only ever returns a small, already name-ordered result set.
 @MainActor
 final class AllMedicinesViewModel: ObservableObject {
     @Published private(set) var medicines: [Medicine] = []
@@ -62,8 +63,9 @@ final class AllMedicinesViewModel: ObservableObject {
                     self.medicines = medicines
                 }
             } else {
+                // Already returned name-ordered by Firestore — no sort to apply here.
                 for await medicines in medicineStore.observeMedicines(nameStartingWith: filterText) {
-                    self.medicines = Self.sort(medicines, by: sortOption, ascending: sortAscending)
+                    self.medicines = medicines
                 }
             }
         }
@@ -92,18 +94,6 @@ final class AllMedicinesViewModel: ObservableObject {
             try await networkMonitor.verifyReachable()
         } catch let networkError as NetworkError {
             throw MedicineError.network(networkError)
-        }
-    }
-
-    /// Applies `sortOption`/`sortAscending` locally, used only for the already name-filtered result set.
-    private static func sort(_ medicines: [Medicine], by sortOption: SortOption, ascending: Bool) -> [Medicine] {
-        switch sortOption {
-        case .none:
-            medicines
-        case .name:
-            medicines.sorted { ascending ? $0.name < $1.name : $0.name > $1.name }
-        case .stock:
-            medicines.sorted { ascending ? $0.stock < $1.stock : $0.stock > $1.stock }
         }
     }
 

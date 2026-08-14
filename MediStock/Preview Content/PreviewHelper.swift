@@ -83,10 +83,23 @@ private struct PreviewMedicineStore: MedicineStoring {
         }
     }
 
-    func observeMedicines(inAisle aisle: String) -> AsyncStream<[Medicine]> {
+    func observeMedicines(
+        inAisle aisle: String,
+        sortedBy sortOption: SortOption,
+        ascending: Bool
+    ) -> AsyncStream<[Medicine]> {
         let filtered = PreviewHelper.sampleMedicines.filter { $0.aisle == aisle }
+        let sorted: [Medicine]
+        switch sortOption {
+        case .none:
+            sorted = filtered
+        case .name:
+            sorted = filtered.sorted { ascending ? $0.name < $1.name : $0.name > $1.name }
+        case .stock:
+            sorted = filtered.sorted { ascending ? $0.stock < $1.stock : $0.stock > $1.stock }
+        }
         return AsyncStream { continuation in
-            continuation.yield(filtered)
+            continuation.yield(sorted)
             continuation.finish()
         }
     }

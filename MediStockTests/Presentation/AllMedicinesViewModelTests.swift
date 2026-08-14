@@ -79,7 +79,7 @@ final class AllMedicinesViewModelTests: XCTestCase {
     }
 
     @MainActor
-    func testSearchResults_sortOptionSet_sortsLocally() async {
+    func testSearchResults_sortOptionSet_ignoresSortAndKeepsServerOrder() async {
         let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
         viewModel.sortOption = .stock
@@ -91,8 +91,8 @@ final class AllMedicinesViewModelTests: XCTestCase {
         medicineStore.emitSearchResults([doliprane, dolodent])
         await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
 
-        // Sorted by stock ascending locally, even though the mock emitted doliprane first.
-        XCTAssertEqual(viewModel.medicines.map(\.id), ["2", "1"])
+        // No local sort — search results are used as returned by the store (Firestore's own name order).
+        XCTAssertEqual(viewModel.medicines.map(\.id), ["1", "2"])
     }
 
     @MainActor

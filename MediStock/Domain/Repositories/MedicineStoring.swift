@@ -22,9 +22,16 @@ protocol MedicineStoring {
     ///   - ascending: The sort direction. Ignored when `sortOption` is `.none`.
     func observeMedicines(sortedBy sortOption: SortOption, ascending: Bool) -> AsyncStream<[Medicine]>
 
-    /// Server-side filtered stream of medicines in a given aisle.
-    /// - Parameter aisle: The exact aisle code to filter on.
-    func observeMedicines(inAisle aisle: String) -> AsyncStream<[Medicine]>
+    /// Server-side filtered and sorted stream of medicines in a given aisle.
+    /// - Parameters:
+    ///   - aisle: The exact aisle code to filter on.
+    ///   - sortOption: How to order the results.
+    ///   - ascending: The sort direction. Ignored when `sortOption` is `.none`.
+    func observeMedicines(
+        inAisle aisle: String,
+        sortedBy sortOption: SortOption,
+        ascending: Bool
+    ) -> AsyncStream<[Medicine]>
 
     /// Server-side filtered stream of medicines whose name starts with `prefix`.
     /// Firestore has no "contains" query, only prefix range queries — this can't match anywhere in the name.

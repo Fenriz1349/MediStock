@@ -15,6 +15,8 @@ final class MedicineStoringDouble: MedicineStoring {
     private(set) var requestedSortOptions: [SortOption] = []
     private(set) var requestedAscending: [Bool] = []
     private(set) var requestedAisles: [String] = []
+    private(set) var requestedAisleSortOptions: [SortOption] = []
+    private(set) var requestedAisleAscending: [Bool] = []
     private(set) var requestedNamePrefixes: [String] = []
     var saveError: Error?
     var deleteError: Error?
@@ -45,8 +47,14 @@ final class MedicineStoringDouble: MedicineStoring {
         return medicinesStream
     }
 
-    func observeMedicines(inAisle aisle: String) -> AsyncStream<[Medicine]> {
+    func observeMedicines(
+        inAisle aisle: String,
+        sortedBy sortOption: SortOption,
+        ascending: Bool
+    ) -> AsyncStream<[Medicine]> {
         requestedAisles.append(aisle)
+        requestedAisleSortOptions.append(sortOption)
+        requestedAisleAscending.append(ascending)
         return medicinesStream
     }
 
