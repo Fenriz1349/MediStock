@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.20.0](https://github.com/Fenriz1349/MediStock/compare/v1.19.0...v1.20.0) (2026-08-14)
+
+
+### Features
+
+* add dispatchQueue in FirebaseApp.configure() to handle it outside mainthread ([aa6f1bf](https://github.com/Fenriz1349/MediStock/commit/aa6f1bf1a597ea1d875a70dcee1af635e837cab6))
+* add index filter for AisleMedicinesViewModel ([31f0697](https://github.com/Fenriz1349/MediStock/commit/31f06976dfd127112941db6745cb0d6702bd60f4))
+
 ## [1.19.0](https://github.com/Fenriz1349/MediStock/compare/v1.18.0...v1.19.0) (2026-08-14)
 
 
