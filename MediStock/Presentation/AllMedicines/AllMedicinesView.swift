@@ -59,6 +59,7 @@ struct AllMedicinesView: View {
             .navigationBarTitle("tab.allMedicines.title", displayMode: .inline)
             .searchable(
                 text: $viewModel.filterText,
+                placement: .toolbar,
                 prompt: Text("allMedicines.filterField")
             )
             .navigationDestination(for: Medicine.self) { medicine in

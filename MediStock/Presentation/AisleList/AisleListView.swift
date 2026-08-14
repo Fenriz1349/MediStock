@@ -58,7 +58,11 @@ struct AisleListView: View {
                 .padding()
             }
             .navigationBarTitle("tab.aisles.title", displayMode: .inline)
-            .searchable(text: $viewModel.filterText, prompt: Text("aisleList.filterField"))
+            .searchable(
+                text: $viewModel.filterText,
+                placement: .toolbar,
+                prompt: Text("aisleList.filterField")
+            )
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button(action: {
