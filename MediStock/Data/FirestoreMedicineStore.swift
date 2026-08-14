@@ -52,6 +52,7 @@ final class FirestoreMedicineStore: MedicineStoring {
     private func observe(_ query: Query) -> AsyncStream<[Medicine]> {
         AsyncStream { continuation in
             let listener = query.addSnapshotListener { snapshot, error in
+                print("TEMP thread check — isMainThread: \(Thread.isMainThread), thread: \(Thread.current)")
                 guard let snapshot else {
                     if let error { print("Error observing medicines: \(error)") }
                     return
