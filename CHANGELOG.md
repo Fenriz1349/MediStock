@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.17.0](https://github.com/Fenriz1349/MediStock/compare/v1.16.0...v1.17.0) (2026-08-14)
+
+
+### Features
+
+* add AccessibilityHandler, implement accessibilityLabel in all views ([94a1573](https://github.com/Fenriz1349/MediStock/commit/94a157300655e8dd15170879e02f6bfc74282d34))
+* add CircleIconButtonStyle, use it for all circular buttons ([16c8977](https://github.com/Fenriz1349/MediStock/commit/16c89778d50f08dd8b1f1113f88e78d0a091ceeb))
+* add focusState on name for MedicineContent, and on email for AuthenticationView only in VO ([3b15415](https://github.com/Fenriz1349/MediStock/commit/3b154156c0c90553a05bcd5c1524da573af59654))
+* hide elements from accessibility ([55da407](https://github.com/Fenriz1349/MediStock/commit/55da4077340c66c47af0301fe450eeb077b5a1fe))
+
+
+### Bug Fixes
+
+* add placement to .searchable to fix VO navigation ([232055c](https://github.com/Fenriz1349/MediStock/commit/232055c59540eaf319e758a8703ea1767bcf5413))
+
 ## [1.16.0](https://github.com/Fenriz1349/MediStock/compare/v1.15.0...v1.16.0) (2026-08-13)
 
 
