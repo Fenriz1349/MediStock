@@ -15,6 +15,7 @@ final class HistoryStoringDouble: HistoryStoring {
     private(set) var updatedMedicines: [Medicine] = []
     private(set) var updateDetails: [(medicine: Medicine, previousName: String, previousAisle: String)] = []
     private(set) var stockChanges: [(medicine: Medicine, previousStock: Int)] = []
+    private(set) var deletedMedicines: [Medicine] = []
     var recordError: Error?
 
     private let historyStream: AsyncStream<[HistoryEntry]>
@@ -48,5 +49,10 @@ final class HistoryStoringDouble: HistoryStoring {
     func recordStockChange(of medicine: Medicine, from previousStock: Int) async throws {
         if let recordError { throw recordError }
         stockChanges.append((medicine, previousStock))
+    }
+
+    func recordDeletion(of medicine: Medicine) async throws {
+        if let recordError { throw recordError }
+        deletedMedicines.append(medicine)
     }
 }

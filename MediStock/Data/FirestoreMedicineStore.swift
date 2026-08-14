@@ -79,6 +79,17 @@ final class FirestoreMedicineStore: MedicineStoring {
         return saved
     }
 
+    /// - Parameter medicine: The medicine to remove. A no-op if `medicine.id` is `nil`.
+    /// - Throws: `MedicineError`, mapped from whatever Firestore reports.
+    func delete(_ medicine: Medicine) async throws {
+        guard let id = medicine.id else { return }
+        do {
+            try await collection.document(id).delete()
+        } catch {
+            throw Self.mapError(error)
+        }
+    }
+
     /// Maps a raw error from the Firestore SDK to a Domain-level `MedicineError`.
     /// So callers never see a Firestore type.
     /// - Parameter error: The error thrown by a Firestore SDK call.

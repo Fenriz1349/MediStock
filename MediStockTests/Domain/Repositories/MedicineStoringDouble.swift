@@ -11,11 +11,13 @@ import Foundation
 /// In-memory fake of `MedicineStoring` for testing, with a controllable medicines stream.
 final class MedicineStoringDouble: MedicineStoring {
     private(set) var savedMedicines: [Medicine] = []
+    private(set) var deletedMedicines: [Medicine] = []
     private(set) var requestedSortOptions: [SortOption] = []
     private(set) var requestedAscending: [Bool] = []
     private(set) var requestedAisles: [String] = []
     private(set) var requestedNamePrefixes: [String] = []
     var saveError: Error?
+    var deleteError: Error?
 
     private let medicinesStream: AsyncStream<[Medicine]>
     private let medicinesContinuation: AsyncStream<[Medicine]>.Continuation
@@ -67,5 +69,10 @@ final class MedicineStoringDouble: MedicineStoring {
         var saved = medicine
         if saved.id == nil { saved.id = UUID().uuidString }
         return saved
+    }
+
+    func delete(_ medicine: Medicine) async throws {
+        if let deleteError { throw deleteError }
+        deletedMedicines.append(medicine)
     }
 }
