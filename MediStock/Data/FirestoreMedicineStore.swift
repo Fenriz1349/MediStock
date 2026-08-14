@@ -32,9 +32,25 @@ final class FirestoreMedicineStore: MedicineStoring {
         }
     }
 
-    /// - Parameter aisle: The exact aisle code to filter on.
-    func observeMedicines(inAisle aisle: String) -> AsyncStream<[Medicine]> {
-        observe(collection.whereField("aisle", isEqualTo: aisle))
+    /// - Parameters:
+    ///   - aisle: The exact aisle code to filter on.
+    ///   - sortOption: How to order the results — translates directly to `.order(by:)`.
+    ///     `.none` leaves the query unordered.
+    ///   - ascending: The sort direction. Ignored when `sortOption` is `.none`.
+    func observeMedicines(
+        inAisle aisle: String,
+        sortedBy sortOption: SortOption,
+        ascending: Bool
+    ) -> AsyncStream<[Medicine]> {
+        let filtered = collection.whereField("aisle", isEqualTo: aisle)
+        switch sortOption {
+        case .none:
+            return observe(filtered)
+        case .name:
+            return observe(filtered.order(by: "name", descending: !ascending))
+        case .stock:
+            return observe(filtered.order(by: "stock", descending: !ascending))
+        }
     }
 
     /// - Parameter prefix: The prefix to match, normalized to `MedicineNameFormat.capitalized(_:)` first —

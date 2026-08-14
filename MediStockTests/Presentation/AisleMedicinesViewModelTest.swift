@@ -46,81 +46,42 @@ final class AisleMedicinesViewModelTest: XCTestCase {
     }
 
     @MainActor
-    func testMedicines_sortOptionNone_keepsEmissionOrder() async {
+    func testListen_requestsAisleWithCurrentSortOptionAndDirection() async {
         let medicineStore = MedicineStoringDouble()
-        let viewModel = TestHelper.makeAisleMedicinesViewModel(medicineStore: medicineStore)
-        let zogzog = TestHelper.makeMedicine(id: "1", name: "Zogzog", stock: 5)
-        let alpha = TestHelper.makeMedicine(id: "2", name: "Alpha", stock: 20)
+        let viewModel = TestHelper.makeAisleMedicinesViewModel(aisle: "AD56", medicineStore: medicineStore)
 
         viewModel.listen()
-        medicineStore.emit([zogzog, alpha])
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
 
-        XCTAssertEqual(viewModel.medicines, [zogzog, alpha])
+        await TestHelper.waitUntil { !medicineStore.requestedAisles.isEmpty }
+        XCTAssertEqual(medicineStore.requestedAisles, ["AD56"])
+        XCTAssertEqual(medicineStore.requestedAisleSortOptions, [.none])
+        XCTAssertEqual(medicineStore.requestedAisleAscending, [true])
     }
 
     @MainActor
-    func testMedicines_sortOptionNameAscending_sortsAlphabetically() async {
+    func testSortOption_changed_requeriesWithNewOption() async {
         let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAisleMedicinesViewModel(medicineStore: medicineStore)
-        let zogzog = TestHelper.makeMedicine(id: "1", name: "Zogzog", stock: 5)
-        let alpha = TestHelper.makeMedicine(id: "2", name: "Alpha", stock: 20)
-
         viewModel.listen()
-        medicineStore.emit([zogzog, alpha])
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-        viewModel.sortOption = .name
-        viewModel.sortAscending = true
+        await TestHelper.waitUntil { medicineStore.requestedAisleSortOptions == [.none] }
 
-        XCTAssertEqual(viewModel.medicines, [alpha, zogzog])
+        viewModel.sortOption = .stock
+
+        await TestHelper.waitUntil { medicineStore.requestedAisleSortOptions == [.none, .stock] }
+        XCTAssertEqual(medicineStore.requestedAisleSortOptions, [.none, .stock])
     }
 
     @MainActor
-    func testMedicines_sortOptionNameDescending_reversesAlphabeticalOrder() async {
+    func testSortAscending_changed_requeriesWithNewDirection() async {
         let medicineStore = MedicineStoringDouble()
         let viewModel = TestHelper.makeAisleMedicinesViewModel(medicineStore: medicineStore)
-        let zogzog = TestHelper.makeMedicine(id: "1", name: "Zogzog", stock: 5)
-        let alpha = TestHelper.makeMedicine(id: "2", name: "Alpha", stock: 20)
-
         viewModel.listen()
-        medicineStore.emit([zogzog, alpha])
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-        viewModel.sortOption = .name
+        await TestHelper.waitUntil { medicineStore.requestedAisleAscending == [true] }
+
         viewModel.sortAscending = false
 
-        XCTAssertEqual(viewModel.medicines, [zogzog, alpha])
-    }
-
-    @MainActor
-    func testMedicines_sortOptionStockAscending_sortsByLowestStockFirst() async {
-        let medicineStore = MedicineStoringDouble()
-        let viewModel = TestHelper.makeAisleMedicinesViewModel(medicineStore: medicineStore)
-        let zogzog = TestHelper.makeMedicine(id: "1", name: "Zogzog", stock: 5)
-        let alpha = TestHelper.makeMedicine(id: "2", name: "Alpha", stock: 20)
-
-        viewModel.listen()
-        medicineStore.emit([alpha, zogzog])
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-        viewModel.sortOption = .stock
-        viewModel.sortAscending = true
-
-        XCTAssertEqual(viewModel.medicines, [zogzog, alpha])
-    }
-
-    @MainActor
-    func testMedicines_sortOptionStockDescending_sortsByHighestStockFirst() async {
-        let medicineStore = MedicineStoringDouble()
-        let viewModel = TestHelper.makeAisleMedicinesViewModel(medicineStore: medicineStore)
-        let zogzog = TestHelper.makeMedicine(id: "1", name: "Zogzog", stock: 5)
-        let alpha = TestHelper.makeMedicine(id: "2", name: "Alpha", stock: 20)
-
-        viewModel.listen()
-        medicineStore.emit([zogzog, alpha])
-        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
-        viewModel.sortOption = .stock
-        viewModel.sortAscending = false
-
-        XCTAssertEqual(viewModel.medicines, [alpha, zogzog])
+        await TestHelper.waitUntil { medicineStore.requestedAisleAscending == [true, false] }
+        XCTAssertEqual(medicineStore.requestedAisleAscending, [true, false])
     }
 
     @MainActor
