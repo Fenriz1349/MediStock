@@ -94,4 +94,29 @@ final class AllMedicinesViewModelTests: XCTestCase {
         // Sorted by stock ascending locally, even though the mock emitted doliprane first.
         XCTAssertEqual(viewModel.medicines.map(\.id), ["2", "1"])
     }
+
+    @MainActor
+    func testDelete_succeeds_removesMedicineAndRecordsHistory() async {
+        let medicineStore = MedicineStoringDouble()
+        let historyStore = HistoryStoringDouble()
+        let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore, historyStore: historyStore)
+        let medicine = TestHelper.makeMedicine()
+
+        await viewModel.delete(medicine)
+
+        XCTAssertEqual(medicineStore.deletedMedicines, [medicine])
+        XCTAssertEqual(historyStore.deletedMedicines, [medicine])
+        XCTAssertNil(viewModel.error)
+    }
+
+    @MainActor
+    func testDelete_storeThrows_exposesError() async {
+        let medicineStore = MedicineStoringDouble()
+        medicineStore.deleteError = MedicineError.unknown
+        let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
+
+        await viewModel.delete(TestHelper.makeMedicine())
+
+        XCTAssertEqual(viewModel.error, .unknown)
+    }
 }

@@ -91,13 +91,20 @@ enum TestHelper {
         )
     }
 
-    /// Builds an `AisleMedicinesViewModel` wired to a fresh mock by default.
+    /// Builds an `AisleMedicinesViewModel` wired to fresh mocks by default.
     @MainActor
     static func makeAisleMedicinesViewModel(
         aisle: String = "Rayon 1",
-        medicineStore: MedicineStoring = MedicineStoringDouble()
+        medicineStore: MedicineStoring = MedicineStoringDouble(),
+        historyStore: HistoryStoring = HistoryStoringDouble(),
+        networkMonitor: NetworkMonitoring = NetworkMonitoringDouble()
     ) -> AisleMedicinesViewModel {
-        AisleMedicinesViewModel(aisle: aisle, medicineStore: medicineStore)
+        AisleMedicinesViewModel(
+            aisle: aisle,
+            medicineStore: medicineStore,
+            historyStore: historyStore,
+            networkMonitor: networkMonitor
+        )
     }
 
     /// Builds an `AisleListViewModel` wired to a fresh mock by default.
@@ -108,11 +115,13 @@ enum TestHelper {
         AisleListViewModel(medicineStore: medicineStore)
     }
 
-    /// Builds an `AllMedicinesViewModel` wired to a fresh mock by default.
+    /// Builds an `AllMedicinesViewModel` wired to fresh mocks by default.
     @MainActor
     static func makeAllMedicinesViewModel(
-        medicineStore: MedicineStoring = MedicineStoringDouble()
+        medicineStore: MedicineStoring = MedicineStoringDouble(),
+        historyStore: HistoryStoring = HistoryStoringDouble(),
+        networkMonitor: NetworkMonitoring = NetworkMonitoringDouble()
     ) -> AllMedicinesViewModel {
-        AllMedicinesViewModel(medicineStore: medicineStore)
+        AllMedicinesViewModel(medicineStore: medicineStore, historyStore: historyStore, networkMonitor: networkMonitor)
     }
 }

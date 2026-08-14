@@ -102,4 +102,35 @@ final class MedicineDetailViewModelTest: XCTestCase {
         XCTAssertEqual(historyStore.stockChanges.first?.medicine.stock, 9)
         XCTAssertEqual(historyStore.stockChanges.first?.previousStock, 10)
     }
+
+    @MainActor
+    func testDelete_success_recordsHistoryAndMarksDeleted() async {
+        let medicineStore = MedicineStoringDouble()
+        let historyStore = HistoryStoringDouble()
+        let medicine = TestHelper.makeMedicine()
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicine: medicine,
+                                                               medicineStore: medicineStore,
+                                                               historyStore: historyStore)
+
+        await viewModel.delete()
+
+        XCTAssertEqual(medicineStore.deletedMedicines, [medicine])
+        XCTAssertEqual(historyStore.deletedMedicines, [medicine])
+        XCTAssertTrue(viewModel.isDeleted)
+        XCTAssertNil(viewModel.error)
+    }
+
+    @MainActor
+    func testDelete_storeFailure_setsTypedErrorAndSkipsHistory() async {
+        let medicineStore = MedicineStoringDouble()
+        let historyStore = HistoryStoringDouble()
+        medicineStore.deleteError = MedicineError.network(.serverUnreachable)
+        let viewModel = TestHelper.makeMedicineDetailViewModel(medicineStore: medicineStore, historyStore: historyStore)
+
+        await viewModel.delete()
+
+        XCTAssertEqual(viewModel.error, .network(.serverUnreachable))
+        XCTAssertFalse(viewModel.isDeleted)
+        XCTAssertTrue(historyStore.deletedMedicines.isEmpty)
+    }
 }
