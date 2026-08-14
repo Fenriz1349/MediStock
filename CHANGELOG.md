@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.21.0](https://github.com/Fenriz1349/MediStock/compare/v1.20.0...v1.21.0) (2026-08-14)
+
+
+### Features
+
+* add PaginationPolicy and lazy / pagination in every Views, update tests ([bd0c409](https://github.com/Fenriz1349/MediStock/commit/bd0c40945d0a8fc6ef3a09e33b2479f76ca98a22))
+
 ## [1.20.0](https://github.com/Fenriz1349/MediStock/compare/v1.19.0...v1.20.0) (2026-08-14)
 
 
