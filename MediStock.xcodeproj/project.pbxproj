@@ -60,6 +60,9 @@
 		68418A19302AF17300A5439D /* MedicineFormViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A18302AF17300A5439D /* MedicineFormViewModelTests.swift */; };
 		68418A1B302B3A4200A5439D /* KeyboardToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A1A302B3A4200A5439D /* KeyboardToolBar.swift */; };
 		68418A1D302B418000A5439D /* PreviewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68418A1C302B418000A5439D /* PreviewHelper.swift */; };
+		684855B0302F0F9800D2A9DD /* MedicineFormIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684855AF302F0F9800D2A9DD /* MedicineFormIntegrationTests.swift */; };
+		684855B2302F0F9E00D2A9DD /* MedicineDetailIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684855B1302F0F9E00D2A9DD /* MedicineDetailIntegrationTests.swift */; };
+		684855B4302F0FA600D2A9DD /* AuthenticationIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684855B3302F0FA600D2A9DD /* AuthenticationIntegrationTests.swift */; };
 		68574366302A51B200839E49 /* NetworkMonitoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574365302A51B200839E49 /* NetworkMonitoring.swift */; };
 		68574368302A51C500839E49 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574367302A51C500839E49 /* NetworkMonitor.swift */; };
 		6857436A302A52A900839E49 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68574369302A52A900839E49 /* NetworkError.swift */; };
@@ -173,6 +176,9 @@
 		68418A18302AF17300A5439D /* MedicineFormViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineFormViewModelTests.swift; sourceTree = "<group>"; };
 		68418A1A302B3A4200A5439D /* KeyboardToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardToolBar.swift; sourceTree = "<group>"; };
 		68418A1C302B418000A5439D /* PreviewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewHelper.swift; sourceTree = "<group>"; };
+		684855AF302F0F9800D2A9DD /* MedicineFormIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineFormIntegrationTests.swift; sourceTree = "<group>"; };
+		684855B1302F0F9E00D2A9DD /* MedicineDetailIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailIntegrationTests.swift; sourceTree = "<group>"; };
+		684855B3302F0FA600D2A9DD /* AuthenticationIntegrationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationIntegrationTests.swift; sourceTree = "<group>"; };
 		6852BE9030235A580078D739 /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
 		68574365302A51B200839E49 /* NetworkMonitoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitoring.swift; sourceTree = "<group>"; };
 		68574367302A51C500839E49 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
@@ -296,6 +302,7 @@
 		53E0D8A62C06084900DE1134 /* MediStockTests */ = {
 			isa = PBXGroup;
 			children = (
+				684855AE302F0F5900D2A9DD /* IntegrationTests */,
 				6811FFC6302C9E5C00FBE793 /* Domain */,
 				68D145033013A57500696204 /* Presentation */,
 				68D145093013AA1600696204 /* TestHelper.swift */,
@@ -462,6 +469,16 @@
 				683E4E3E302DCF6200733C22 /* AccessibilityHandlerTests.swift */,
 			);
 			path = LocalizableTests;
+			sourceTree = "<group>";
+		};
+		684855AE302F0F5900D2A9DD /* IntegrationTests */ = {
+			isa = PBXGroup;
+			children = (
+				684855AF302F0F9800D2A9DD /* MedicineFormIntegrationTests.swift */,
+				684855B1302F0F9E00D2A9DD /* MedicineDetailIntegrationTests.swift */,
+				684855B3302F0FA600D2A9DD /* AuthenticationIntegrationTests.swift */,
+			);
+			path = IntegrationTests;
 			sourceTree = "<group>";
 		};
 		6869167E3025F45000E86CFE /* Errors */ = {
@@ -811,10 +828,12 @@
 				6811FFD1302CA9DF00FBE793 /* MedicineStoringDouble.swift in Sources */,
 				68418A11302AE98D00A5439D /* EmailPolicyTests.swift in Sources */,
 				68418A15302AEC6100A5439D /* MedicinePolicyTests.swift in Sources */,
+				684855B4302F0FA600D2A9DD /* AuthenticationIntegrationTests.swift in Sources */,
 				6811FFD7302CAA1300FBE793 /* NetworkMonitoringDouble.swift in Sources */,
 				683E4E42302DD0E100733C22 /* AuthenticationErrorMessageTests.swift in Sources */,
 				683E4E46302DD0F800733C22 /* PasswordRequirementLabelTests.swift in Sources */,
 				68951E4B3029D3D700E2767B /* AllMedicinesViewModelTests.swift in Sources */,
+				684855B2302F0F9E00D2A9DD /* MedicineDetailIntegrationTests.swift in Sources */,
 				682D9FF33021EEAC00DBC11E /* MedicineDetailViewModelTest.swift in Sources */,
 				68951E473029D28E00E2767B /* AisleListViewModelTests.swift in Sources */,
 				68951E4F3029F74100E2767B /* MedicineNameFormatTests.swift in Sources */,
@@ -824,6 +843,7 @@
 				683E4E3F302DCF6200733C22 /* AccessibilityHandlerTests.swift in Sources */,
 				68D1450A3013AA1600696204 /* TestHelper.swift in Sources */,
 				683E4E44302DD0EE00733C22 /* MedicineErrorMessageTests.swift in Sources */,
+				684855B0302F0F9800D2A9DD /* MedicineFormIntegrationTests.swift in Sources */,
 				68D145063013A58700696204 /* AuthenticationViewModelTest.swift in Sources */,
 				68951E433029D1E800E2767B /* AisleMedicinesViewModelTest.swift in Sources */,
 				6811FFD3302CAA0400FBE793 /* AuthenticationServicingDouble.swift in Sources */,
