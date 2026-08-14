@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.19.0](https://github.com/Fenriz1349/MediStock/compare/v1.18.0...v1.19.0) (2026-08-14)
+
+
+### Features
+
+* add delete in MedicineStoring and recordDeletion in HistoryStoring ([8eea52f](https://github.com/Fenriz1349/MediStock/commit/8eea52fac2da32651a7c326bd5b105c788ae85d2))
+* implement delete method in all VM, add swipe to delete and delete button in DetailView, disply alert on delete ([e11e667](https://github.com/Fenriz1349/MediStock/commit/e11e66774f093a9e656a8b6d64a89af85bda1c65))
+
 ## [1.18.0](https://github.com/Fenriz1349/MediStock/compare/v1.17.0...v1.18.0) (2026-08-14)
 
 
