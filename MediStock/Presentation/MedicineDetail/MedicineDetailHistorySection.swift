@@ -25,13 +25,16 @@ struct MedicineDetailHistorySection: View {
                     Text(String(localized: "medicineDetail.history.user",
                                 defaultValue: "Utilisateur : \(localized.user)"))
                         .font(.subheadline)
-                    Text(String(localized: "medicineDetail.history.date",
-                                defaultValue: "Date : \(localized.date)"))
+                    (Text(String(localized: "accessibility.historyEntry.datePrefix", defaultValue: "Date : "))
+                        + Text(entry.timestamp, style: .date)
+                        + Text(" ")
+                        + Text(entry.timestamp, style: .time))
                         .font(.subheadline)
                     Text(String(localized: "medicineDetail.history.details",
                                 defaultValue: "Détails : \(localized.details)"))
                         .font(.subheadline)
                 }
+                .accessibilityElement(children: .combine)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
                 .background(Color(.secondarySystemBackground))

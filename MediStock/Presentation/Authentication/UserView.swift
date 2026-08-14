@@ -22,6 +22,7 @@ struct UserView: View {
                     Image(systemName: "person.crop.circle.fill")
                         .font(.system(size: 48))
                         .foregroundColor(.accentColor)
+                        .accessibilityHidden(true)
 
                     Text(viewModel.session?.email ?? "TEST")
                         .font(.title3)

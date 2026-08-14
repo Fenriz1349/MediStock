@@ -22,6 +22,8 @@ struct AppLogo: View {
         }
         .font(.system(size: size, weight: .heavy, design: .rounded))
         .foregroundColor(.accentColor)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("MediStock")
     }
 }
 

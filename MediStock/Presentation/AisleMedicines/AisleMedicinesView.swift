@@ -9,18 +9,26 @@ import SwiftUI
 
 struct AisleMedicinesView: View {
     @StateObject var viewModel: AisleMedicinesViewModel
+    /// Shared with the ancestor `NavigationStack` — `AisleListView` owns it, not this screen.
+    @Binding var navigationPath: NavigationPath
 
     var body: some View {
         List {
             ForEach(viewModel.medicines, id: \.id) { medicine in
-                NavigationLink(value: medicine) {
+                Button {
+                    navigationPath.append(medicine)
+                } label: {
                     AccentListRow(
                         heading: medicine.name,
                         caption: String(localized: "allMedicines.medicineStock",
                                         defaultValue: "Stock : \(medicine.stock)"),
-                        accentColor: medicine.stock == 0 ? .secondary : .accentColor
+                        accentColor: medicine.stock == 0 ? .secondary : .accentColor,
+                        accessibilityLabel: AccessibilityHandler.MedicineRow.label(
+                            name: medicine.name, stock: medicine.stock
+                        )
                     )
                 }
+                .buttonStyle(.plain)
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
             }
@@ -43,6 +51,9 @@ struct AisleMedicinesView: View {
 struct AisleMedicinesView_Previews: PreviewProvider {
     static var previews: some View {
         let aisle = PreviewHelper.sampleMedicine.aisle
-        AisleMedicinesView(viewModel: PreviewHelper.container.makeAisleMedicinesViewModel(aisle: aisle))
+        AisleMedicinesView(
+            viewModel: PreviewHelper.container.makeAisleMedicinesViewModel(aisle: aisle),
+            navigationPath: .constant(NavigationPath())
+        )
     }
 }

@@ -12,50 +12,79 @@ import Toasty
 struct AllMedicinesView: View {
     @StateObject var viewModel: AllMedicinesViewModel
     @Environment(\.diContainer) private var container
+
     @State private var isPresentingAddMedicine = false
+    @State private var navigationPath: [Medicine] = []
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             List {
                 if viewModel.medicines.isEmpty {
                     Text("allMedicines.noResults")
                         .foregroundColor(.secondary)
                 } else {
                     ForEach(viewModel.medicines, id: \.id) { medicine in
-                        NavigationLink(value: medicine) {
+                        Button {
+                            navigationPath.append(medicine)
+                        } label: {
                             AccentListRow(
                                 heading: medicine.name,
-                                caption: String(localized: "allMedicines.medicineStock",
-                                                defaultValue: "Stock : \(medicine.stock)"),
-                                accentColor: medicine.stock == 0 ? .secondary : .accentColor
+                                caption: String(
+                                    localized: "allMedicines.medicineStock",
+                                    defaultValue: "Stock : \(medicine.stock)"
+                                ),
+                                accentColor: medicine.stock == 0
+                                    ? .secondary
+                                    : .accentColor,
+                                accessibilityLabel: AccessibilityHandler.MedicineRow.label(
+                                    name: medicine.name,
+                                    stock: medicine.stock
+                                )
                             )
                         }
+                        .buttonStyle(.plain)
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                        .listRowBackground(Color.clear)
                     }
-                    .listRowBackground(Color.clear)
                 }
             }
             .overlay(alignment: .bottomTrailing) {
-                SortingMenu(sortOption: $viewModel.sortOption, sortAscending: $viewModel.sortAscending)
-                    .padding()
+                SortingMenu(
+                    sortOption: $viewModel.sortOption,
+                    sortAscending: $viewModel.sortAscending
+                )
+                .padding()
             }
             .navigationBarTitle("tab.allMedicines.title", displayMode: .inline)
-            .searchable(text: $viewModel.filterText, prompt: Text("allMedicines.filterField"))
+            .searchable(
+                text: $viewModel.filterText,
+                placement: .toolbar,
+                prompt: Text("allMedicines.filterField")
+            )
             .navigationDestination(for: Medicine.self) { medicine in
-                MedicineDetailView(viewModel: container.makeMedicineDetailViewModel(medicine: medicine))
+                MedicineDetailView(
+                    viewModel: container.makeMedicineDetailViewModel(
+                        medicine: medicine
+                    )
+                )
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Button(action: {
+                    Button {
                         isPresentingAddMedicine = true
-                    }, label: {
+                    } label: {
                         Image(systemName: "plus")
-                    })
+                    }
+                    .accessibilityLabel(
+                        AccessibilityHandler.AddMedicineButton.label
+                    )
                 }
             }
             .sheet(isPresented: $isPresentingAddMedicine) {
-                AddMedicineView(viewModel: container.makeMedicineFormViewModel())
+                AddMedicineView(
+                    viewModel: container.makeMedicineFormViewModel()
+                )
             }
             .onAppear {
                 viewModel.listen()

@@ -12,6 +12,7 @@ import CustomTextFields
 struct AuthenticationView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
     @EnvironmentObject var toasty: ToastyManager
+    @State private var isEmailFocused = false
 
     var body: some View {
         VStack {
@@ -24,7 +25,8 @@ struct AuthenticationView: View {
                 type: .email,
                 validator: EmailPolicy.isValid,
                 errorMessage: String(localized: "auth.email.invalidFormat"),
-                validationState: $viewModel.emailState
+                validationState: $viewModel.emailState,
+                isFocusedBinding: $isEmailFocused
             )
             .padding()
 
@@ -53,6 +55,7 @@ struct AuthenticationView: View {
                     let isMet = !viewModel.unmetPasswordRequirements.contains(requirement)
                     HStack {
                         Image(systemName: isMet ? "checkmark.circle.fill" : "circle")
+                            .accessibilityHidden(true)
                         Text(requirement.localizedDescription)
                     }
                     .foregroundColor(isMet ? .green : .secondary)
@@ -91,6 +94,13 @@ struct AuthenticationView: View {
         }
         .onChange(of: viewModel.didSendPasswordReset) { _, _ in
             toasty.showSuccess(String(localized: "user.resetPassword.successMessage"))
+        }
+        .onAppear {
+            // Only for VoiceOver: skips the swipe to reach the first field.
+            // Sighted users get the plain screen instead of an unprompted keyboard.
+            if UIAccessibility.isVoiceOverRunning {
+                isEmailFocused = true
+            }
         }
     }
 }

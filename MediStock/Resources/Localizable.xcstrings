@@ -1,6 +1,179 @@
 {
   "sourceLanguage" : "fr",
   "strings" : {
+    " " : {
+
+    },
+    "accessibility.addMedicineButton.label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a medicine"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un médicament"
+          }
+        }
+      }
+    },
+    "accessibility.aisleRow.labelPlural" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %lld medicines"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %lld médicaments"
+          }
+        }
+      }
+    },
+    "accessibility.aisleRow.labelSingular" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, 1 medicine"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, 1 médicament"
+          }
+        }
+      }
+    },
+    "accessibility.historyEntry.datePrefix" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date: "
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date : "
+          }
+        }
+      }
+    },
+    "accessibility.medicineDetail.summary" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@, stock of %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, %@, stock de %lld"
+          }
+        }
+      }
+    },
+    "accessibility.medicineRow.label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, stock of %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, stock de %lld"
+          }
+        }
+      }
+    },
+    "accessibility.sortButton.ascending" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort ascending"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trier par ordre croissant"
+          }
+        }
+      }
+    },
+    "accessibility.sortButton.descending" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort descending"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trier par ordre décroissant"
+          }
+        }
+      }
+    },
+    "accessibility.stockButton.decrease" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decrease, stock from %lld to %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diminuer, stock de %lld à %lld"
+          }
+        }
+      }
+    },
+    "accessibility.stockButton.increase" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Increase, stock from %lld to %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Augmenter, stock de %lld à %lld"
+          }
+        }
+      }
+    },
     "addMedicine.cancelButton" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -392,23 +565,6 @@
         }
       }
     },
-    "auth.login.button" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Login"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se connecter"
-          }
-        }
-      }
-    },
     "auth.forgotPasswordButton" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -422,6 +578,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mot de passe oublié ?"
+          }
+        }
+      }
+    },
+    "auth.login.button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se connecter"
           }
         }
       }
@@ -1027,6 +1200,9 @@
     "MediSt" : {
 
     },
+    "MediStock" : {
+
+    },
     "network.error.notConnected" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1248,23 +1424,6 @@
         }
       }
     },
-    "user.resetPasswordButton" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset Password"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Réinitialiser le mot de passe"
-          }
-        }
-      }
-    },
     "user.resetPassword.successMessage" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1278,6 +1437,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "E-mail de réinitialisation envoyé."
+          }
+        }
+      }
+    },
+    "user.resetPasswordButton" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset Password"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réinitialiser le mot de passe"
           }
         }
       }
