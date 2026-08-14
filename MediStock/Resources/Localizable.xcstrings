@@ -106,40 +106,6 @@
         }
       }
     },
-    "accessibility.stockButton.decrease" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Decrease, stock from %lld to %lld"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diminuer, stock de %lld à %lld"
-          }
-        }
-      }
-    },
-    "accessibility.stockButton.increase" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Increase, stock from %lld to %lld"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Augmenter, stock de %lld à %lld"
-          }
-        }
-      }
-    },
     "accessibility.sortButton.ascending" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -170,6 +136,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Trier par ordre décroissant"
+          }
+        }
+      }
+    },
+    "accessibility.stockButton.decrease" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Decrease, stock from %lld to %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diminuer, stock de %lld à %lld"
+          }
+        }
+      }
+    },
+    "accessibility.stockButton.increase" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Increase, stock from %lld to %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Augmenter, stock de %lld à %lld"
           }
         }
       }
@@ -1198,6 +1198,9 @@
       }
     },
     "MediSt" : {
+
+    },
+    "MediStock" : {
 
     },
     "network.error.notConnected" : {

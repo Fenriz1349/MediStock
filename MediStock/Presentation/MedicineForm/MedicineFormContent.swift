@@ -12,6 +12,7 @@ import CustomTextFields
 /// Not a standalone navigable screen — just renders the fields, never triggers a save itself.
 struct MedicineFormContent: View {
     @ObservedObject var viewModel: MedicineFormViewModel
+    @State private var isNameFocused = false
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -21,7 +22,8 @@ struct MedicineFormContent: View {
                 type: .alphaNumber,
                 validator: MedicinePolicy.isValidName,
                 errorMessage: String(localized: "medicineDetail.name.invalidFormat"),
-                validationState: $viewModel.nameState
+                validationState: $viewModel.nameState,
+                isFocusedBinding: $isNameFocused
             )
             Text("medicineDetail.name.capitalizationHint")
                 .font(.caption)
@@ -54,6 +56,14 @@ struct MedicineFormContent: View {
             }
         }
         .padding(.horizontal)
+        .onAppear {
+            // Setting focus immediately on appear is unreliable when this view is presented in a
+            // sheet (AddMedicineView): the view isn't yet first-responder-ready mid-presentation.
+            Task {
+                try? await Task.sleep(nanoseconds: 600_000_000)
+                isNameFocused = true
+            }
+        }
     }
 }
 
