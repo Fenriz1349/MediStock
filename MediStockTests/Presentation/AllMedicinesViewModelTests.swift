@@ -96,6 +96,66 @@ final class AllMedicinesViewModelTests: XCTestCase {
     }
 
     @MainActor
+    func testListen_initially_requestsDefaultPageSize() async {
+        let medicineStore = MedicineStoringDouble()
+        let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
+
+        viewModel.listen()
+
+        await TestHelper.waitUntil { !medicineStore.requestedLimits.isEmpty }
+        XCTAssertEqual(medicineStore.requestedLimits, [viewModel.pageSize])
+    }
+
+    @MainActor
+    func testLoadMore_resultsFillPageSize_raisesPageSizeAndRequeries() async {
+        let medicineStore = MedicineStoringDouble()
+        let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
+        viewModel.listen()
+        let fullPage = (0..<viewModel.pageSize).map { TestHelper.makeMedicine(id: "\($0)") }
+        medicineStore.emit(fullPage)
+        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
+        let initialPageSize = viewModel.pageSize
+
+        viewModel.loadMore()
+
+        await TestHelper.waitUntil { viewModel.pageSize > initialPageSize }
+        XCTAssertEqual(medicineStore.requestedLimits, [initialPageSize, viewModel.pageSize])
+    }
+
+    @MainActor
+    func testLoadMore_resultsUnderPageSize_isNoOp() async {
+        let medicineStore = MedicineStoringDouble()
+        let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
+        viewModel.listen()
+        medicineStore.emit([TestHelper.makeMedicine()])
+        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
+        let initialPageSize = viewModel.pageSize
+
+        viewModel.loadMore()
+
+        XCTAssertEqual(viewModel.pageSize, initialPageSize)
+        XCTAssertEqual(medicineStore.requestedLimits, [initialPageSize])
+    }
+
+    @MainActor
+    func testFilterText_set_resetsPageSize() async {
+        let medicineStore = MedicineStoringDouble()
+        let viewModel = TestHelper.makeAllMedicinesViewModel(medicineStore: medicineStore)
+        viewModel.listen()
+        let fullPage = (0..<viewModel.pageSize).map { TestHelper.makeMedicine(id: "\($0)") }
+        medicineStore.emit(fullPage)
+        await TestHelper.waitUntil { !viewModel.medicines.isEmpty }
+        viewModel.loadMore()
+        await TestHelper.waitUntil { medicineStore.requestedLimits.count == 2 }
+        let raisedPageSize = viewModel.pageSize
+
+        viewModel.filterText = "Dol"
+
+        await TestHelper.waitUntil { medicineStore.requestedNamePrefixes == ["Dol"] }
+        XCTAssertLessThan(viewModel.pageSize, raisedPageSize)
+    }
+
+    @MainActor
     func testDelete_succeeds_removesMedicineAndRecordsHistory() async {
         let medicineStore = MedicineStoringDouble()
         let historyStore = HistoryStoringDouble()

@@ -18,6 +18,7 @@ final class MedicineStoringDouble: MedicineStoring {
     private(set) var requestedAisleSortOptions: [SortOption] = []
     private(set) var requestedAisleAscending: [Bool] = []
     private(set) var requestedNamePrefixes: [String] = []
+    private(set) var requestedLimits: [Int] = []
     var saveError: Error?
     var deleteError: Error?
 
@@ -41,25 +42,29 @@ final class MedicineStoringDouble: MedicineStoring {
         medicinesStream
     }
 
-    func observeMedicines(sortedBy sortOption: SortOption, ascending: Bool) -> AsyncStream<[Medicine]> {
+    func observeMedicines(sortedBy sortOption: SortOption, ascending: Bool, limit: Int) -> AsyncStream<[Medicine]> {
         requestedSortOptions.append(sortOption)
         requestedAscending.append(ascending)
+        requestedLimits.append(limit)
         return medicinesStream
     }
 
     func observeMedicines(
         inAisle aisle: String,
         sortedBy sortOption: SortOption,
-        ascending: Bool
+        ascending: Bool,
+        limit: Int
     ) -> AsyncStream<[Medicine]> {
         requestedAisles.append(aisle)
         requestedAisleSortOptions.append(sortOption)
         requestedAisleAscending.append(ascending)
+        requestedLimits.append(limit)
         return medicinesStream
     }
 
-    func observeMedicines(nameStartingWith prefix: String) -> AsyncStream<[Medicine]> {
+    func observeMedicines(nameStartingWith prefix: String, limit: Int) -> AsyncStream<[Medicine]> {
         requestedNamePrefixes.append(prefix)
+        requestedLimits.append(limit)
         return nameSearchStream
     }
 
