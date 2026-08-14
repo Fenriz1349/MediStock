@@ -13,11 +13,14 @@ import Foundation
 final class AisleMedicinesViewModel: ObservableObject {
     @Published private(set) var medicines: [Medicine] = []
     @Published var sortOption: SortOption = .none {
-        didSet { listen() }
+        didSet { pageSize = PaginationPolicy.initialPageSize; listen() }
     }
     @Published var sortAscending = true {
-        didSet { listen() }
+        didSet { pageSize = PaginationPolicy.initialPageSize; listen() }
     }
+    /// Maximum number of results requested. Raised by `loadMore()`, not a real cursor.
+    /// Each raise re-subscribes with a bigger limit rather than fetching only the next page.
+    @Published private(set) var pageSize = PaginationPolicy.initialPageSize
     /// Reset to `nil` at the start of every action, then set again on failure.
     /// The View observes this to trigger a toast, resolving the localized message itself.
     /// This ViewModel never touches the display language.
@@ -49,18 +52,33 @@ final class AisleMedicinesViewModel: ObservableObject {
     }
 
     /// Starts observing medicines in this aisle, sorted per `sortOption`/`sortAscending`.
-    /// Call once when the screen appears. Automatically re-called whenever either changes.
+    /// Call once when the screen appears. Automatically re-called whenever any of those change.
     func listen() {
         observationTask?.cancel()
         let sortOption = sortOption
         let sortAscending = sortAscending
+        let pageSize = pageSize
         observationTask = Task { [weak self] in
             guard let self else { return }
-            let stream = medicineStore.observeMedicines(inAisle: aisle, sortedBy: sortOption, ascending: sortAscending)
+            let stream = medicineStore.observeMedicines(
+                inAisle: aisle,
+                sortedBy: sortOption,
+                ascending: sortAscending,
+                limit: pageSize
+            )
             for await medicines in stream {
                 self.medicines = medicines
             }
         }
+    }
+
+    /// Raises `pageSize` and re-subscribes to load the next batch of results.
+    /// Call when the last visible row appears.
+    /// No-op if `medicines` came back under `pageSize` — that already was every result there is.
+    func loadMore() {
+        guard medicines.count >= pageSize else { return }
+        pageSize += PaginationPolicy.increment
+        listen()
     }
 
     /// Permanently deletes `medicine`.

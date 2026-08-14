@@ -14,17 +14,20 @@ import Foundation
 final class AllMedicinesViewModel: ObservableObject {
     @Published private(set) var medicines: [Medicine] = []
     @Published var sortOption: SortOption = .none {
-        didSet { listen() }
+        didSet { pageSize = PaginationPolicy.initialPageSize; listen() }
     }
     /// The sort direction. Ignored when `sortOption` is `.none`.
     @Published var sortAscending = true {
-        didSet { listen() }
+        didSet { pageSize = PaginationPolicy.initialPageSize; listen() }
     }
     /// Firestore prefix match on the medicine name.
     /// Doesn't match anywhere else in the name — only the start.
     @Published var filterText = "" {
-        didSet { listen() }
+        didSet { pageSize = PaginationPolicy.initialPageSize; listen() }
     }
+    /// Maximum number of results requested. Raised by `loadMore()`, not a real cursor.
+    /// Each raise re-subscribes with a bigger limit rather than fetching only the next page.
+    @Published private(set) var pageSize = PaginationPolicy.initialPageSize
     /// Reset to `nil` at the start of every action, then set again on failure.
     /// The View observes this to trigger a toast, resolving the localized message itself.
     /// This ViewModel never touches the display language.
@@ -48,27 +51,43 @@ final class AllMedicinesViewModel: ObservableObject {
     }
 
     /// Starts observing the medicine catalog, filtered/sorted per the current `filterText`,
-    /// `sortOption` and `sortAscending`.
+    /// `sortOption`, `sortAscending` and `pageSize`.
     /// Call once when the screen appears.
-    /// Automatically re-called whenever any of those three change.
+    /// Automatically re-called whenever any of those change.
     func listen() {
         observationTask?.cancel()
         let sortOption = sortOption
         let sortAscending = sortAscending
         let filterText = filterText
+        let pageSize = pageSize
         observationTask = Task { [weak self] in
             guard let self else { return }
             if filterText.isEmpty {
-                for await medicines in medicineStore.observeMedicines(sortedBy: sortOption, ascending: sortAscending) {
+                let stream = medicineStore.observeMedicines(
+                    sortedBy: sortOption,
+                    ascending: sortAscending,
+                    limit: pageSize
+                )
+                for await medicines in stream {
                     self.medicines = medicines
                 }
             } else {
                 // Already returned name-ordered by Firestore — no sort to apply here.
-                for await medicines in medicineStore.observeMedicines(nameStartingWith: filterText) {
+                let stream = medicineStore.observeMedicines(nameStartingWith: filterText, limit: pageSize)
+                for await medicines in stream {
                     self.medicines = medicines
                 }
             }
         }
+    }
+
+    /// Raises `pageSize` and re-subscribes to load the next batch of results.
+    /// Call when the last visible row appears.
+    /// No-op if `medicines` came back under `pageSize` — that already was every result there is.
+    func loadMore() {
+        guard medicines.count >= pageSize else { return }
+        pageSize += PaginationPolicy.increment
+        listen()
     }
 
     /// Permanently deletes `medicine`.

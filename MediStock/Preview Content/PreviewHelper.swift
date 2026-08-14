@@ -67,7 +67,7 @@ private struct PreviewMedicineStore: MedicineStoring {
         }
     }
 
-    func observeMedicines(sortedBy sortOption: SortOption, ascending: Bool) -> AsyncStream<[Medicine]> {
+    func observeMedicines(sortedBy sortOption: SortOption, ascending: Bool, limit: Int) -> AsyncStream<[Medicine]> {
         let sorted: [Medicine]
         switch sortOption {
         case .none:
@@ -78,7 +78,7 @@ private struct PreviewMedicineStore: MedicineStoring {
             sorted = PreviewHelper.sampleMedicines.sorted { ascending ? $0.stock < $1.stock : $0.stock > $1.stock }
         }
         return AsyncStream { continuation in
-            continuation.yield(sorted)
+            continuation.yield(Array(sorted.prefix(limit)))
             continuation.finish()
         }
     }
@@ -86,7 +86,8 @@ private struct PreviewMedicineStore: MedicineStoring {
     func observeMedicines(
         inAisle aisle: String,
         sortedBy sortOption: SortOption,
-        ascending: Bool
+        ascending: Bool,
+        limit: Int
     ) -> AsyncStream<[Medicine]> {
         let filtered = PreviewHelper.sampleMedicines.filter { $0.aisle == aisle }
         let sorted: [Medicine]
@@ -99,15 +100,15 @@ private struct PreviewMedicineStore: MedicineStoring {
             sorted = filtered.sorted { ascending ? $0.stock < $1.stock : $0.stock > $1.stock }
         }
         return AsyncStream { continuation in
-            continuation.yield(sorted)
+            continuation.yield(Array(sorted.prefix(limit)))
             continuation.finish()
         }
     }
 
-    func observeMedicines(nameStartingWith prefix: String) -> AsyncStream<[Medicine]> {
+    func observeMedicines(nameStartingWith prefix: String, limit: Int) -> AsyncStream<[Medicine]> {
         let filtered = PreviewHelper.sampleMedicines.filter { $0.name.hasPrefix(prefix) }
         return AsyncStream { continuation in
-            continuation.yield(filtered)
+            continuation.yield(Array(filtered.prefix(limit)))
             continuation.finish()
         }
     }

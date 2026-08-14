@@ -48,6 +48,11 @@ struct AllMedicinesView: View {
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                         .listRowBackground(Color.clear)
+                        .onAppear {
+                            if medicine.id == viewModel.medicines.last?.id {
+                                viewModel.loadMore()
+                            }
+                        }
                     }
                     .onDelete { indexSet in
                         pendingDeletion = indexSet.first.map { viewModel.medicines[$0] }
