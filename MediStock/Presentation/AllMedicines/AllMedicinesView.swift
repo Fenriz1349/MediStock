@@ -60,11 +60,15 @@ struct AllMedicinesView: View {
                 }
             }
             .overlay(alignment: .bottomTrailing) {
-                SortingMenu(
-                    sortOption: $viewModel.sortOption,
-                    sortAscending: $viewModel.sortAscending
-                )
-                .padding()
+                // No sort menu while searching — a name-prefix search already returns a small,
+                // name-ordered result set, so sorting it has no real use.
+                if viewModel.filterText.isEmpty {
+                    SortingMenu(
+                        sortOption: $viewModel.sortOption,
+                        sortAscending: $viewModel.sortAscending
+                    )
+                    .padding()
+                }
             }
             .navigationBarTitle("tab.allMedicines.title", displayMode: .inline)
             .searchable(
