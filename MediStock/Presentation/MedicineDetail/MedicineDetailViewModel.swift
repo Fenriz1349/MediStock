@@ -19,6 +19,8 @@ final class MedicineDetailViewModel: ObservableObject {
     @Published private(set) var error: MedicineError?
     /// `true` for the duration of an action, so the View can show a loading indicator.
     @Published private(set) var isLoading = false
+    /// `true` once `delete()` has succeeded. The View observes this to dismiss itself.
+    @Published private(set) var isDeleted = false
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
@@ -71,6 +73,25 @@ final class MedicineDetailViewModel: ObservableObject {
         let previousStock = medicine.stock
         await save(mutate: { $0.stock -= 1 },
                   recordHistory: { try await self.historyStore.recordStockChange(of: $0, from: previousStock) })
+    }
+
+    /// Permanently deletes the medicine. On success, sets `isDeleted` so the View can dismiss.
+    func delete() async {
+        error = nil
+        isLoading = true
+        defer { isLoading = false }
+        do {
+            try await verifyNetworkReachable()
+            try await medicineStore.delete(medicine)
+            try await historyStore.recordDeletion(of: medicine)
+        } catch let medicineError as MedicineError {
+            error = medicineError
+            return
+        } catch {
+            self.error = .unknown
+            return
+        }
+        isDeleted = true
     }
 
     /// Applies `mutate` to a copy of the current medicine, persists it.

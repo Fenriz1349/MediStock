@@ -12,9 +12,11 @@ import Toasty
 struct AllMedicinesView: View {
     @StateObject var viewModel: AllMedicinesViewModel
     @Environment(\.diContainer) private var container
+    @EnvironmentObject private var toasty: ToastyManager
 
     @State private var isPresentingAddMedicine = false
     @State private var navigationPath: [Medicine] = []
+    @State private var pendingDeletion: Medicine?
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -47,6 +49,14 @@ struct AllMedicinesView: View {
                         .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                         .listRowBackground(Color.clear)
                     }
+                    .onDelete { indexSet in
+                        pendingDeletion = indexSet.first.map { viewModel.medicines[$0] }
+                    }
+                }
+            }
+            .overlay {
+                if viewModel.isLoading {
+                    LoadingOverlay()
                 }
             }
             .overlay(alignment: .bottomTrailing) {
@@ -86,8 +96,26 @@ struct AllMedicinesView: View {
                     viewModel: container.makeMedicineFormViewModel()
                 )
             }
+            .alert(
+                "medicine.delete.confirmTitle",
+                isPresented: Binding(get: { pendingDeletion != nil }, set: { if !$0 { pendingDeletion = nil } })
+            ) {
+                Button("medicine.delete.confirmButton", role: .destructive) {
+                    if let pendingDeletion {
+                        Task { await viewModel.delete(pendingDeletion) }
+                    }
+                }
+                Button("medicine.delete.cancelButton", role: .cancel) {}
+            } message: {
+                Text("medicine.delete.confirmMessage")
+            }
             .onAppear {
                 viewModel.listen()
+            }
+            .onChange(of: viewModel.error) { _, error in
+                if let error {
+                    toasty.showError(error.localizedMessage)
+                }
             }
         }
     }

@@ -39,6 +39,9 @@ struct HistoryEntryLocalized {
             return String(localized: "medicineDetail.history.action.stockDecreased",
                           defaultValue: "Diminution du stock de \(name) de \(delta)")
         }
+        if let name = raw.removingPrefix("Deleted ") {
+            return String(localized: "medicineDetail.history.action.deleted", defaultValue: "Suppression de \(name)")
+        }
         return raw
     }
 
@@ -55,6 +58,10 @@ struct HistoryEntryLocalized {
         if let (from, to) = stockRange(raw) {
             return String(localized: "medicineDetail.history.details.stockChanged",
                           defaultValue: "Stock passé de \(from) à \(to)")
+        }
+        if let stock = remainingStockAtDeletion(raw) {
+            return String(localized: "medicineDetail.history.details.deleted",
+                          defaultValue: "Retiré, il restait \(stock) en stock")
         }
         let clauses = raw.components(separatedBy: ", ")
         let localizedClauses = clauses.compactMap(localizedUpdateClause)
@@ -104,6 +111,14 @@ struct HistoryEntryLocalized {
               let to = Int(rest[separatorRange.upperBound...])
         else { return nil }
         return (from, to)
+    }
+
+    /// Parses `"Removed with <n> remaining in stock"`, `nil` if `<n>` isn't a valid integer.
+    private static func remainingStockAtDeletion(_ raw: String) -> Int? {
+        guard let rest = raw.removingPrefix("Removed with "),
+              let separatorRange = rest.range(of: " remaining in stock")
+        else { return nil }
+        return Int(rest[..<separatorRange.lowerBound])
     }
 }
 

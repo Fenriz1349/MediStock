@@ -36,4 +36,7 @@ protocol MedicineStoring {
 
     /// Creates or updates a medicine and returns it with its resolved identifier.
     func save(_ medicine: Medicine) async throws -> Medicine
+
+    /// Permanently removes a medicine. `medicine.id` must be set.
+    func delete(_ medicine: Medicine) async throws
 }

@@ -6,11 +6,15 @@
 //
 
 import SwiftUI
+import Toasty
 
 struct AisleMedicinesView: View {
     @StateObject var viewModel: AisleMedicinesViewModel
     /// Shared with the ancestor `NavigationStack` — `AisleListView` owns it, not this screen.
     @Binding var navigationPath: NavigationPath
+    @EnvironmentObject private var toasty: ToastyManager
+
+    @State private var pendingDeletion: Medicine?
 
     var body: some View {
         List {
@@ -32,7 +36,15 @@ struct AisleMedicinesView: View {
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
             }
+            .onDelete { indexSet in
+                pendingDeletion = indexSet.first.map { viewModel.medicines[$0] }
+            }
             .listRowBackground(Color.clear)
+        }
+        .overlay {
+            if viewModel.isLoading {
+                LoadingOverlay()
+            }
         }
         .overlay(alignment: .bottomTrailing) {
             SortingMenu(sortOption: $viewModel.sortOption, sortAscending: $viewModel.sortAscending)
@@ -42,8 +54,33 @@ struct AisleMedicinesView: View {
             AisleCode.format(code: viewModel.aisle, aisleLabel: AisleLabel.localized),
             displayMode: .inline
         )
+        .alert(
+            "medicine.delete.confirmTitle",
+            isPresented: Binding(get: { pendingDeletion != nil }, set: { if !$0 { pendingDeletion = nil } })
+        ) {
+            Button("medicine.delete.confirmButton", role: .destructive) {
+                if let pendingDeletion {
+                    Task { await viewModel.delete(pendingDeletion) }
+                }
+            }
+            Button("medicine.delete.cancelButton", role: .cancel) {}
+        } message: {
+            Text("medicine.delete.confirmMessage")
+        }
         .onAppear {
             viewModel.listen()
+        }
+        .onChange(of: viewModel.error) { _, error in
+            if let error {
+                toasty.showError(error.localizedMessage)
+            }
+        }
+        .onChange(of: viewModel.medicines) { oldValue, newValue in
+            // The aisle just lost its last medicine (deleted from here or from the detail screen).
+            // Nothing left to show — go back to the aisle list instead of an empty screen.
+            if !oldValue.isEmpty, newValue.isEmpty, !navigationPath.isEmpty {
+                navigationPath.removeLast()
+            }
         }
     }
 }
@@ -55,5 +92,6 @@ struct AisleMedicinesView_Previews: PreviewProvider {
             viewModel: PreviewHelper.container.makeAisleMedicinesViewModel(aisle: aisle),
             navigationPath: .constant(NavigationPath())
         )
+        .environmentObject(ToastyManager())
     }
 }

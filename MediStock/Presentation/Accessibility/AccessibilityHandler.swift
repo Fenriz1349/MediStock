@@ -59,4 +59,10 @@ enum AccessibilityHandler {
             String(localized: "accessibility.addMedicineButton.label", defaultValue: "Ajouter un médicament")
         }
     }
+
+    enum DeleteButton {
+        static func label(name: String) -> String {
+            String(localized: "accessibility.deleteButton.label", defaultValue: "Supprimer \(name)")
+        }
+    }
 }
