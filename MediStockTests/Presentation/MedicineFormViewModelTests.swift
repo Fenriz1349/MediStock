@@ -271,6 +271,18 @@ final class MedicineFormViewModelTests: XCTestCase {
     }
 
     @MainActor
+    func testListenAisles_aislesEmitted_populatesAvailableAislesSorted() async {
+        let aisleStore = AisleStoringDouble()
+        let viewModel = TestHelper.makeMedicineFormViewModel(aisleStore: aisleStore)
+
+        viewModel.listenAisles()
+        aisleStore.emit([AisleSummary(code: "AD10", medicineCount: 1), AisleSummary(code: "AD2", medicineCount: 1)])
+        await TestHelper.waitUntil { !viewModel.availableAisles.isEmpty }
+
+        XCTAssertEqual(viewModel.availableAisles, ["AD2", "AD10"])
+    }
+
+    @MainActor
     func testSanitizeStock_containsLetters_stripsThem() {
         let viewModel = TestHelper.makeMedicineFormViewModel()
         viewModel.stockText = "1a2b3"
