@@ -21,6 +21,23 @@
         }
       }
     },
+    "accessibility.aislePickerButton.label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose an existing aisle"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir un rayon existant"
+          }
+        }
+      }
+    },
     "accessibility.aisleRow.labelPlural" : {
       "extractionState" : "manual",
       "localizations" : {

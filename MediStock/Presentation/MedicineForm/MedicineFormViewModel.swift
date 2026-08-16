@@ -25,6 +25,8 @@ final class MedicineFormViewModel: ObservableObject {
     @Published private(set) var error: MedicineError?
     /// `true` for the duration of `save(cleanedAisle:)`, so the View can show a loading indicator.
     @Published private(set) var isLoading = false
+    /// Existing aisle codes, for the picker next to the aisle field. See `listenAisles()`.
+    @Published private(set) var availableAisles: [String] = []
 
     /// Stock is only part of the form when creating.
     /// Editing an existing medicine's stock goes through the +/- steppers instead, not this form.
@@ -37,6 +39,7 @@ final class MedicineFormViewModel: ObservableObject {
     private let historyStore: HistoryStoring
     private let aisleStore: AisleStoring
     private let networkMonitor: NetworkMonitoring
+    private var aislesTask: Task<Void, Never>?
 
     /// - Parameters:
     ///   - existingMedicine: `nil` to create a new medicine, or the medicine being edited.
@@ -66,6 +69,17 @@ final class MedicineFormViewModel: ObservableObject {
         name = existingMedicine.name
         aisle = existingMedicine.aisle
         stockText = String(existingMedicine.stock)
+    }
+
+    /// Starts observing existing aisle codes, for the picker. Call once when the screen appears.
+    func listenAisles() {
+        aislesTask?.cancel()
+        aislesTask = Task { [weak self] in
+            guard let self else { return }
+            for await aisles in aisleStore.observeAisles() {
+                self.availableAisles = aisles.map(\.code).sorted(by: AisleCode.areInOrder)
+            }
+        }
     }
 
     /// Strips non-digit characters from `stockText`. Call from `.onChange(of: stockText)`.
@@ -129,5 +143,9 @@ final class MedicineFormViewModel: ObservableObject {
         } catch let networkError as NetworkError {
             throw MedicineError.network(networkError)
         }
+    }
+
+    deinit {
+        aislesTask?.cancel()
     }
 }
