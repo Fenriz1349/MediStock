@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.22.0](https://github.com/Fenriz1349/MediStock/compare/v1.21.0...v1.22.0) (2026-08-16)
+
+
+### Features
+
+* add FirestoreAisleStore, AisleSummary, AisleStoring and AisleStoringDouble ([0bb9a75](https://github.com/Fenriz1349/MediStock/commit/0bb9a7569192c2f342f9e69d13b2c2d726a339bb))
+* add picker with aislesSummary in MedicineFormContent, add test ([f0e3291](https://github.com/Fenriz1349/MediStock/commit/f0e3291e402c850ca78bf0224457d3d09d3e329e))
+* implement aisleStore in DIContainer and VM, add sanitizedAisle to prevent / in aislename, update PreviewHelper ([61f2b86](https://github.com/Fenriz1349/MediStock/commit/61f2b86528f807c03f15a4c20e185b2558b612bd))
+
 ## [1.21.0](https://github.com/Fenriz1349/MediStock/compare/v1.20.0...v1.21.0) (2026-08-14)
 
 
