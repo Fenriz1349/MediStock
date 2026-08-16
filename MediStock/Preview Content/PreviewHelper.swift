@@ -51,6 +51,7 @@ enum PreviewHelper {
         DIContainer(
             medicineStore: PreviewMedicineStore(),
             historyStore: PreviewHistoryStore(),
+            aisleStore: PreviewAisleStore(),
             authenticationService: PreviewAuthenticationService(),
             networkMonitor: PreviewNetworkMonitor()
         )
@@ -138,6 +139,22 @@ private struct PreviewHistoryStore: HistoryStoring {
     func recordUpdate(of medicine: Medicine, previousName: String, previousAisle: String) async throws {}
     func recordStockChange(of medicine: Medicine, from previousStock: Int) async throws {}
     func recordDeletion(of medicine: Medicine) async throws {}
+}
+
+/// Fake `AisleStoring` for Previews, deriving counts from `PreviewHelper.sampleMedicines`.
+/// Each stream yields once and finishes — a static snapshot, not a live subscription.
+private struct PreviewAisleStore: AisleStoring {
+    func observeAisles() -> AsyncStream<[AisleSummary]> {
+        let counts = Dictionary(grouping: PreviewHelper.sampleMedicines, by: \.aisle).mapValues(\.count)
+        let aisles = counts.map { AisleSummary(code: $0.key, medicineCount: $0.value) }
+        return AsyncStream { continuation in
+            continuation.yield(aisles)
+            continuation.finish()
+        }
+    }
+
+    func recordMedicineAdded(toAisle aisle: String) async throws {}
+    func recordMedicineRemoved(fromAisle aisle: String) async throws {}
 }
 
 /// Fake `AuthenticationServicing` for Previews, always signed in as `PreviewHelper.sampleUser`.

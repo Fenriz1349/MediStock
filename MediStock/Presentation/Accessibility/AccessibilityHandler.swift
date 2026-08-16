@@ -65,4 +65,10 @@ enum AccessibilityHandler {
             String(localized: "accessibility.deleteButton.label", defaultValue: "Supprimer \(name)")
         }
     }
+
+    enum AislePickerButton {
+        static var label: String {
+            String(localized: "accessibility.aislePickerButton.label", defaultValue: "Choisir un rayon existant")
+        }
+    }
 }

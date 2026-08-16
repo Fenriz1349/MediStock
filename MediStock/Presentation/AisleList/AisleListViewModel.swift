@@ -7,8 +7,8 @@
 
 import Foundation
 
-/// Presentation-layer state for the aisle list screen. Derives distinct aisle codes from the medicine stream.
-/// Firestore has no "distinct"/"group by" query, so this can't be pushed server-side.
+/// Presentation-layer state for the aisle list screen.
+/// Reads the `aisles` collection directly (see `AisleStoring`) instead of deriving from every medicine.
 @MainActor
 final class AisleListViewModel: ObservableObject {
     @Published private(set) var allAisles: [String] = []
@@ -20,15 +20,15 @@ final class AisleListViewModel: ObservableObject {
     /// Purely local, same reasoning as `sortAscending` — all the data is already loaded.
     @Published var filterText = ""
 
-    private let medicineStore: MedicineStoring
+    private let aisleStore: AisleStoring
     private var observationTask: Task<Void, Never>?
 
-    /// - Parameter medicineStore: Domain-level abstraction over medicine persistence.
-    init(medicineStore: MedicineStoring) {
-        self.medicineStore = medicineStore
+    /// - Parameter aisleStore: Domain-level abstraction over the `aisles` collection.
+    init(aisleStore: AisleStoring) {
+        self.aisleStore = aisleStore
     }
 
-    /// Starts observing the medicine catalog to derive its distinct aisles.
+    /// Starts observing the `aisles` collection.
     /// Sorted the way Finder orders file names (e.g. "AD2" before "AD10" — a plain string sort would put
     /// "AD10" first).
     /// Call once when the screen appears.
@@ -36,9 +36,9 @@ final class AisleListViewModel: ObservableObject {
         observationTask?.cancel()
         observationTask = Task { [weak self] in
             guard let self else { return }
-            for await medicines in medicineStore.observeMedicines() {
-                self.allAisles = Array(Set(medicines.map(\.aisle))).sorted(by: AisleCode.areInOrder)
-                self.medicineCounts = Dictionary(grouping: medicines, by: \.aisle).mapValues(\.count)
+            for await aisles in aisleStore.observeAisles() {
+                self.allAisles = aisles.map(\.code).sorted(by: AisleCode.areInOrder)
+                self.medicineCounts = Dictionary(uniqueKeysWithValues: aisles.map { ($0.code, $0.medicineCount) })
             }
         }
     }

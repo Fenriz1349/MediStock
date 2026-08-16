@@ -42,6 +42,10 @@
 		682D9FF730220D4C00DBC11E /* MedistockUI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */; };
 		682D9FF830220D4C00DBC11E /* MedistockUI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */; };
 		682D9FF930220D4C00DBC11E /* MedistockUI.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = 682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */; };
+		6833B7C63032384B00EA6526 /* AisleSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6833B7C53032384B00EA6526 /* AisleSummary.swift */; };
+		6833B7C83032385D00EA6526 /* AisleStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6833B7C73032385D00EA6526 /* AisleStoring.swift */; };
+		6833B7CA3032386D00EA6526 /* FirestoreAisleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6833B7C93032386D00EA6526 /* FirestoreAisleStore.swift */; };
+		6833B7CC3032388100EA6526 /* AisleStoringDouble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6833B7CB3032388100EA6526 /* AisleStoringDouble.swift */; };
 		6836B20830248295003E756D /* AisleCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6836B20730248295003E756D /* AisleCode.swift */; };
 		6836B20B3024922E003E756D /* AisleCodeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6836B20A3024922E003E756D /* AisleCodeTest.swift */; };
 		683E4E3D302DCEED00733C22 /* AccessibilityHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 683E4E3C302DCEED00733C22 /* AccessibilityHandler.swift */; };
@@ -160,6 +164,10 @@
 		682D9FF23021EEAC00DBC11E /* MedicineDetailViewModelTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineDetailViewModelTest.swift; sourceTree = "<group>"; };
 		682D9FF4302204A600DBC11E /* SortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOption.swift; sourceTree = "<group>"; };
 		682D9FF630220D4C00DBC11E /* MedistockUI.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = MedistockUI.xctestplan; path = MediStockUITests/MedistockUI.xctestplan; sourceTree = "<group>"; };
+		6833B7C53032384B00EA6526 /* AisleSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleSummary.swift; sourceTree = "<group>"; };
+		6833B7C73032385D00EA6526 /* AisleStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleStoring.swift; sourceTree = "<group>"; };
+		6833B7C93032386D00EA6526 /* FirestoreAisleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreAisleStore.swift; sourceTree = "<group>"; };
+		6833B7CB3032388100EA6526 /* AisleStoringDouble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleStoringDouble.swift; sourceTree = "<group>"; };
 		6836B20730248295003E756D /* AisleCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleCode.swift; sourceTree = "<group>"; };
 		6836B20A3024922E003E756D /* AisleCodeTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleCodeTest.swift; sourceTree = "<group>"; };
 		683E4E3C302DCEED00733C22 /* AccessibilityHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityHandler.swift; sourceTree = "<group>"; };
@@ -337,6 +345,7 @@
 				6811FFD0302CA9DF00FBE793 /* MedicineStoringDouble.swift */,
 				6811FFD4302CAA0D00FBE793 /* HistoryStoringDouble.swift */,
 				6811FFD6302CAA1300FBE793 /* NetworkMonitoringDouble.swift */,
+				6833B7CB3032388100EA6526 /* AisleStoringDouble.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -512,6 +521,7 @@
 				68D144F530139B1D00696204 /* FirestoreMedicineStore.swift */,
 				68D144F730139B2700696204 /* FirestoreHistoryStore.swift */,
 				68574367302A51C500839E49 /* NetworkMonitor.swift */,
+				6833B7C93032386D00EA6526 /* FirestoreAisleStore.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -522,6 +532,7 @@
 				68D144ED301393C600696204 /* AppUser.swift */,
 				53E0D8DB2C06099C00DE1134 /* Medicine.swift */,
 				53E0D8E92C066F7A00DE1134 /* HistoryEntry.swift */,
+				6833B7C53032384B00EA6526 /* AisleSummary.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -533,6 +544,7 @@
 				68D144EF3013998100696204 /* MedicineStoring.swift */,
 				68D144F13013999000696204 /* HistoryStoring.swift */,
 				68574365302A51B200839E49 /* NetworkMonitoring.swift */,
+				6833B7C73032385D00EA6526 /* AisleStoring.swift */,
 			);
 			path = Repositories;
 			sourceTree = "<group>";
@@ -788,6 +800,7 @@
 				68D144F23013999000696204 /* HistoryStoring.swift in Sources */,
 				683E4E4A302DF6C000733C22 /* CircleIconButtonStyle.swift in Sources */,
 				6811FFC5302C57F800FBE793 /* AppButtonStyle.swift in Sources */,
+				6833B7C83032385D00EA6526 /* AisleStoring.swift in Sources */,
 				6887EC2130246BCC00DAF7E8 /* AddMedicineView.swift in Sources */,
 				68D145023013A52800696204 /* AuthenticationViewModel.swift in Sources */,
 				6836B20830248295003E756D /* AisleCode.swift in Sources */,
@@ -818,7 +831,9 @@
 				686916843025FA5100E86CFE /* PasswordRequirementLabel.swift in Sources */,
 				68D144FA30139B2F00696204 /* FirebaseAuthenticationService.swift in Sources */,
 				68D144F630139B1D00696204 /* FirestoreMedicineStore.swift in Sources */,
+				6833B7CA3032386D00EA6526 /* FirestoreAisleStore.swift in Sources */,
 				686916783025D20200E86CFE /* AisleLabel.swift in Sources */,
+				6833B7C63032384B00EA6526 /* AisleSummary.swift in Sources */,
 				53E0D8EE2C06718100DE1134 /* AllMedicinesView.swift in Sources */,
 				68951E413029CFC300E2767B /* AisleMedicinesViewModel.swift in Sources */,
 				53E0D8EC2C06717200DE1134 /* MainTabView.swift in Sources */,
@@ -839,6 +854,7 @@
 				68951E4B3029D3D700E2767B /* AllMedicinesViewModelTests.swift in Sources */,
 				684855B2302F0F9E00D2A9DD /* MedicineDetailIntegrationTests.swift in Sources */,
 				682D9FF33021EEAC00DBC11E /* MedicineDetailViewModelTest.swift in Sources */,
+				6833B7CC3032388100EA6526 /* AisleStoringDouble.swift in Sources */,
 				68951E473029D28E00E2767B /* AisleListViewModelTests.swift in Sources */,
 				68951E4F3029F74100E2767B /* MedicineNameFormatTests.swift in Sources */,
 				6836B20B3024922E003E756D /* AisleCodeTest.swift in Sources */,

@@ -30,14 +30,31 @@ struct MedicineFormContent: View {
                 .foregroundColor(.secondary)
                 .padding(.bottom, 10)
 
-            CustomTextField.triggered(
-                placeholder: String(localized: "medicineDetail.aisle.label"),
-                text: $viewModel.aisle,
-                type: .alphaNumber,
-                validator: MedicinePolicy.isValidAisle,
-                errorMessage: String(localized: "medicineDetail.aisle.invalidFormat"),
-                validationState: $viewModel.aisleState
-            )
+            HStack {
+                CustomTextField.triggered(
+                    placeholder: String(localized: "medicineDetail.aisle.label"),
+                    text: $viewModel.aisle,
+                    type: .alphaNumber,
+                    validator: MedicinePolicy.isValidAisle,
+                    errorMessage: String(localized: "medicineDetail.aisle.invalidFormat"),
+                    validationState: $viewModel.aisleState
+                )
+                .onChange(of: viewModel.aisle) {
+                    viewModel.sanitizeAisle()
+                }
+
+                if !viewModel.availableAisles.isEmpty {
+                    Menu {
+                        ForEach(viewModel.availableAisles, id: \.self) { code in
+                            Button(code) { viewModel.aisle = code }
+                        }
+                    } label: {
+                        Image(systemName: "list.bullet")
+                    }
+                    .buttonStyle(CircleIconButtonStyle())
+                    .accessibilityLabel(AccessibilityHandler.AislePickerButton.label)
+                }
+            }
             .padding(.bottom, 10)
 
             // Stock only makes sense when creating — editing goes through the +/- steppers instead.
@@ -57,6 +74,7 @@ struct MedicineFormContent: View {
         }
         .padding(.horizontal)
         .onAppear {
+            viewModel.listenAisles()
             // Setting focus immediately on appear is unreliable when this view is presented in a
             // sheet (AddMedicineView): the view isn't yet first-responder-ready mid-presentation.
             Task {

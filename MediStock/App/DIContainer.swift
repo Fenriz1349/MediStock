@@ -13,17 +13,20 @@ import SwiftUI
 struct DIContainer {
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
+    private let aisleStore: AisleStoring
     private let authenticationService: AuthenticationServicing
     private let networkMonitor: NetworkMonitoring
 
     init(
         medicineStore: MedicineStoring = FirestoreMedicineStore(),
         historyStore: HistoryStoring = FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
+        aisleStore: AisleStoring = FirestoreAisleStore(),
         authenticationService: AuthenticationServicing = FirebaseAuthenticationService(),
         networkMonitor: NetworkMonitoring = NetworkMonitor()
     ) {
         self.medicineStore = medicineStore
         self.historyStore = historyStore
+        self.aisleStore = aisleStore
         self.authenticationService = authenticationService
         self.networkMonitor = networkMonitor
     }
@@ -40,6 +43,7 @@ struct DIContainer {
             existingMedicine: existingMedicine,
             medicineStore: medicineStore,
             historyStore: historyStore,
+            aisleStore: aisleStore,
             networkMonitor: networkMonitor
         )
     }
@@ -50,6 +54,7 @@ struct DIContainer {
             medicine: medicine,
             medicineStore: medicineStore,
             historyStore: historyStore,
+            aisleStore: aisleStore,
             networkMonitor: networkMonitor
         )
     }
@@ -61,18 +66,24 @@ struct DIContainer {
             aisle: aisle,
             medicineStore: medicineStore,
             historyStore: historyStore,
+            aisleStore: aisleStore,
             networkMonitor: networkMonitor
         )
     }
 
     @MainActor
     func makeAisleListViewModel() -> AisleListViewModel {
-        AisleListViewModel(medicineStore: medicineStore)
+        AisleListViewModel(aisleStore: aisleStore)
     }
 
     @MainActor
     func makeAllMedicinesViewModel() -> AllMedicinesViewModel {
-        AllMedicinesViewModel(medicineStore: medicineStore, historyStore: historyStore, networkMonitor: networkMonitor)
+        AllMedicinesViewModel(
+            medicineStore: medicineStore,
+            historyStore: historyStore,
+            aisleStore: aisleStore,
+            networkMonitor: networkMonitor
+        )
     }
 }
 

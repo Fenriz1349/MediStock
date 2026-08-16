@@ -137,13 +137,19 @@ final class AisleMedicinesViewModelTest: XCTestCase {
     func testDelete_succeeds_recordsHistory() async {
         let medicineStore = MedicineStoringDouble()
         let historyStore = HistoryStoringDouble()
-        let viewModel = TestHelper.makeAisleMedicinesViewModel(medicineStore: medicineStore, historyStore: historyStore)
-        let medicine = TestHelper.makeMedicine()
+        let aisleStore = AisleStoringDouble()
+        let viewModel = TestHelper.makeAisleMedicinesViewModel(
+            medicineStore: medicineStore,
+            historyStore: historyStore,
+            aisleStore: aisleStore
+        )
+        let medicine = TestHelper.makeMedicine(aisle: "AD56")
 
         await viewModel.delete(medicine)
 
         XCTAssertEqual(medicineStore.deletedMedicines, [medicine])
         XCTAssertEqual(historyStore.deletedMedicines, [medicine])
+        XCTAssertEqual(aisleStore.removedFromAisles, ["AD56"])
         XCTAssertNil(viewModel.error)
     }
 
