@@ -80,7 +80,10 @@ final class MedicineFormViewModelTests: XCTestCase {
         let medicineStore = MedicineStoringDouble()
         let networkMonitor = NetworkMonitoringDouble()
         networkMonitor.verifyReachableError = .notConnected
-        let viewModel = TestHelper.makeMedicineFormViewModel(medicineStore: medicineStore, networkMonitor: networkMonitor)
+        let viewModel = TestHelper.makeMedicineFormViewModel(
+            medicineStore: medicineStore,
+            networkMonitor: networkMonitor
+        )
 
         await viewModel.save(cleanedAisle: "AD56")
 
@@ -206,6 +209,65 @@ final class MedicineFormViewModelTests: XCTestCase {
         let saved = await viewModel.save(cleanedAisle: "AD56")
 
         XCTAssertNil(saved)
+    }
+
+    @MainActor
+    func testSave_newMedicine_recordsAisleAdded() async {
+        let aisleStore = AisleStoringDouble()
+        let viewModel = TestHelper.makeMedicineFormViewModel(aisleStore: aisleStore)
+        viewModel.name = "Doliprane"
+        viewModel.stockText = "10"
+
+        await viewModel.save(cleanedAisle: "AD56")
+
+        XCTAssertEqual(aisleStore.addedToAisles, ["AD56"])
+        XCTAssertTrue(aisleStore.removedFromAisles.isEmpty)
+    }
+
+    @MainActor
+    func testSave_existingMedicineAisleChanged_recordsRemovedThenAdded() async {
+        let aisleStore = AisleStoringDouble()
+        let medicine = TestHelper.makeMedicine(aisle: "AD56")
+        let viewModel = TestHelper.makeMedicineFormViewModel(existingMedicine: medicine, aisleStore: aisleStore)
+        viewModel.name = "Doliprane"
+
+        await viewModel.save(cleanedAisle: "AD10")
+
+        XCTAssertEqual(aisleStore.removedFromAisles, ["AD56"])
+        XCTAssertEqual(aisleStore.addedToAisles, ["AD10"])
+    }
+
+    @MainActor
+    func testSave_existingMedicineAisleUnchanged_skipsAisleSync() async {
+        let aisleStore = AisleStoringDouble()
+        let medicine = TestHelper.makeMedicine(aisle: "AD56")
+        let viewModel = TestHelper.makeMedicineFormViewModel(existingMedicine: medicine, aisleStore: aisleStore)
+        viewModel.name = "Dafalgan"
+
+        await viewModel.save(cleanedAisle: "AD56")
+
+        XCTAssertTrue(aisleStore.addedToAisles.isEmpty)
+        XCTAssertTrue(aisleStore.removedFromAisles.isEmpty)
+    }
+
+    @MainActor
+    func testSanitizeAisle_containsSlash_stripsIt() {
+        let viewModel = TestHelper.makeMedicineFormViewModel()
+        viewModel.aisle = "A/D56"
+
+        viewModel.sanitizeAisle()
+
+        XCTAssertEqual(viewModel.aisle, "AD56")
+    }
+
+    @MainActor
+    func testSanitizeAisle_noSlash_leavesUnchanged() {
+        let viewModel = TestHelper.makeMedicineFormViewModel()
+        viewModel.aisle = "AD56"
+
+        viewModel.sanitizeAisle()
+
+        XCTAssertEqual(viewModel.aisle, "AD56")
     }
 
     @MainActor
