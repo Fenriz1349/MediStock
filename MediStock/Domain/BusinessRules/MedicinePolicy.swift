@@ -39,4 +39,11 @@ enum MedicinePolicy {
     static func sanitizedStock(_ stockText: String) -> String {
         stockText.filter(\.isNumber)
     }
+
+    /// Strips `/`, since the aisle code is used as-is as an `aisles` collection document id —
+    /// Firestore treats `/` as a path separator, which would break that document lookup.
+    /// - Parameter aisle: The raw aisle field text, as typed by the user.
+    static func sanitizedAisle(_ aisle: String) -> String {
+        aisle.filter { $0 != "/" }
+    }
 }

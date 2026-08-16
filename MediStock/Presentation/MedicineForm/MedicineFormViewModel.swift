@@ -35,22 +35,26 @@ final class MedicineFormViewModel: ObservableObject {
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
+    private let aisleStore: AisleStoring
     private let networkMonitor: NetworkMonitoring
 
     /// - Parameters:
     ///   - existingMedicine: `nil` to create a new medicine, or the medicine being edited.
     ///   - medicineStore: Domain-level abstraction over medicine persistence.
     ///   - historyStore: Domain-level abstraction over history persistence.
+    ///   - aisleStore: Domain-level abstraction over the aisle-count sync. See `save(cleanedAisle:)`.
     ///   - networkMonitor: Checked before every write. See `verifyNetworkReachable()`.
     init(
         existingMedicine: Medicine?,
         medicineStore: MedicineStoring,
         historyStore: HistoryStoring,
+        aisleStore: AisleStoring,
         networkMonitor: NetworkMonitoring
     ) {
         self.existingMedicine = existingMedicine
         self.medicineStore = medicineStore
         self.historyStore = historyStore
+        self.aisleStore = aisleStore
         self.networkMonitor = networkMonitor
         setup()
     }
@@ -69,6 +73,15 @@ final class MedicineFormViewModel: ObservableObject {
         let sanitized = MedicinePolicy.sanitizedStock(stockText)
         if sanitized != stockText {
             stockText = sanitized
+        }
+    }
+
+    /// Strips characters that would break a Firestore document path if used as-is as an `aisles` doc id.
+    /// Call from `.onChange(of: aisle)`.
+    func sanitizeAisle() {
+        let sanitized = MedicinePolicy.sanitizedAisle(aisle)
+        if sanitized != aisle {
+            aisle = sanitized
         }
     }
 
@@ -91,8 +104,13 @@ final class MedicineFormViewModel: ObservableObject {
                 try await historyStore.recordUpdate(of: saved,
                                                     previousName: existingMedicine.name,
                                                     previousAisle: existingMedicine.aisle)
+                if existingMedicine.aisle != saved.aisle {
+                    try await aisleStore.recordMedicineRemoved(fromAisle: existingMedicine.aisle)
+                    try await aisleStore.recordMedicineAdded(toAisle: saved.aisle)
+                }
             } else {
                 try await historyStore.recordAddition(of: saved)
+                try await aisleStore.recordMedicineAdded(toAisle: saved.aisle)
             }
             return saved
         } catch let medicineError as MedicineError {

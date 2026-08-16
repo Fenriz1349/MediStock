@@ -24,6 +24,7 @@ final class MedicineDetailViewModel: ObservableObject {
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
+    private let aisleStore: AisleStoring
     private let networkMonitor: NetworkMonitoring
     private var historyTask: Task<Void, Never>?
 
@@ -31,16 +32,19 @@ final class MedicineDetailViewModel: ObservableObject {
     ///   - medicine: The medicine to view/edit, injected by the navigation that created this screen.
     ///   - medicineStore: Domain-level abstraction over medicine persistence.
     ///   - historyStore: Domain-level abstraction over history persistence.
+    ///   - aisleStore: Domain-level abstraction over the aisle-count sync. See `delete()`.
     ///   - networkMonitor: Checked before every write. See `verifyNetworkReachable()`.
     init(
         medicine: Medicine,
         medicineStore: MedicineStoring,
         historyStore: HistoryStoring,
+        aisleStore: AisleStoring,
         networkMonitor: NetworkMonitoring
     ) {
         self.medicine = medicine
         self.medicineStore = medicineStore
         self.historyStore = historyStore
+        self.aisleStore = aisleStore
         self.networkMonitor = networkMonitor
     }
 
@@ -84,6 +88,7 @@ final class MedicineDetailViewModel: ObservableObject {
             try await verifyNetworkReachable()
             try await medicineStore.delete(medicine)
             try await historyStore.recordDeletion(of: medicine)
+            try await aisleStore.recordMedicineRemoved(fromAisle: medicine.aisle)
         } catch let medicineError as MedicineError {
             error = medicineError
             return

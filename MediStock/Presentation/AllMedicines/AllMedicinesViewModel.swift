@@ -37,16 +37,24 @@ final class AllMedicinesViewModel: ObservableObject {
 
     private let medicineStore: MedicineStoring
     private let historyStore: HistoryStoring
+    private let aisleStore: AisleStoring
     private let networkMonitor: NetworkMonitoring
     private var observationTask: Task<Void, Never>?
 
     /// - Parameters:
     ///   - medicineStore: Domain-level abstraction over medicine persistence.
     ///   - historyStore: Domain-level abstraction over history persistence.
+    ///   - aisleStore: Domain-level abstraction over the aisle-count sync. See `delete(_:)`.
     ///   - networkMonitor: Checked before every delete. See `verifyNetworkReachable()`.
-    init(medicineStore: MedicineStoring, historyStore: HistoryStoring, networkMonitor: NetworkMonitoring) {
+    init(
+        medicineStore: MedicineStoring,
+        historyStore: HistoryStoring,
+        aisleStore: AisleStoring,
+        networkMonitor: NetworkMonitoring
+    ) {
         self.medicineStore = medicineStore
         self.historyStore = historyStore
+        self.aisleStore = aisleStore
         self.networkMonitor = networkMonitor
     }
 
@@ -99,6 +107,7 @@ final class AllMedicinesViewModel: ObservableObject {
             try await verifyNetworkReachable()
             try await medicineStore.delete(medicine)
             try await historyStore.recordDeletion(of: medicine)
+            try await aisleStore.recordMedicineRemoved(fromAisle: medicine.aisle)
         } catch let medicineError as MedicineError {
             error = medicineError
         } catch {

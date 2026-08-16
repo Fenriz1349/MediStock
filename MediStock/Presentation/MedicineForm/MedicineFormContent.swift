@@ -38,6 +38,9 @@ struct MedicineFormContent: View {
                 errorMessage: String(localized: "medicineDetail.aisle.invalidFormat"),
                 validationState: $viewModel.aisleState
             )
+            .onChange(of: viewModel.aisle) {
+                viewModel.sanitizeAisle()
+            }
             .padding(.bottom, 10)
 
             // Stock only makes sense when creating — editing goes through the +/- steppers instead.
