@@ -12,7 +12,6 @@
 		53E0D89B2C06084900DE1134 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53E0D89A2C06084900DE1134 /* Assets.xcassets */; };
 		53E0D89E2C06084900DE1134 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 53E0D89D2C06084900DE1134 /* Preview Assets.xcassets */; };
 		53E0D8B22C06084900DE1134 /* MediStockUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E0D8B12C06084900DE1134 /* MediStockUITests.swift */; };
-		53E0D8B42C06084900DE1134 /* MediStockUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E0D8B32C06084900DE1134 /* MediStockUITestsLaunchTests.swift */; };
 		53E0D8C82C06092E00DE1134 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 53E0D8C72C06092E00DE1134 /* FirebaseAuth */; };
 		53E0D8D22C06092E00DE1134 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 53E0D8D12C06092E00DE1134 /* FirebaseFirestore */; };
 		53E0D8D62C06092E00DE1134 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 53E0D8D52C06092E00DE1134 /* FirebaseFirestoreSwift */; };
@@ -139,7 +138,6 @@
 		53E0D8A32C06084900DE1134 /* MediStockTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MediStockTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		53E0D8AD2C06084900DE1134 /* MediStockUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MediStockUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		53E0D8B12C06084900DE1134 /* MediStockUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediStockUITests.swift; sourceTree = "<group>"; };
-		53E0D8B32C06084900DE1134 /* MediStockUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediStockUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		53E0D8D72C06097900DE1134 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		53E0D8D92C06098F00DE1134 /* AisleMedicinesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AisleMedicinesView.swift; sourceTree = "<group>"; };
 		53E0D8DB2C06099C00DE1134 /* Medicine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medicine.swift; sourceTree = "<group>"; };
@@ -324,7 +322,6 @@
 			isa = PBXGroup;
 			children = (
 				53E0D8B12C06084900DE1134 /* MediStockUITests.swift */,
-				53E0D8B32C06084900DE1134 /* MediStockUITestsLaunchTests.swift */,
 			);
 			path = MediStockUITests;
 			sourceTree = "<group>";
@@ -571,7 +568,6 @@
 		68D144FF3013A4DE00696204 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
-				683E4E3B302DCED200733C22 /* Accessibility */,
 				53E0D8982C06084700DE1134 /* ContentView.swift */,
 				53E0D8EB2C06717200DE1134 /* MainTabView.swift */,
 				68D145003013A50500696204 /* Authentication */,
@@ -585,6 +581,7 @@
 				683E4E35302DA1C500733C22 /* Lists */,
 				683E4E36302DA22B00733C22 /* ErrorMessages */,
 				683E4E3A302DA3A600733C22 /* Shared */,
+				683E4E3B302DCED200733C22 /* Accessibility */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -877,7 +874,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				53E0D8B42C06084900DE1134 /* MediStockUITestsLaunchTests.swift in Sources */,
 				53E0D8B22C06084900DE1134 /* MediStockUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
