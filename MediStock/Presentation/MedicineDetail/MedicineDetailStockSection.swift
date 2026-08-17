@@ -29,17 +29,20 @@ struct MedicineDetailStockSection: View {
                 .disabled(stock == 0)
                 .opacity(stock == 0 ? 0.4 : 1)
                 .accessibilityLabel(AccessibilityHandler.StockButton.decreaseLabel(stock: stock))
+                .accessibilityIdentifier("medicineDetail.decreaseButton")
 
                 Text(stock, format: .number)
                     .font(.title2)
                     .frame(minWidth: 100)
                     .accessibilityHidden(stockValueAccessibilityHidden)
+                    .accessibilityIdentifier("medicineDetail.stockValue")
 
                 Button(action: onIncrease, label: {
                     Image(systemName: "plus")
                 })
                 .buttonStyle(CircleIconButtonStyle())
                 .accessibilityLabel(AccessibilityHandler.StockButton.increaseLabel(stock: stock))
+                .accessibilityIdentifier("medicineDetail.increaseButton")
             }
             .padding(.bottom, 10)
         }

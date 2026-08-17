@@ -27,6 +27,7 @@ struct UserView: View {
                     Text(viewModel.session?.email ?? "TEST")
                         .font(.title3)
                         .fontWeight(.semibold)
+                        .accessibilityIdentifier("user.emailLabel")
                 }
                 .padding(.vertical, 40)
 
@@ -51,6 +52,7 @@ struct UserView: View {
                         Text("user.deleteAccountButton")
                     })
                     .buttonStyle(AppButtonStyle(color: .red))
+                    .accessibilityIdentifier("user.deleteAccountButton")
                 }
 
                 Spacer()

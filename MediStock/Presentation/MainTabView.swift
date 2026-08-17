@@ -18,18 +18,21 @@ struct MainTabView: View {
                     Image(systemName: "list.dash")
                     Text("tab.aisles.title")
                 }
+                .accessibilityIdentifier("tab.aisles")
 
             AllMedicinesView(viewModel: container.makeAllMedicinesViewModel())
                 .tabItem {
                     Image(systemName: "square.grid.2x2")
                     Text("tab.allMedicines.title")
                 }
+                .accessibilityIdentifier("tab.allMedicines")
 
             UserView()
                 .tabItem {
                     Image(systemName: "person.circle")
                     Text("tab.user.title")
                 }
+                .accessibilityIdentifier("tab.user")
         }
     }
 }

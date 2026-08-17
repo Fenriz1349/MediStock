@@ -41,6 +41,7 @@ struct AisleListView: View {
                             )
                         }
                         .buttonStyle(.plain)
+                        .accessibilityIdentifier("aisleRow.\(aisle)")
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                     }
@@ -71,6 +72,7 @@ struct AisleListView: View {
                         Image(systemName: "plus")
                     })
                     .accessibilityLabel(AccessibilityHandler.AddMedicineButton.label)
+                    .accessibilityIdentifier("aisleList.addButton")
                 }
             }
             .sheet(isPresented: $isPresentingAddMedicine) {

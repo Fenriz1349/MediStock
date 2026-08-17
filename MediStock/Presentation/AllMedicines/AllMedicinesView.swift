@@ -45,6 +45,7 @@ struct AllMedicinesView: View {
                             )
                         }
                         .buttonStyle(.plain)
+                        .accessibilityIdentifier("medicineRow.\(medicine.name)")
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
                         .listRowBackground(Color.clear)
@@ -98,6 +99,7 @@ struct AllMedicinesView: View {
                     .accessibilityLabel(
                         AccessibilityHandler.AddMedicineButton.label
                     )
+                    .accessibilityIdentifier("allMedicines.addButton")
                 }
             }
             .sheet(isPresented: $isPresentingAddMedicine) {

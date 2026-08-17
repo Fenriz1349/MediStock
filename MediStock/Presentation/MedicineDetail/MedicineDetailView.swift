@@ -118,6 +118,7 @@ struct MedicineDetailView: View {
                         Image(systemName: "trash")
                     }
                     .accessibilityLabel(AccessibilityHandler.DeleteButton.label(name: viewModel.medicine.name))
+                    .accessibilityIdentifier("medicineDetail.deleteButton")
                 }
             }
         }
