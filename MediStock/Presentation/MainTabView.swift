@@ -8,6 +8,10 @@
 import SwiftUI
 import Toasty
 
+/// SwiftUI derives each `UITabBarItem`'s accessibility identifier from its `Image`'s SF Symbol name.
+/// Not from any `.accessibilityIdentifier` on the tab's content.
+/// `MediStockUITests` matches tabs by these symbol names (e.g. `"square.grid.2x2"`).
+/// Changing one would silently break that test.
 struct MainTabView: View {
     @Environment(\.diContainer) private var container
 
@@ -18,21 +22,18 @@ struct MainTabView: View {
                     Image(systemName: "list.dash")
                     Text("tab.aisles.title")
                 }
-                .accessibilityIdentifier("tab.aisles")
 
             AllMedicinesView(viewModel: container.makeAllMedicinesViewModel())
                 .tabItem {
                     Image(systemName: "square.grid.2x2")
                     Text("tab.allMedicines.title")
                 }
-                .accessibilityIdentifier("tab.allMedicines")
 
             UserView()
                 .tabItem {
                     Image(systemName: "person.circle")
                     Text("tab.user.title")
                 }
-                .accessibilityIdentifier("tab.user")
         }
     }
 }
