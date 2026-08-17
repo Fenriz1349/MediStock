@@ -7,10 +7,8 @@
 
 import Foundation
 
-/// Business rule: a medicine name is always stored capitalized — first letter uppercase, the rest lowercase.
-/// This is a genuine invariant, enforced at write time, not just an assumption about typed input.
-/// It lets the Firestore-side name search normalize a typed prefix the same way and still find a match.
-/// No extra stored field needed just for case-insensitive comparison.
+/// Business rule: a medicine name is always stored capitalized (first letter upper, rest lower).
+/// Enforced at write time, so name search can normalize a typed prefix the same way.
 enum MedicineNameFormat {
     /// - Parameter name: The raw name, as typed by the user.
     /// - Returns: `name` with its first character uppercased and the rest lowercased.

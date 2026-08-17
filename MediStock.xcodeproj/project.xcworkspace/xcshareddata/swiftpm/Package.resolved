@@ -1,5 +1,5 @@
 {
-  "originHash" : "402b6e62efc5be3d65f867a80dc45cd54215f2297ac4deb881c637446a0a4d74",
+  "originHash" : "fe6ecdda9b36b5459ddc8e3fcb72a14d7975404fbcc08fbb376b7e48d1877fef",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -17,6 +17,15 @@
       "state" : {
         "revision" : "3b62f154d00019ae29a71e9738800bb6f18b236d",
         "version" : "10.19.2"
+      }
+    },
+    {
+      "identity" : "customtextfields",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Fenriz1349/CustomTextFields",
+      "state" : {
+        "branch" : "main",
+        "revision" : "d3ef6f5c93b649c8dda7b0c30e90b46bd75274a9"
       }
     },
     {

@@ -10,22 +10,32 @@ import Network
 
 /// `NWPathMonitor`/`URLSession`-backed implementation of `NetworkMonitoring`.
 final class NetworkMonitor: NetworkMonitoring {
-    private(set) var isConnected: Bool
+    /// Optimistic default.
+    /// Most of the time the device is actually connected.
+    /// And this self-corrects near-instantly once the first real path update arrives.
+    /// The alternative (defaulting to `false`) would mean looking offline while actually connected.
+    /// For a moment, or longer.
+    /// Worse for this app's one use of `isConnected` — whether to show `OfflineView` at launch.
+    private(set) var isConnected = true
 
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "com.juliencotte.medistock.networkmonitor")
     /// Pinged to confirm reachability. Firestore itself.
     /// So a successful response proves both internet access and backend availability in one shot.
     private let reachabilityURL = URL(string: "https://firestore.googleapis.com")!
+    private var continuation: AsyncStream<Bool>.Continuation?
 
     /// Starts the underlying `NWPathMonitor`.
-    /// `isConnected` is also set once synchronously right after starting, from `monitor.currentPath`.
-    /// Without that, it would keep the placeholder value set below until the first callback fires from
-    /// `observeConnectivity()`. Which could be wrong for a moment right after launch.
+    /// `pathUpdateHandler` is assigned before `start(queue:)` is called, not after.
+    /// The other way around risks the very first path evaluation firing into no handler at all.
+    /// Never reported again until the status actually changes later.
     init() {
-        isConnected = false
+        monitor.pathUpdateHandler = { [weak self] path in
+            let connected = path.status == .satisfied
+            self?.isConnected = connected
+            self?.continuation?.yield(connected)
+        }
         monitor.start(queue: queue)
-        isConnected = monitor.currentPath.status == .satisfied
     }
 
     deinit {
@@ -36,11 +46,7 @@ final class NetworkMonitor: NetworkMonitoring {
         AsyncStream { [weak self] continuation in
             guard let self else { return }
             continuation.yield(self.isConnected)
-            self.monitor.pathUpdateHandler = { [weak self] path in
-                let connected = path.status == .satisfied
-                self?.isConnected = connected
-                continuation.yield(connected)
-            }
+            self.continuation = continuation
         }
     }
 

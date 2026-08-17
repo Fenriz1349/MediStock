@@ -3,12 +3,19 @@ import Toasty
 
 struct ContentView: View {
     @EnvironmentObject var authenticationViewModel: AuthenticationViewModel
-    @EnvironmentObject var catalogViewModel: CatalogViewModel
-    @EnvironmentObject var toasty: ToastyManager
+    /// Keeps `LoadingView` on screen at least this long, even if the session resolves sooner.
+    /// Avoids a flash of `LoadingView` for returning users whose session confirms almost instantly.
+    @State private var minimumLoadingDelayElapsed = false
+
+    private var isShowingLaunchLoading: Bool {
+        !authenticationViewModel.hasResolvedSession || !minimumLoadingDelayElapsed
+    }
 
     var body: some View {
         Group {
-            if authenticationViewModel.session != nil {
+            if isShowingLaunchLoading {
+                LoadingView()
+            } else if authenticationViewModel.session != nil {
                 MainTabView()
             } else if !authenticationViewModel.isConnected {
                 OfflineView()
@@ -16,18 +23,18 @@ struct ContentView: View {
                 AuthenticationView()
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .overlay {
-            if authenticationViewModel.isLoading || catalogViewModel.isLoading {
+            if authenticationViewModel.isLoading {
                 LoadingOverlay()
             }
         }
         .onAppear {
             authenticationViewModel.listen()
             authenticationViewModel.listenConnectivity()
-        }
-        .onChange(of: catalogViewModel.error) { _, error in
-            if let error {
-                toasty.showError(error.localizedMessage)
+            Task {
+                try? await Task.sleep(nanoseconds: 1_500_000_000)
+                minimumLoadingDelayElapsed = true
             }
         }
     }
@@ -36,11 +43,8 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-            .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService(),
-                                                       networkMonitor: NetworkMonitor()))
-            .environmentObject(CatalogViewModel(medicineStore: FirestoreMedicineStore(),
-                                                historyStore: FirestoreHistoryStore(authenticationService: FirebaseAuthenticationService()),
-                                                networkMonitor: NetworkMonitor()))
+            .environmentObject(PreviewHelper.container.makeAuthenticationViewModel())
             .environmentObject(ToastyManager())
+            .environment(\.diContainer, PreviewHelper.container)
     }
 }

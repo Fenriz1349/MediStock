@@ -53,60 +53,87 @@ enum TestHelper {
     /// So tests only need to pass what they actually care about configuring/inspecting.
     @MainActor
     static func makeAuthenticationViewModel(
-        authenticationService: AuthenticationServicing = MockAuthenticationServicing(),
-        networkMonitor: NetworkMonitoring = MockNetworkMonitoring()
+        authenticationService: AuthenticationServicing = AuthenticationServicingDouble(),
+        networkMonitor: NetworkMonitoring = NetworkMonitoringDouble()
     ) -> AuthenticationViewModel {
         AuthenticationViewModel(authenticationService: authenticationService, networkMonitor: networkMonitor)
     }
 
-    /// Builds a `CatalogViewModel` wired to fresh mocks by default.
+    /// Builds a `MedicineFormViewModel` wired to fresh mocks by default.
     @MainActor
-    static func makeCatalogViewModel(
-        medicineStore: MedicineStoring = MockMedicineStoring(),
-        historyStore: HistoryStoring = MockHistoryStoring(),
-        networkMonitor: NetworkMonitoring = MockNetworkMonitoring()
-    ) -> CatalogViewModel {
-        CatalogViewModel(medicineStore: medicineStore, historyStore: historyStore, networkMonitor: networkMonitor)
+    static func makeMedicineFormViewModel(
+        existingMedicine: Medicine? = nil,
+        medicineStore: MedicineStoring = MedicineStoringDouble(),
+        historyStore: HistoryStoring = HistoryStoringDouble(),
+        aisleStore: AisleStoring = AisleStoringDouble(),
+        networkMonitor: NetworkMonitoring = NetworkMonitoringDouble()
+    ) -> MedicineFormViewModel {
+        MedicineFormViewModel(
+            existingMedicine: existingMedicine,
+            medicineStore: medicineStore,
+            historyStore: historyStore,
+            aisleStore: aisleStore,
+            networkMonitor: networkMonitor
+        )
     }
 
     /// Builds a `MedicineDetailViewModel` wired to fresh mocks by default.
     @MainActor
     static func makeMedicineDetailViewModel(
         medicine: Medicine = TestHelper.makeMedicine(),
-        medicineStore: MedicineStoring = MockMedicineStoring(),
-        historyStore: HistoryStoring = MockHistoryStoring(),
-        networkMonitor: NetworkMonitoring = MockNetworkMonitoring()
+        medicineStore: MedicineStoring = MedicineStoringDouble(),
+        historyStore: HistoryStoring = HistoryStoringDouble(),
+        aisleStore: AisleStoring = AisleStoringDouble(),
+        networkMonitor: NetworkMonitoring = NetworkMonitoringDouble()
     ) -> MedicineDetailViewModel {
         MedicineDetailViewModel(
             medicine: medicine,
             medicineStore: medicineStore,
             historyStore: historyStore,
+            aisleStore: aisleStore,
             networkMonitor: networkMonitor
         )
     }
 
-    /// Builds an `AisleMedicinesViewModel` wired to a fresh mock by default.
+    /// Builds an `AisleMedicinesViewModel` wired to fresh mocks by default.
     @MainActor
     static func makeAisleMedicinesViewModel(
         aisle: String = "Rayon 1",
-        medicineStore: MedicineStoring = MockMedicineStoring()
+        medicineStore: MedicineStoring = MedicineStoringDouble(),
+        historyStore: HistoryStoring = HistoryStoringDouble(),
+        aisleStore: AisleStoring = AisleStoringDouble(),
+        networkMonitor: NetworkMonitoring = NetworkMonitoringDouble()
     ) -> AisleMedicinesViewModel {
-        AisleMedicinesViewModel(aisle: aisle, medicineStore: medicineStore)
+        AisleMedicinesViewModel(
+            aisle: aisle,
+            medicineStore: medicineStore,
+            historyStore: historyStore,
+            aisleStore: aisleStore,
+            networkMonitor: networkMonitor
+        )
     }
 
     /// Builds an `AisleListViewModel` wired to a fresh mock by default.
     @MainActor
     static func makeAisleListViewModel(
-        medicineStore: MedicineStoring = MockMedicineStoring()
+        aisleStore: AisleStoring = AisleStoringDouble()
     ) -> AisleListViewModel {
-        AisleListViewModel(medicineStore: medicineStore)
+        AisleListViewModel(aisleStore: aisleStore)
     }
 
-    /// Builds an `AllMedicinesViewModel` wired to a fresh mock by default.
+    /// Builds an `AllMedicinesViewModel` wired to fresh mocks by default.
     @MainActor
     static func makeAllMedicinesViewModel(
-        medicineStore: MedicineStoring = MockMedicineStoring()
+        medicineStore: MedicineStoring = MedicineStoringDouble(),
+        historyStore: HistoryStoring = HistoryStoringDouble(),
+        aisleStore: AisleStoring = AisleStoringDouble(),
+        networkMonitor: NetworkMonitoring = NetworkMonitoringDouble()
     ) -> AllMedicinesViewModel {
-        AllMedicinesViewModel(medicineStore: medicineStore)
+        AllMedicinesViewModel(
+            medicineStore: medicineStore,
+            historyStore: historyStore,
+            aisleStore: aisleStore,
+            networkMonitor: networkMonitor
+        )
     }
 }

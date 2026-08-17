@@ -21,30 +21,52 @@ final class FirestoreMedicineStore: MedicineStoring {
     ///   - sortOption: How to order the results — translates directly to `.order(by:)`.
     ///     `.none` leaves the query unordered.
     ///   - ascending: The sort direction. Ignored when `sortOption` is `.none`.
-    func observeMedicines(sortedBy sortOption: SortOption, ascending: Bool) -> AsyncStream<[Medicine]> {
+    ///   - limit: Translates directly to `.limit(to:)`.
+    func observeMedicines(sortedBy sortOption: SortOption, ascending: Bool, limit: Int) -> AsyncStream<[Medicine]> {
         switch sortOption {
         case .none:
-            observe(collection)
+            observe(collection.limit(to: limit))
         case .name:
-            observe(collection.order(by: "name", descending: !ascending))
+            observe(collection.order(by: "name", descending: !ascending).limit(to: limit))
         case .stock:
-            observe(collection.order(by: "stock", descending: !ascending))
+            observe(collection.order(by: "stock", descending: !ascending).limit(to: limit))
         }
     }
 
-    /// - Parameter aisle: The exact aisle code to filter on.
-    func observeMedicines(inAisle aisle: String) -> AsyncStream<[Medicine]> {
-        observe(collection.whereField("aisle", isEqualTo: aisle))
+    /// - Parameters:
+    ///   - aisle: The exact aisle code to filter on.
+    ///   - sortOption: How to order the results — translates directly to `.order(by:)`.
+    ///     `.none` leaves the query unordered.
+    ///   - ascending: The sort direction. Ignored when `sortOption` is `.none`.
+    ///   - limit: Translates directly to `.limit(to:)`.
+    func observeMedicines(
+        inAisle aisle: String,
+        sortedBy sortOption: SortOption,
+        ascending: Bool,
+        limit: Int
+    ) -> AsyncStream<[Medicine]> {
+        let filtered = collection.whereField("aisle", isEqualTo: aisle)
+        switch sortOption {
+        case .none:
+            return observe(filtered.limit(to: limit))
+        case .name:
+            return observe(filtered.order(by: "name", descending: !ascending).limit(to: limit))
+        case .stock:
+            return observe(filtered.order(by: "stock", descending: !ascending).limit(to: limit))
+        }
     }
 
-    /// - Parameter prefix: The prefix to match, normalized to `MedicineNameFormat.capitalized(_:)` first —
-    ///   `Medicine.name` is always stored that way, so both sides of the comparison must match.
-    func observeMedicines(nameStartingWith prefix: String) -> AsyncStream<[Medicine]> {
+    /// - Parameters:
+    ///   - prefix: The prefix to match, normalized to `MedicineNameFormat.capitalized(_:)` first —
+    ///     `Medicine.name` is always stored that way, so both sides of the comparison must match.
+    ///   - limit: Translates directly to `.limit(to:)`.
+    func observeMedicines(nameStartingWith prefix: String, limit: Int) -> AsyncStream<[Medicine]> {
         let normalizedPrefix = MedicineNameFormat.capitalized(prefix)
         return observe(collection
             .order(by: "name")
             .whereField("name", isGreaterThanOrEqualTo: normalizedPrefix)
-            .whereField("name", isLessThan: normalizedPrefix + "\u{f8ff}"))
+            .whereField("name", isLessThan: normalizedPrefix + "\u{f8ff}")
+            .limit(to: limit))
     }
 
     /// Shared listener setup for every `observeMedicines...` variant above.
@@ -52,6 +74,7 @@ final class FirestoreMedicineStore: MedicineStoring {
     private func observe(_ query: Query) -> AsyncStream<[Medicine]> {
         AsyncStream { continuation in
             let listener = query.addSnapshotListener { snapshot, error in
+                print("TEMP thread check — isMainThread: \(Thread.isMainThread), thread: \(Thread.current)")
                 guard let snapshot else {
                     if let error { print("Error observing medicines: \(error)") }
                     return
@@ -79,7 +102,7 @@ final class FirestoreMedicineStore: MedicineStoring {
         return saved
     }
 
-    /// - Parameter medicine: The medicine to delete. A no-op if it has no `id`.
+    /// - Parameter medicine: The medicine to remove. A no-op if `medicine.id` is `nil`.
     /// - Throws: `MedicineError`, mapped from whatever Firestore reports.
     func delete(_ medicine: Medicine) async throws {
         guard let id = medicine.id else { return }

@@ -17,21 +17,27 @@ struct MedicineDetailHistorySection: View {
                 .font(.headline)
                 .padding(.top, 20)
             ForEach(history, id: \.id) { entry in
+                let localized = HistoryEntryLocalized(entry)
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(entry.action)
-                        .font(.headline)
-                    Text(String(localized: "medicineDetail.history.user",
-                                defaultValue: "Utilisateur : \(entry.user)"))
+                    Text(localized.action)
                         .font(.subheadline)
-                    Text(String(localized: "medicineDetail.history.date",
-                                defaultValue: "Date : \(entry.timestamp.formatted())"))
+                        .fontWeight(.semibold)
+                    Text(String(localized: "medicineDetail.history.user",
+                                defaultValue: "Utilisateur : \(localized.user)"))
+                        .font(.subheadline)
+                    (Text(String(localized: "accessibility.historyEntry.datePrefix", defaultValue: "Date : "))
+                        + Text(entry.timestamp, style: .date)
+                        + Text(" ")
+                        + Text(entry.timestamp, style: .time))
                         .font(.subheadline)
                     Text(String(localized: "medicineDetail.history.details",
-                                defaultValue: "Détails : \(entry.details)"))
+                                defaultValue: "Détails : \(localized.details)"))
                         .font(.subheadline)
                 }
+                .accessibilityElement(children: .combine)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color(.secondarySystemBackground))
                 .cornerRadius(10)
                 .padding(.bottom, 5)
             }

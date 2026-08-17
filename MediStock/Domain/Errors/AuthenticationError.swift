@@ -7,10 +7,8 @@
 
 import Foundation
 
-/// Typed authentication failures, mapped from Firebase's error codes by `FirebaseAuthenticationService`.
-/// So the rest of the app never sees a Firebase type.
-/// No localized text here — resolving that is a display concern the View handles, same as
-/// `AisleCode`/`PasswordPolicy`.
+/// Typed authentication failures, mapped from Firebase's error codes.
+/// No localized text here — that's a display concern, resolved by the View.
 enum AuthenticationError: Error, Equatable {
     /// Sign-in failed because the email/password combination is wrong, or the account doesn't exist.
     /// Firebase deliberately merges these two cases (email enumeration protection), so this type does too.

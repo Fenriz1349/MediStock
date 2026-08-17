@@ -77,6 +77,11 @@ jobs:
       # Unlike the two "latest" settings above, xcodebuild has no "any available device" keyword,
       # so this device name is the one place that may need adjusting if it isn't on the runner
       # (the failure log lists the actually available simulators).
+      # -only-testing restricts both building and running to MediStockTests — MediStockUITests
+      # (still just Xcode's default template) would otherwise get built for nothing on every run.
+      # -skip-testing excludes every class that asserts localized (French) strings: the runner's
+      # simulator defaults to English, so these only run locally. HistoryEntryLocalizedTests is
+      # its own case (Presentation/); the rest live together under Presentation/LocalizableTests.
       - name: Test
         run: |
           xcodebuild test \
@@ -84,4 +89,11 @@ jobs:
             -scheme MediStock \
             -destination 'platform=iOS Simulator,name=iPhone 17' \
             -derivedDataPath DerivedData \
+            -only-testing:MediStockTests \
+            -skip-testing:MediStockTests/HistoryEntryLocalizedTests \
+            -skip-testing:MediStockTests/AisleLabelTests \
+            -skip-testing:MediStockTests/AuthenticationErrorMessageTests \
+            -skip-testing:MediStockTests/MedicineErrorMessageTests \
+            -skip-testing:MediStockTests/PasswordRequirementLabelTests \
+            -skip-testing:MediStockTests/AccessibilityHandlerTests \
             CODE_SIGNING_ALLOWED=NO

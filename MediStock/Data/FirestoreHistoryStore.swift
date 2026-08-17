@@ -10,8 +10,7 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 /// Firestore-backed implementation of `HistoryStoring`, mapping documents to/from `HistoryEntry`.
-/// Resolves the acting user itself (via `AuthenticationServicing`) and builds each entry's wording.
-/// So callers only ever say *what* happened, never *who* did it or how to phrase it.
+/// Resolves the acting user itself and builds each entry's wording — callers only say *what* happened.
 final class FirestoreHistoryStore: HistoryStoring {
     private let collection = Firestore.firestore().collection("history")
     private let authenticationService: AuthenticationServicing
@@ -57,12 +56,21 @@ final class FirestoreHistoryStore: HistoryStoring {
                          medicineId: medicine.id ?? "")
     }
 
-    /// - Parameter medicine: The medicine after the name/aisle update.
+    /// - Parameters:
+    ///   - medicine: The medicine after the name/aisle update.
+    ///   - previousName: The name before the edit.
+    ///   - previousAisle: The aisle before the edit.
     /// - Throws: `MedicineError`, mapped from whatever Firestore reports.
-    func recordUpdate(of medicine: Medicine) async throws {
-        try await record(action: "Updated \(medicine.name)",
-                         details: "Updated medicine details",
-                         medicineId: medicine.id ?? "")
+    func recordUpdate(of medicine: Medicine, previousName: String, previousAisle: String) async throws {
+        var changes: [String] = []
+        if medicine.name != previousName {
+            changes.append("name changed from \(previousName) to \(medicine.name)")
+        }
+        if medicine.aisle != previousAisle {
+            changes.append("aisle changed from \(previousAisle) to \(medicine.aisle)")
+        }
+        let details = changes.isEmpty ? "Updated medicine details" : changes.joined(separator: ", ")
+        try await record(action: "Updated \(medicine.name)", details: details, medicineId: medicine.id ?? "")
     }
 
     /// - Parameters:
@@ -77,11 +85,11 @@ final class FirestoreHistoryStore: HistoryStoring {
                          medicineId: medicine.id ?? "")
     }
 
-    /// - Parameter medicine: The medicine that was just removed from the catalog.
+    /// - Parameter medicine: The medicine that was just permanently deleted.
     /// - Throws: `MedicineError`, mapped from whatever Firestore reports.
     func recordDeletion(of medicine: Medicine) async throws {
         try await record(action: "Deleted \(medicine.name)",
-                         details: "Removed from catalog with \(medicine.stock) in stock",
+                         details: "Removed with \(medicine.stock) remaining in stock",
                          medicineId: medicine.id ?? "")
     }
 

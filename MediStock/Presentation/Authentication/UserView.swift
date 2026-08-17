@@ -8,10 +8,8 @@
 import SwiftUI
 import Toasty
 
-/// Account screen: shows the connected user's email, lets them sign out or permanently delete their account.
-/// Uses `AuthenticationViewModel` directly, same VM as `AuthenticationView`.
-/// Every action here is an authentication concern.
-/// No dedicated ViewModel needed.
+/// Account screen: shows the connected user's email.
+/// Lets them reset their password, sign out, or permanently delete their account.
 struct UserView: View {
     @EnvironmentObject var viewModel: AuthenticationViewModel
     @EnvironmentObject var toasty: ToastyManager
@@ -19,27 +17,48 @@ struct UserView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                Text(viewModel.session?.email ?? "")
-                    .font(.headline)
-                    .padding(.top, 40)
+            VStack(spacing: 32) {
+                VStack(spacing: 12) {
+                    Image(systemName: "person.crop.circle.fill")
+                        .font(.system(size: 48))
+                        .foregroundColor(.accentColor)
+                        .accessibilityHidden(true)
+
+                    Text(viewModel.session?.email ?? "TEST")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .accessibilityIdentifier("user.emailLabel")
+                }
+                .padding(.vertical, 40)
+
+                VStack(spacing: 12) {
+                    Button(action: {
+                        Task { await viewModel.sendPasswordReset(email: viewModel.session?.email ?? "") }
+                    }, label: {
+                        Text("user.resetPasswordButton")
+                    })
+                    .buttonStyle(AppButtonStyle())
+
+                    Button(action: {
+                        viewModel.signOut()
+                    }, label: {
+                        Text("user.logoutButton")
+                    })
+                    .buttonStyle(AppButtonStyle())
+
+                    Button(role: .destructive, action: {
+                        isPresentingDeleteConfirmation = true
+                    }, label: {
+                        Text("user.deleteAccountButton")
+                    })
+                    .buttonStyle(AppButtonStyle(color: .red))
+                    .accessibilityIdentifier("user.deleteAccountButton")
+                }
 
                 Spacer()
-
-                Button(action: {
-                    viewModel.signOut()
-                }, label: {
-                    Text("user.logoutButton")
-                })
-
-                Button(role: .destructive, action: {
-                    isPresentingDeleteConfirmation = true
-                }, label: {
-                    Text("user.deleteAccountButton")
-                })
             }
             .padding()
-            .navigationBarTitle("tab.user.title")
+            .navigationBarTitle("tab.user.title", displayMode: .inline)
             .alert(
                 "user.deleteAccount.confirmTitle",
                 isPresented: $isPresentingDeleteConfirmation
@@ -57,12 +76,14 @@ struct UserView: View {
                 toasty.showError(error.localizedMessage)
             }
         }
+        .onChange(of: viewModel.didSendPasswordReset) { _, _ in
+            toasty.showSuccess(String(localized: "user.resetPassword.successMessage"))
+        }
     }
 }
 
 #Preview {
     UserView()
-        .environmentObject(AuthenticationViewModel(authenticationService: FirebaseAuthenticationService(),
-                                                    networkMonitor: NetworkMonitor()))
+        .environmentObject(PreviewHelper.container.makeAuthenticationViewModel())
         .environmentObject(ToastyManager())
 }
