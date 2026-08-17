@@ -28,6 +28,7 @@ struct AuthenticationView: View {
                 validationState: $viewModel.emailState,
                 isFocusedBinding: $isEmailFocused
             )
+            .accessibilityIdentifier("auth.emailField")
             .padding()
 
             Button(action: {
@@ -48,6 +49,7 @@ struct AuthenticationView: View {
                 errorMessage: String(localized: "auth.password.invalidFormat"),
                 validationState: $viewModel.passwordState
             )
+            .accessibilityIdentifier("auth.passwordField")
             .padding()
 
             VStack(alignment: .leading, spacing: 4) {
@@ -70,6 +72,7 @@ struct AuthenticationView: View {
             })
             .buttonStyle(AppButtonStyle())
             .disabled(!viewModel.isFormValid)
+            .accessibilityIdentifier("auth.loginButton")
             .padding(.horizontal, 24)
 
             Button(action: {
@@ -79,6 +82,7 @@ struct AuthenticationView: View {
             })
             .buttonStyle(AppButtonStyle())
             .disabled(!viewModel.isFormValid)
+            .accessibilityIdentifier("auth.signUpButton")
             .padding(.horizontal, 24)
         }
         .padding()

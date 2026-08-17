@@ -33,6 +33,7 @@ struct AddMedicineView: View {
                         }
                     }
                     .disabled(!viewModel.isFormValid)
+                    .accessibilityIdentifier("addMedicine.saveButton")
                 }
                 KeyboardToolBar(isValidateEnabled: viewModel.isFormValid) {
                     let cleanedAisle = AisleCode.stripLabel(AisleLabel.localized, from: viewModel.aisle)

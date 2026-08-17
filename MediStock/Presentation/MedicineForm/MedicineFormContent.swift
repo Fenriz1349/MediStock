@@ -25,6 +25,7 @@ struct MedicineFormContent: View {
                 validationState: $viewModel.nameState,
                 isFocusedBinding: $isNameFocused
             )
+            .accessibilityIdentifier("medicineForm.nameField")
             Text("medicineDetail.name.capitalizationHint")
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -39,6 +40,7 @@ struct MedicineFormContent: View {
                     errorMessage: String(localized: "medicineDetail.aisle.invalidFormat"),
                     validationState: $viewModel.aisleState
                 )
+                .accessibilityIdentifier("medicineForm.aisleField")
                 .onChange(of: viewModel.aisle) {
                     viewModel.sanitizeAisle()
                 }
@@ -67,6 +69,7 @@ struct MedicineFormContent: View {
                     errorMessage: String(localized: "medicineDetail.stock.invalidFormat"),
                     validationState: $viewModel.stockState
                 )
+                .accessibilityIdentifier("medicineForm.stockField")
                 .onChange(of: viewModel.stockText) {
                     viewModel.sanitizeStock()
                 }
